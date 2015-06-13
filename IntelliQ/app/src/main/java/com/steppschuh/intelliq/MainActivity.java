@@ -1,5 +1,6 @@
 package com.steppschuh.intelliq;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -38,8 +39,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void showQueue(String id) {
+        FragmentQueue fragment = new FragmentQueue();
+        fragment.setCompanyId(id);
+
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new FragmentQueue())
+                .add(R.id.container, fragment)
                 .commit();
     }
 

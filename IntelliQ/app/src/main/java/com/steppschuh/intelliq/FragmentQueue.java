@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,12 +19,21 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
 
     MobileApp app;
 
+    String companyId;
+    Company currentCompany;
+    QueueItem currentItem;
+
     View contentFragment;
 
     Handler refreshHandler = new Handler();
     Runnable refreshRunable;
     int refreshDelay = 5000;
     boolean shouldRefresh = true;
+
+    TextView ticketNumber;
+    TextView timeLeft;
+    TextView peopleInQueue;
+    Button leaveQueue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +50,18 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
     }
 
     private void setupUi() {
+        ticketNumber = (TextView) contentFragment.findViewById(R.id.ticket_number);
+        timeLeft = (TextView) contentFragment.findViewById(R.id.time_left);
+        peopleInQueue = (TextView) contentFragment.findViewById(R.id.people_in_queue);
+        leaveQueue = (Button) contentFragment.findViewById(R.id.button_leave_queue);
+        leaveQueue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: leave queue
+                ((MainActivity) app.getContextActivity()).showCompanies();
+            }
+        });
+
         refreshHandler = new Handler();
         refreshRunable = new Runnable() {
             public void run() {
@@ -51,7 +74,33 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
     }
 
     private void updateUi() {
+        currentCompany = null;
+        for (Company company : app.getCompanies()) {
+            if (company.getId().equals(companyId)) {
+                currentCompany = company;
+            }
+        }
 
+        if (currentCompany == null) {
+            ((MainActivity) app.getContextActivity()).showCompanies();
+            return;
+        }
+
+        if (currentItem == null) {
+
+            return;
+        }
+
+        int numberQuedItemsBefore = currentCompany.getQueuedItemsBeforeCount(currentItem);
+
+        ticketNumber.setText(String.valueOf(currentItem.position));
+        timeLeft.setText(String.valueOf(currentCompany.getWaitingTime() * numberQuedItemsBefore) + " min");
+        peopleInQueue.setText(String.valueOf(numberQuedItemsBefore));
+
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 
     @Override

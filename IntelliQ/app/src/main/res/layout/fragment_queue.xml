@@ -36,6 +36,66 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:text="@string/ticket_id"
+                            style="@style/Base.TextAppearance.AppCompat.Subhead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <RelativeLayout
+                            android:layout_margin="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:src="@drawable/ticket_back"
+                                android:layout_centerVertical="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="60dp" />
+
+                            <TextView
+                                android:id="@+id/ticket_number"
+                                android:text="127"
+                                android:textColor="@color/primary"
+                                android:layout_margin="10dp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
+                                style="@style/Base.TextAppearance.AppCompat.Display1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:text="@string/ticket_id_desc"
+                            style="@style/Base.TextAppearance.AppCompat.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                card_view:cardCornerRadius="4dp">
+
+                <RelativeLayout
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
                             android:text="@string/time_left"
                             style="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:layout_width="wrap_content"
@@ -47,6 +107,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:id="@+id/time_left"
                                 android:text="15 min"
                                 android:textColor="@color/primary"
                                 android:layout_margin="10dp"
@@ -100,6 +161,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:id="@+id/people_in_queue"
                                 android:text="3"
                                 android:textColor="@color/primary"
                                 android:layout_margin="10dp"
@@ -142,65 +204,6 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:text="@string/ticket_id"
-                            style="@style/Base.TextAppearance.AppCompat.Subhead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <RelativeLayout
-                            android:layout_margin="5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:src="@drawable/ticket_back"
-                                android:layout_centerVertical="true"
-                                android:layout_width="match_parent"
-                                android:layout_height="60dp" />
-
-                            <TextView
-                                android:text="127"
-                                android:textColor="@color/primary"
-                                android:layout_margin="10dp"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                style="@style/Base.TextAppearance.AppCompat.Display1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
-
-                        </RelativeLayout>
-
-                        <TextView
-                            android:text="@string/ticket_id_desc"
-                            style="@style/Base.TextAppearance.AppCompat.Small"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                card_view:cardCornerRadius="4dp">
-
-                <RelativeLayout
-                    android:layout_margin="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
                             android:text="@string/cancel"
                             style="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:layout_width="wrap_content"
@@ -209,11 +212,13 @@
                         <TextView
                             android:text="@string/cancel_desc"
                             android:layout_marginTop="5px"
+                            android:layout_marginBottom="5px"
                             style="@style/Base.TextAppearance.AppCompat.Small"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
                         <Button
+                            android:id="@+id/button_leave_queue"
                             android:text="@string/cancel_button"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />

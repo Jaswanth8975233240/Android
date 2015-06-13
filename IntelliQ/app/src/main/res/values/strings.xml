@@ -13,7 +13,7 @@
     <string name="people_in_queue_desc">These people are already in line and will get served before you.</string>
 
     <string name="ticket_id">Your ticket</string>
-    <string name="ticket_id_desc">This is your ticket ID, we\'ll let you know when it\'s time for you to show up.</string>
+    <string name="ticket_id_desc">This is your ticket number, we\'ll let you know when it\'s time for you to show up.</string>
 
     <string name="time_left">Time left</string>
     <string name="time_left_desc">This is an estimation of how long you have to wait. Make sure that you are back on time.</string>

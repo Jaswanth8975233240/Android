@@ -4,11 +4,21 @@
     android:layout_height="match_parent"
     android:background="@color/primary_light">
 
+    <ImageView
+        android:id="@+id/logo"
+        android:src="@drawable/ticket_back"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
+
     <TextView
         android:id="@+id/loading"
         android:text="@string/loading"
+        android:layout_below="@id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/primary"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         style="@style/Base.TextAppearance.AppCompat.Body1"/>

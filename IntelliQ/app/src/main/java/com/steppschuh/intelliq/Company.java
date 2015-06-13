@@ -48,13 +48,22 @@ public class Company {
         company.setLogoUrl(jsonObject.getAsJsonPrimitive("logo__c").getAsString());
         company.setClosingHour(jsonObject.getAsJsonPrimitive("closingHour__c").getAsString());
         company.setWaitingTime(jsonObject.getAsJsonPrimitive("waitingTime__c").getAsInt());
+        company.setPeopleInQueue(jsonObject.getAsJsonPrimitive("waiting").getAsInt());
 
         Log.d(MobileApp.TAG, "Item parsed: " + company.getName());
 
         return company;
     }
 
-
+    public int getQueuedItemsBeforeCount(QueueItem currentItem) {
+        int count = 0;
+        for (QueueItem queueItem : queueItems) {
+            if (queueItem.getCheckinTime() < currentItem.getCheckinTime()) {
+                count++;
+            }
+        }
+        return count;
+    }
 
 
 

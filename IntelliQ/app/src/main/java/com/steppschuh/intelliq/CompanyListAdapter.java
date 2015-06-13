@@ -46,8 +46,7 @@ public class CompanyListAdapter extends ArrayAdapter<Company> {
         ((TextView) rowView.findViewById(R.id.itemNameLabel)).setText(currentItem.getName());
         ((TextView) rowView.findViewById(R.id.itemQueueValue)).setText(String.valueOf(currentItem.getPeopleInQueue()));
         ((TextView) rowView.findViewById(R.id.itemWaitingTime)).setText(String.valueOf(currentItem.getWaitingTime()) + " min");
-
-        //((TextView) rowView.findViewById(R.id.itemDifferenceRelative)).setTextColor(currentItem.getColorIndocator());
+        ((TextView) rowView.findViewById(R.id.itemQueueValue)).setText(String.valueOf(currentItem.getPeopleInQueue()));
 
         // load image
         ImageView itemImage = (ImageView) rowView.findViewById(R.id.itemImage);
@@ -60,7 +59,8 @@ public class CompanyListAdapter extends ArrayAdapter<Company> {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) context).showQueue((String) v.getTag());
+                ((MobileApp) context.getApplication()).requestQueueEntry((String) v.getTag(), null);
+                ((MainActivity) context).showLoading();
             }
         });
 

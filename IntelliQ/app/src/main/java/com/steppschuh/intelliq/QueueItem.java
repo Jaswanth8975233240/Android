@@ -1,5 +1,9 @@
 package com.steppschuh.intelliq;
 
+import android.util.Log;
+
+import com.google.gson.JsonObject;
+
 /**
  * Created by Steppschuh on 13/06/15.
  */
@@ -20,9 +24,23 @@ public class QueueItem {
     String id;
     String name;
     String companyId;
+    String status;
     long checkinTime;
     int position;
     int ticketNumber;
+
+    public static QueueItem parseFromJson(JsonObject jsonObject) throws Exception{
+        QueueItem queueItem = new QueueItem();
+
+        Log.d(MobileApp.TAG, "Parsing JSON item: " + jsonObject);
+
+        queueItem.setId(jsonObject.getAsJsonPrimitive("Id").getAsString());
+        queueItem.setName(jsonObject.getAsJsonPrimitive("Name").getAsString());
+
+        Log.d(MobileApp.TAG, "Item parsed: " + queueItem.getName());
+
+        return queueItem;
+    }
 
     public String getId() {
         return id;
