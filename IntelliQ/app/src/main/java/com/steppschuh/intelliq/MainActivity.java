@@ -22,6 +22,27 @@ public class MainActivity extends ActionBarActivity {
             app.setContextActivity(this);
         }
 
+        if (savedInstanceState == null) {
+            showLoading();
+        }
+    }
+
+    public void showCompanies() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new FragmentCompanies())
+                .commit();
+    }
+
+    public void showQueue() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new FragmentCompanies())
+                .commit();
+    }
+
+    public void showLoading() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, new FragmentLoading())
+                .commit();
     }
 
     @Override
@@ -40,6 +61,9 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_refresh) {
+            app.requestCompanies(null);
             return true;
         }
 

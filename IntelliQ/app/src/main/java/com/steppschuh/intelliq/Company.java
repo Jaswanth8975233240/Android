@@ -17,10 +17,11 @@ import java.util.List;
 public class Company {
 
     String id;
-    String name;
-    String closingHour;
-    String logoUrl;
-    int waitingTime;
+    String name = "Unknown";
+    String closingHour = "20";
+    String logoUrl = "";
+    int waitingTime = 0;
+    int peopleInQueue = 0;
 
     List<QueueItem> queueItems = new ArrayList<>();
 
@@ -42,14 +43,13 @@ public class Company {
 
         Log.d(MobileApp.TAG, "Parsing JSON item: " + jsonObject);
 
-        company.setId(jsonObject.getAsJsonPrimitive("id").getAsString());
-        String title = jsonObject.getAsJsonObject("title").getAsJsonPrimitive("value").getAsString();
-        company.setName(title);
+        company.setId(jsonObject.getAsJsonPrimitive("Id").getAsString());
+        company.setName(jsonObject.getAsJsonPrimitive("Name").getAsString());
+        company.setLogoUrl(jsonObject.getAsJsonPrimitive("logo__c").getAsString());
+        company.setClosingHour(jsonObject.getAsJsonPrimitive("closingHour__c").getAsString());
+        company.setWaitingTime(jsonObject.getAsJsonPrimitive("waitingTime__c").getAsInt());
 
-        Log.d(MobileApp.TAG, "Parsing item: " + company.getName());
-
-        String description = jsonObject.getAsJsonObject("description").getAsJsonPrimitive("value").getAsString();
-        //company.setDescription(Html.fromHtml(description).toString());
+        Log.d(MobileApp.TAG, "Item parsed: " + company.getName());
 
         return company;
     }
@@ -96,6 +96,14 @@ public class Company {
 
     public void setWaitingTime(int waitingTime) {
         this.waitingTime = waitingTime;
+    }
+
+    public int getPeopleInQueue() {
+        return peopleInQueue;
+    }
+
+    public void setPeopleInQueue(int peopleInQueue) {
+        this.peopleInQueue = peopleInQueue;
     }
 
     public List<QueueItem> getQueueItems() {

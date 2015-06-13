@@ -62,14 +62,14 @@ public class MobileApp extends Application {
             public void run() {
                 Log.d(TAG, "Initializing asynchronously");
 
-                requestCompanies();
+                requestCompanies(null);
 
                 Log.d(TAG, "Asynchronously initialization done");
             }
         }).start();
     }
 
-    public void requestCompanies() {
+    public void requestCompanies(final CallbackReceiver callbackReceiver) {
         Log.d(TAG, "Requesting companies");
         companies = new ArrayList<Company>();
 
@@ -87,10 +87,7 @@ public class MobileApp extends Application {
                                 return;
                             }
 
-                            //JsonObject ads = result.getAsJsonObject("{http://www.ebayclassifiedsgroup.com/schema/ad/v1}ads");
-                            //JsonArray adArray = ads.getAsJsonObject("value").getAsJsonArray("ad");
-
-                            JsonArray companiesArray = result.getAsJsonArray();
+                            JsonArray companiesArray = result.getAsJsonArray("companies");
                             for (JsonElement companyEntry : companiesArray) {
                                 try {
                                     companies.add(Company.parseFromJson((JsonObject) companyEntry));
@@ -101,6 +98,12 @@ public class MobileApp extends Application {
                             }
 
                             Log.d(TAG, "Companies received: " + companies.size());
+
+                            if (callbackReceiver != null) {
+                                callbackReceiver.onCallBackReceived(null);
+                            } else {
+                                ((MainActivity) contextActivity).showCompanies();
+                            }
                         }
                     });
         } catch (Exception ex) {
@@ -110,7 +113,7 @@ public class MobileApp extends Application {
     }
 
 
-    
+
 
     public Activity getContextActivity() {
         return contextActivity;
