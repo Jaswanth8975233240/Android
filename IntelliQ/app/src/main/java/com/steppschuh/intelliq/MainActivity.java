@@ -23,7 +23,11 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (savedInstanceState == null) {
-            showLoading();
+            if (app.getCompanies().size() > 0) {
+                showCompanies();
+            } else {
+                showLoading();
+            }
         }
     }
 
@@ -33,9 +37,9 @@ public class MainActivity extends ActionBarActivity {
                 .commit();
     }
 
-    public void showQueue() {
+    public void showQueue(String id) {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, new FragmentCompanies())
+                .add(R.id.container, new FragmentQueue())
                 .commit();
     }
 

@@ -7,5 +7,20 @@
 
     <string name="loading">Loading</string>
     <string name="companies">Companies</string>
-    <string name="people_in_queue">People in queue:</string>
+    <string name="queue">Queue</string>
+
+    <string name="people_in_queue">People in queue</string>
+    <string name="people_in_queue_desc">These people are already in line and will get served before you.</string>
+
+    <string name="ticket_id">Your ticket</string>
+    <string name="ticket_id_desc">This is your ticket ID, we\'ll let you know when it\'s time for you to show up.</string>
+
+    <string name="time_left">Time left</string>
+    <string name="time_left_desc">This is an estimation of how long you have to wait. Make sure that you are back on time.</string>
+
+    <string name="cancel">Cancel ticket</string>
+    <string name="cancel_desc">You can give up your place in the queue by clicking the button below.</string>
+    <string name="cancel_button">Leave Queue</string>
+
+
 </resources>

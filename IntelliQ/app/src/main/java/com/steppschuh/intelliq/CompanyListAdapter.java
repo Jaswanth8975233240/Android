@@ -56,6 +56,14 @@ public class CompanyListAdapter extends ArrayAdapter<Company> {
                 .error(R.drawable.error)
                 .load(currentItem.getLogoUrl());
 
+        rowView.setTag(currentItem.getId());
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).showQueue((String) v.getTag());
+            }
+        });
+
         return rowView;
     }
 
