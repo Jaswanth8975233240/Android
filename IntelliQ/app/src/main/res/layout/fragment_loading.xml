@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:src="@drawable/ticket_back"
+        android:src="@drawable/logo"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"

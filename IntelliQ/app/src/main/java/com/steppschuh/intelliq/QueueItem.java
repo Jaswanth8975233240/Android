@@ -26,7 +26,6 @@ public class QueueItem {
     String companyId;
     String status;
     long checkinTime;
-    int position;
     int ticketNumber;
 
     public static QueueItem parseFromJson(JsonObject jsonObject) throws Exception{
@@ -34,8 +33,11 @@ public class QueueItem {
 
         Log.d(MobileApp.TAG, "Parsing JSON item: " + jsonObject);
 
-        queueItem.setId(jsonObject.getAsJsonPrimitive("Id").getAsString());
-        queueItem.setName(jsonObject.getAsJsonPrimitive("Name").getAsString());
+        queueItem.setId(jsonObject.getAsJsonPrimitive("id").getAsString());
+        queueItem.setName(jsonObject.getAsJsonPrimitive("name").getAsString());
+        queueItem.setTicketNumber(jsonObject.getAsJsonPrimitive("position__c").getAsInt());
+        queueItem.setCheckinTime(jsonObject.getAsJsonPrimitive("checkintime__c").getAsLong());
+        queueItem.setStatus(jsonObject.getAsJsonPrimitive("status__c").getAsString());
 
         Log.d(MobileApp.TAG, "Item parsed: " + queueItem.getName());
 
@@ -74,19 +76,19 @@ public class QueueItem {
         this.checkinTime = checkinTime;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public int getTicketNumber() {
         return ticketNumber;
     }
 
     public void setTicketNumber(int ticketNumber) {
         this.ticketNumber = ticketNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

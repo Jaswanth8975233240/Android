@@ -50,10 +50,14 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
         refreshHandler = new Handler();
         refreshRunable = new Runnable() {
             public void run() {
-                if (shouldRefresh) {
-                    app.requestCompanies(FragmentCompanies.this);
+                try {
+                    if (shouldRefresh) {
+                        app.requestCompanies(FragmentCompanies.this);
+                    }
+                    refreshHandler.postDelayed(this, refreshDelay);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                refreshHandler.postDelayed(this, refreshDelay);
             }
         };
     }

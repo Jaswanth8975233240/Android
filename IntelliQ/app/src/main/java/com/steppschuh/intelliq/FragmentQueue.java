@@ -65,10 +65,14 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
         refreshHandler = new Handler();
         refreshRunable = new Runnable() {
             public void run() {
-                if (shouldRefresh) {
-                    //app.requestCompanies(FragmentQueue.this);
+                try {
+                    if (shouldRefresh) {
+                        app.requestQueuedPeople(currentCompany.getId(), FragmentQueue.this);
+                    }
+                    refreshHandler.postDelayed(this, refreshDelay);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                refreshHandler.postDelayed(this, refreshDelay);
             }
         };
     }
@@ -86,14 +90,21 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
             return;
         }
 
-        if (currentItem == null) {
+        for (QueueItem queueItem : currentCompany.getQueueItems()) {
+            if (queueItem.getId().equals(app.getQueueItemId())) {
+                currentItem = queueItem;
+            }
+        }
 
+        if (currentItem == null) {
             return;
         }
 
+        getActivity().setTitle(currentCompany.getName() + " " + getString(R.string.queue));
+
         int numberQuedItemsBefore = currentCompany.getQueuedItemsBeforeCount(currentItem);
 
-        ticketNumber.setText(String.valueOf(currentItem.position));
+        ticketNumber.setText(String.valueOf(currentItem.getTicketNumber()));
         timeLeft.setText(String.valueOf(currentCompany.getWaitingTime() * numberQuedItemsBefore) + " min");
         peopleInQueue.setText(String.valueOf(numberQuedItemsBefore));
 

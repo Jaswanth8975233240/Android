@@ -43,11 +43,11 @@ public class Company {
 
         Log.d(MobileApp.TAG, "Parsing JSON item: " + jsonObject);
 
-        company.setId(jsonObject.getAsJsonPrimitive("Id").getAsString());
-        company.setName(jsonObject.getAsJsonPrimitive("Name").getAsString());
+        company.setId(jsonObject.getAsJsonPrimitive("id").getAsString());
+        company.setName(jsonObject.getAsJsonPrimitive("name").getAsString());
         company.setLogoUrl(jsonObject.getAsJsonPrimitive("logo__c").getAsString());
-        company.setClosingHour(jsonObject.getAsJsonPrimitive("closingHour__c").getAsString());
-        company.setWaitingTime(jsonObject.getAsJsonPrimitive("waitingTime__c").getAsInt());
+        company.setClosingHour(jsonObject.getAsJsonPrimitive("closinghour__c").getAsString());
+        company.setWaitingTime(jsonObject.getAsJsonPrimitive("waitingtime__c").getAsInt());
         company.setPeopleInQueue(jsonObject.getAsJsonPrimitive("waiting").getAsInt());
 
         Log.d(MobileApp.TAG, "Item parsed: " + company.getName());

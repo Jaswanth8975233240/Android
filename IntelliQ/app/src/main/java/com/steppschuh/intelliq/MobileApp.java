@@ -26,6 +26,7 @@ public class MobileApp extends Application {
 
     List<Company> companies = new ArrayList<>();
     String userName = "Unknown";
+    String queueItemId;
 
     /**
      * Methods for initializing the app
@@ -174,21 +175,24 @@ public class MobileApp extends Application {
     public void requestQueueEntry(final String companyId, final CallbackReceiver callbackReceiver) {
         Log.d(TAG, "Requesting queue entry");
 
+        String url = ApiHelper.getAddQueueItemUrl(userName, companyId);
+        Log.d(TAG, url);
+
         try {
             Ion.with(contextActivity)
-                    .load(ApiHelper.getAddQueueItemUrl(userName, companyId))
+                    .load(url)
                     .setTimeout(5000)
                     .asJsonObject()
                     .setCallback(new FutureCallback<JsonObject>() {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null) {
-                                e.printStackTrace();
-                                return;
-                            }
-
                             try {
-                                String queueItemId = result.getAsJsonPrimitive("qItemId").getAsString();
+                                if (e != null) {
+                                    e.printStackTrace();
+                                    throw new Exception(e.getMessage());
+                                }
+
+                                queueItemId = result.getAsJsonPrimitive("qItemId").getAsString();
                                 Log.d(TAG, "Queue item id: " + queueItemId);
 
                                 QueueItem item = new QueueItem();
@@ -233,5 +237,21 @@ public class MobileApp extends Application {
 
     public void setCompanies(List<Company> companies) {
         this.companies = companies;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getQueueItemId() {
+        return queueItemId;
+    }
+
+    public void setQueueItemId(String queueItemId) {
+        this.queueItemId = queueItemId;
     }
 }

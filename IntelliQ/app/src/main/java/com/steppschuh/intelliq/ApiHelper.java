@@ -21,11 +21,11 @@ public class ApiHelper {
     }
 
     public static String getAddQueueItemUrl(String name, String id) {
-        return BASE_URL + "qitems?companyId=" + id + "name=" + name;
+        return BASE_URL + "qitems/post?company=" + id + "&name=" + name;
     }
 
     public static String getCancelQueueItemUrl(String id) {
-        return BASE_URL + "qitems/cancel?id=" + id;
+        return BASE_URL + "qitems/cancel/post?id=" + id;
     }
 
     public static String getQueueItemsForCompanyUrl(String id) {
