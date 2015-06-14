@@ -1,7 +1,21 @@
 package com.steppschuh.intelliq;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Application;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.nfc.Tag;
+import android.provider.ContactsContract;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.NotificationCompat.WearableExtender;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -12,6 +26,7 @@ import com.koushikdutta.ion.Ion;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,6 +35,7 @@ import java.util.List;
 public class MobileApp extends Application {
 
     public static final String TAG = "intelliq";
+    public static final int NOTIFICATION_ID = 123;
 
     public boolean isInitialized = false;
     private Activity contextActivity;
@@ -27,6 +43,9 @@ public class MobileApp extends Application {
     List<Company> companies = new ArrayList<>();
     String userName = "Unknown";
     String queueItemId;
+
+    NotificationManager mNotificationManager;
+
 
     /**
      * Methods for initializing the app
@@ -65,11 +84,61 @@ public class MobileApp extends Application {
             public void run() {
                 Log.d(TAG, "Initializing asynchronously");
 
+                userName = getOwnerName();
+                if (userName == null) {
+                    userName = android.os.Build.MODEL;
+                }
+
+                Log.d(TAG, "User name: " + userName);
+
                 requestCompanies(null);
 
                 Log.d(TAG, "Asynchronously initialization done");
             }
         }).start();
+    }
+
+    public String getOwnerMail() {
+        AccountManager manager = AccountManager.get(this);
+        Account[] accounts = manager.getAccountsByType("com.google");
+        List<String> possibleEmails = new LinkedList<String>();
+
+        for (Account account : accounts) {
+            possibleEmails.add(account.name);
+        }
+
+        if (!possibleEmails.isEmpty() && possibleEmails.get(0) != null) {
+            String email = possibleEmails.get(0);
+            String[] parts = email.split("@");
+
+            if (parts.length > 1)
+                return parts[0];
+        }
+        return null;
+    }
+
+    public String getOwnerName() {
+        String name = getOwnerMail();
+
+        Cursor c = contextActivity.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+        int count = c.getCount();
+        String[] columnNames = c.getColumnNames();
+        boolean b = c.moveToFirst();
+        int position = c.getPosition();
+        if (count == 1 && position == 0) {
+            for (int j = 0; j < columnNames.length; j++) {
+                String columnName = columnNames[j];
+                String columnValue = c.getString(c.getColumnIndex(columnName));
+
+                if (columnName.equalsIgnoreCase("display_name")) {
+                    name = columnValue;
+                }
+
+                Log.d(TAG, columnName + ": " + columnValue);
+            }
+        }
+        c.close();
+        return name;
     }
 
     public void requestCompanies(final CallbackReceiver callbackReceiver) {
@@ -221,7 +290,84 @@ public class MobileApp extends Application {
         }
     }
 
+    public void requestQueueCancel(final String queueItemId, final CallbackReceiver callbackReceiver) {
+        Log.d(TAG, "Requesting queue leave");
 
+        String url = ApiHelper.getCancelQueueItemUrl(queueItemId);
+        Log.d(TAG, url);
+
+        try {
+            Ion.with(contextActivity)
+                    .load(url)
+                    .setTimeout(5000)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            try {
+                                if (e != null) {
+                                    e.printStackTrace();
+                                    throw new Exception(e.getMessage());
+                                }
+
+                                Log.d(TAG, "Queue item canceled: " + queueItemId);
+
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                            }
+                        }
+                    });
+        } catch (Exception ex) {
+            Log.e(TAG, "Error while requesting queue leave");
+            ex.printStackTrace();
+        }
+    }
+
+    public void showNotification(int number) {
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Create an intent for the reply action
+        Intent actionIntent = new Intent(this, MainActivity.class);
+        PendingIntent actionPendingIntent =
+                PendingIntent.getActivity(this, 0, actionIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Create the action
+        NotificationCompat.Action cancelAction =
+                new NotificationCompat.Action.Builder(R.mipmap.ic_launcher,
+                        getString(R.string.cancel_button), actionPendingIntent)
+                        .build();
+
+        NotificationCompat.WearableExtender wearableExtender =
+                new NotificationCompat.WearableExtender()
+                        .addAction(cancelAction)
+                        .setHintHideIcon(false);
+
+        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setAutoCancel(false)
+                .extend(wearableExtender);
+
+        if (number > 2) {
+            mNotifyBuilder.setContentTitle(number + " people in queue");
+            mNotifyBuilder.setContentText("You still have a few minutes before you should get back.");
+        } else {
+            mNotifyBuilder.setContentTitle("Get back, you're next!");
+            mNotifyBuilder.setContentText("You should be called up soon, make sure to be there on time.");
+        }
+
+        mNotificationManager.notify(
+                NOTIFICATION_ID,
+                mNotifyBuilder.build());
+    }
+
+    public void cancelNotification() {
+        mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(NOTIFICATION_ID);
+    }
 
     public Activity getContextActivity() {
         return contextActivity;

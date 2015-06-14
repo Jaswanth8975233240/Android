@@ -27,7 +27,7 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
 
     Handler refreshHandler = new Handler();
     Runnable refreshRunable;
-    int refreshDelay = 5000;
+    int refreshDelay = 7000;
     boolean shouldRefresh = true;
 
     TextView ticketNumber;
@@ -57,7 +57,12 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
         leaveQueue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: leave queue
+                if (currentItem != null) {
+                    app.requestQueueCancel(currentItem.getId(), null);
+                    currentItem = null;
+                    app.setQueueItemId(null);
+                }
+                app.cancelNotification();
                 ((MainActivity) app.getContextActivity()).showCompanies();
             }
         });
@@ -108,6 +113,7 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
         timeLeft.setText(String.valueOf(currentCompany.getWaitingTime() * numberQuedItemsBefore) + " min");
         peopleInQueue.setText(String.valueOf(numberQuedItemsBefore));
 
+        app.showNotification(numberQuedItemsBefore);
     }
 
     public void setCompanyId(String companyId) {

@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +22,16 @@ public class ApiHelper {
     }
 
     public static String getAddQueueItemUrl(String name, String id) {
+        try {
+            name = URLEncoder.encode(name, "utf-8");
+        } catch (Exception ex) {
+
+        }
         return BASE_URL + "qitems/post?company=" + id + "&name=" + name;
     }
 
     public static String getCancelQueueItemUrl(String id) {
-        return BASE_URL + "qitems/cancel/post?id=" + id;
+        return BASE_URL + "qitem/cancel/post?id=" + id;
     }
 
     public static String getQueueItemsForCompanyUrl(String id) {

@@ -45,7 +45,7 @@ public class CompanyListAdapter extends ArrayAdapter<Company> {
         // fill data
         ((TextView) rowView.findViewById(R.id.itemNameLabel)).setText(currentItem.getName());
         ((TextView) rowView.findViewById(R.id.itemQueueValue)).setText(String.valueOf(currentItem.getPeopleInQueue()));
-        ((TextView) rowView.findViewById(R.id.itemWaitingTime)).setText(String.valueOf(currentItem.getWaitingTime()) + " min");
+        ((TextView) rowView.findViewById(R.id.itemWaitingTime)).setText(String.valueOf(currentItem.getWaitingTime() * currentItem.getPeopleInQueue()) + " min");
         ((TextView) rowView.findViewById(R.id.itemQueueValue)).setText(String.valueOf(currentItem.getPeopleInQueue()));
 
         // load image

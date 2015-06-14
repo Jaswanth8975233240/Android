@@ -1,12 +1,19 @@
 package com.steppschuh.intelliq;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -22,9 +29,11 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
     ListView CompanyList;
     CompanyListAdapter CompanyListAdapter;
 
+    Button scanCode;
+
     Handler refreshHandler = new Handler();
     Runnable refreshRunable;
-    int refreshDelay = 5000;
+    int refreshDelay = 10000;
     boolean shouldRefresh = true;
 
     @Override
@@ -46,6 +55,17 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
         ArrayList<Company> companies = new ArrayList<>();
         CompanyListAdapter = new CompanyListAdapter(getActivity(), R.layout.company_list_item, companies);
         CompanyList.setAdapter(CompanyListAdapter);
+
+        scanCode = (Button) contentFragment.findViewById(R.id.button_scan);
+        scanCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast toast = Toast.makeText(getActivity(), getString(R.string.no_code_reader), Toast.LENGTH_SHORT);
+                //toast.show();
+
+                ((MainActivity) getActivity()).scanBarcode(null);
+            }
+        });
 
         refreshHandler = new Handler();
         refreshRunable = new Runnable() {

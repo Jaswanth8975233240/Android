@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "IntelliQ",
+    "description": "Extension name"
+  },
+  "appNotSupported": {
+    "message": "Ez az alkalmazás nem kompatibilis az eszközével.",
+    "description": "Message displayed when the app is not supported."
+  }
+}

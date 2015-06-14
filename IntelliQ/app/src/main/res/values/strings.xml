@@ -8,6 +8,8 @@
     <string name="loading">Loading</string>
     <string name="queue">Queue</string>
 
+    <string name="no_code_reader">No QR code reader found</string>
+
     <string name="companies">Companies</string>
     <string name="companies_desc">Select the queue that you want to join from the companies near by or scan a code below.</string>
     <string name="companies_scan">Scan QR Code</string>

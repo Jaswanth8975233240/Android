@@ -1,0 +1,10 @@
+{
+  "extName": {
+    "message": "IntelliQ",
+    "description": "Extension name"
+  },
+  "appNotSupported": {
+    "message": "Aplikacija nije kompatibilna s vašim uređajem.",
+    "description": "Message displayed when the app is not supported."
+  }
+}
