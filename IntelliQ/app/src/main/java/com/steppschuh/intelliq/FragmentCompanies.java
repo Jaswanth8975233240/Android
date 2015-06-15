@@ -33,7 +33,7 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
 
     Handler refreshHandler = new Handler();
     Runnable refreshRunable;
-    int refreshDelay = 10000;
+    int refreshDelay = 5000;
     boolean shouldRefresh = true;
 
     @Override

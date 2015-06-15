@@ -27,7 +27,7 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
 
     Handler refreshHandler = new Handler();
     Runnable refreshRunable;
-    int refreshDelay = 7000;
+    int refreshDelay = 5000;
     boolean shouldRefresh = true;
 
     TextView ticketNumber;

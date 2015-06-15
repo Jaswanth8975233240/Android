@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
                     showLoading();
                 } catch (Exception ex) {
                     Toast toast = Toast.makeText(this, "Invalid code scanned", Toast.LENGTH_SHORT);
-                    toast.show();
+                    //toast.show();
                 }
             }
         } else {
