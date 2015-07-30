@@ -25,11 +25,6 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
 
     View contentFragment;
 
-    Handler refreshHandler = new Handler();
-    Runnable refreshRunable;
-    int refreshDelay = 5000;
-    boolean shouldRefresh = true;
-
     TextView ticketNumber;
     TextView timeLeft;
     TextView peopleInQueue;
@@ -62,58 +57,45 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
                     currentItem = null;
                     app.setQueueItemId(null);
                 }
-                app.cancelNotification();
                 ((MainActivity) app.getContextActivity()).showCompanies();
             }
         });
-
-        refreshHandler = new Handler();
-        refreshRunable = new Runnable() {
-            public void run() {
-                try {
-                    if (shouldRefresh) {
-                        app.requestQueuedPeople(currentCompany.getId(), FragmentQueue.this);
-                    }
-                    refreshHandler.postDelayed(this, refreshDelay);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
     }
 
     private void updateUi() {
-        currentCompany = null;
-        for (Company company : app.getCompanies()) {
-            if (company.getId().equals(companyId)) {
-                currentCompany = company;
+        try {
+            currentCompany = null;
+            for (Company company : app.getCompanies()) {
+                if (company.getId().equals(companyId)) {
+                    currentCompany = company;
+                }
             }
-        }
 
-        if (currentCompany == null) {
-            ((MainActivity) app.getContextActivity()).showCompanies();
-            return;
-        }
-
-        for (QueueItem queueItem : currentCompany.getQueueItems()) {
-            if (queueItem.getId().equals(app.getQueueItemId())) {
-                currentItem = queueItem;
+            if (currentCompany == null) {
+                ((MainActivity) app.getContextActivity()).showCompanies();
+                return;
             }
+
+            for (QueueItem queueItem : currentCompany.getQueueItems()) {
+                if (queueItem.getId().equals(app.getQueueItemId())) {
+                    currentItem = queueItem;
+                }
+            }
+
+            if (currentItem == null) {
+                return;
+            }
+
+            getActivity().setTitle(currentCompany.getName() + " " + getString(R.string.queue));
+
+            int numberQuedItemsBefore = currentCompany.getQueuedItemsBeforeCount(currentItem);
+
+            ticketNumber.setText(String.valueOf(currentItem.getTicketNumber()));
+            timeLeft.setText(String.valueOf(currentCompany.getWaitingTime() * numberQuedItemsBefore) + " min");
+            peopleInQueue.setText(String.valueOf(numberQuedItemsBefore));
+        } catch (Exception ex) {
+
         }
-
-        if (currentItem == null) {
-            return;
-        }
-
-        getActivity().setTitle(currentCompany.getName() + " " + getString(R.string.queue));
-
-        int numberQuedItemsBefore = currentCompany.getQueuedItemsBeforeCount(currentItem);
-
-        ticketNumber.setText(String.valueOf(currentItem.getTicketNumber()));
-        timeLeft.setText(String.valueOf(currentCompany.getWaitingTime() * numberQuedItemsBefore) + " min");
-        peopleInQueue.setText(String.valueOf(numberQuedItemsBefore));
-
-        app.showNotification(numberQuedItemsBefore);
     }
 
     public void setCompanyId(String companyId) {
@@ -128,15 +110,12 @@ public class FragmentQueue extends Fragment implements CallbackReceiver {
     @Override
     public void onPause() {
         super.onPause();
-        shouldRefresh = false;
-        refreshHandler.removeCallbacks(refreshRunable);
+        app.removeCallbackReceiver(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        shouldRefresh = true;
-        refreshHandler = new Handler();
-        refreshHandler.postDelayed(refreshRunable, refreshDelay);
+        app.addCallbackReceiver(this);
     }
 }

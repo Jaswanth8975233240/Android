@@ -31,10 +31,6 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
 
     Button scanCode;
 
-    Handler refreshHandler = new Handler();
-    Runnable refreshRunable;
-    int refreshDelay = 5000;
-    boolean shouldRefresh = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,26 +56,12 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
         scanCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast toast = Toast.makeText(getActivity(), getString(R.string.no_code_reader), Toast.LENGTH_SHORT);
+                //Toast toast = Toast.makeText(getActivity(), getString(R.string.no_code_reader), Toast.LENGTH_SHORT);
                 //toast.show();
 
                 ((MainActivity) getActivity()).scanBarcode(null);
             }
         });
-
-        refreshHandler = new Handler();
-        refreshRunable = new Runnable() {
-            public void run() {
-                try {
-                    if (shouldRefresh) {
-                        app.requestCompanies(FragmentCompanies.this);
-                    }
-                    refreshHandler.postDelayed(this, refreshDelay);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        };
     }
 
     private void updateUi() {
@@ -107,15 +89,12 @@ public class FragmentCompanies extends Fragment implements CallbackReceiver {
     @Override
     public void onPause() {
         super.onPause();
-        shouldRefresh = false;
-        refreshHandler.removeCallbacks(refreshRunable);
+        app.removeCallbackReceiver(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        shouldRefresh = true;
-        refreshHandler = new Handler();
-        refreshHandler.postDelayed(refreshRunable, refreshDelay);
+        app.addCallbackReceiver(this);
     }
 }

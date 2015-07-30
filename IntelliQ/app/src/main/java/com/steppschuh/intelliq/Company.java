@@ -25,19 +25,6 @@ public class Company {
 
     List<QueueItem> queueItems = new ArrayList<>();
 
-    /*
-   "attributes": {
-     "type": "company__c",
-     "url": "/services/data/v33.0/sobjects/company__c/a022000000jCYZOAA4"
-   },
-   "Id": "a022000000jCYZOAA4",
-   "Name": "Blind Barber Harry",
-   "closingHour__c": 20,
-   "logo__c": "http://chic-chester.co.uk/wp-content/uploads/2014/08/20140806_LogoSupporterPlaceholder.png",
-   "waitingTime__c": 20
-    */
-
-
     public static Company parseFromJson(JsonObject jsonObject) throws Exception{
         Company company = new Company();
 
@@ -56,6 +43,10 @@ public class Company {
     }
 
     public int getQueuedItemsBeforeCount(QueueItem currentItem) {
+        if (!containsQueueItem(currentItem)) {
+            return -1;
+        }
+
         int count = 0;
         for (QueueItem queueItem : queueItems) {
             if (queueItem.getCheckinTime() < currentItem.getCheckinTime()) {
@@ -65,7 +56,23 @@ public class Company {
         return count;
     }
 
+    public boolean containsQueueItem(QueueItem item) {
+        for (QueueItem queueItem : queueItems) {
+            if (queueItem.getId().equals(item.getId())) {
+                return true;
+            }
+        }
 
+        return false;
+    }
+
+    public void deleteQueueItem(QueueItem item) {
+        for (QueueItem queueItem : queueItems) {
+            if (queueItem.getId().equals((item.getId()))) {
+                queueItems.remove(queueItem);
+            }
+        }
+    }
 
     public String getId() {
         return id;

@@ -1,6 +1,7 @@
 package com.steppschuh.intelliq;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -32,10 +33,16 @@ public class MainActivity extends ActionBarActivity {
         }
 
         if (savedInstanceState == null) {
-            if (app.getCompanies().size() > 0) {
-                showCompanies();
+            if (app.getQueueService() != null && app.getQueueService().currentCompanyId != null) {
+                showQueue(app.getQueueService().currentCompanyId);
             } else {
-                showLoading();
+                if (app.getCompanies().size() > 0) {
+                    //app.hideLoadingScreen();
+                    showCompanies();
+                } else {
+                    //app.showLoadingScreen();
+                    showCompanies();
+                }
             }
         }
     }
@@ -113,7 +120,7 @@ public class MainActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_refresh) {
-            app.requestCompanies(null);
+            app.requestCompanies();
             return true;
         }
 

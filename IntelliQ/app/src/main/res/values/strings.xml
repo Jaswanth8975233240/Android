@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">IntelliQ</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_refresh">Refresh</string>
 
-    <string name="loading">Loading</string>
+    <string name="loading">Loading...</string>
     <string name="queue">Queue</string>
 
     <string name="no_code_reader">No QR code reader found</string>
@@ -27,5 +26,12 @@
     <string name="cancel_desc">You can give up your place in the queue by clicking the button below.</string>
     <string name="cancel_button">Leave Queue</string>
 
+    <string name="notification_title_default">[NUMBER] people before you</string>
+    <string name="notification_content_default">You still have a few minutes before you should get back to [COMPANYNAME]</string>
+
+    <string name="notification_title_get_back">Your turn at [COMPANYNAME]</string>
+    <string name="notification_content_get_back">#[NUMBER] will be called up soon, make sure to be there on time.</string>
+
+    <string name="click_to_dismiss">tap to dismiss ticket</string>
 
 </resources>

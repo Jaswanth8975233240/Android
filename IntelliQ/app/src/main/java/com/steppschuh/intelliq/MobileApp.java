@@ -6,16 +6,19 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
-import android.nfc.Tag;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.NotificationCompat.WearableExtender;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
@@ -40,11 +43,16 @@ public class MobileApp extends Application {
     public boolean isInitialized = false;
     private Activity contextActivity;
 
+    QueueService queueService;
+    boolean queueServiceBound = false;
+
     List<Company> companies = new ArrayList<>();
     String userName = "Unknown";
     String queueItemId;
 
     NotificationManager mNotificationManager;
+
+    List<CallbackReceiver> callbackReceivers = new ArrayList<>();
 
 
     /**
@@ -57,6 +65,8 @@ public class MobileApp extends Application {
 
         try	{
             initializeHelpers();
+
+            initializeQueueService();
 
             //Invoke asynchronous initialization
             initializeAsync();
@@ -91,11 +101,61 @@ public class MobileApp extends Application {
 
                 Log.d(TAG, "User name: " + userName);
 
-                requestCompanies(null);
-
                 Log.d(TAG, "Asynchronously initialization done");
             }
         }).start();
+    }
+
+    public void initializeQueueService() {
+        try {
+            registerQueueDataReceiver();
+            startQueueService();
+            bindQueueService();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void startQueueService() {
+        Log.d(TAG, "Starting queue service");
+        Intent intent = new Intent(this, QueueService.class);
+        startService(intent);
+    }
+
+    public void stopQueueService() {
+        Log.d(TAG, "Stopping queue service");
+        queueServiceBound = false;
+        Intent intent = new Intent(this, QueueService.class);
+        stopService(intent);
+    }
+
+    public void bindQueueService() {
+        Log.d(TAG, "Binding queue service");
+        Intent intent = new Intent(this, QueueService.class);
+        bindService(intent, queueServiceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void registerQueueDataReceiver() {
+        IntentFilter mStatusIntentFilter = new IntentFilter(QueueService.BROADCAST_ACTION);
+
+        // Instantiates a new DownloadStateReceiver
+        ResponseReceiver QueueServiceStateReceiver = new ResponseReceiver();
+
+        // Registers the DownloadStateReceiver and its intent filters
+        LocalBroadcastManager.getInstance(this).registerReceiver(QueueServiceStateReceiver, mStatusIntentFilter);
+    }
+
+    public void showLoadingScreen() {
+        ((MainActivity) contextActivity).showLoading();
+    }
+
+    public void hideLoadingScreen() {
+        if (queueItemId != null) {
+            ((MainActivity) contextActivity).showQueue(queueItemId);
+        } else {
+            ((MainActivity) contextActivity).showCompanies();
+        }
+
     }
 
     public String getOwnerMail() {
@@ -134,115 +194,32 @@ public class MobileApp extends Application {
                     name = columnValue;
                 }
 
-                Log.d(TAG, columnName + ": " + columnValue);
+                //Log.d(TAG, columnName + ": " + columnValue);
             }
         }
         c.close();
         return name;
     }
 
-    public void requestCompanies(final CallbackReceiver callbackReceiver) {
-        Log.d(TAG, "Requesting companies");
-        companies = new ArrayList<Company>();
-
-        try {
-            Ion.with(contextActivity)
-                    .load(ApiHelper.getAllCompaniesUrl())
-                    .setTimeout(5000)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null) {
-                                e.printStackTrace();
-                                return;
-                            }
-
-                            try {
-                                JsonArray companiesArray = result.getAsJsonArray("companies");
-                                for (JsonElement companyEntry : companiesArray) {
-                                    try {
-                                        companies.add(Company.parseFromJson((JsonObject) companyEntry));
-                                    } catch (Exception ex) {
-                                        Log.e(TAG, "Unable to parse company: " + ex.getMessage());
-                                        //ex.printStackTrace();
-                                    }
-                                }
-
-                                Log.d(TAG, "Companies received: " + companies.size());
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-
-                            if (callbackReceiver != null) {
-                                callbackReceiver.onCallBackReceived(null);
-                            } else {
-                                ((MainActivity) contextActivity).showCompanies();
-                            }
-                        }
-                    });
-        } catch (Exception ex) {
-            Log.e(TAG, "Error while requesting companies");
-            ex.printStackTrace();
+    public void requestCompanies() {
+        if (queueServiceBound) {
+            queueService.requestCompanies();
         }
     }
 
-    public void requestQueuedPeople(final String companyId, final CallbackReceiver callbackReceiver) {
-        Log.d(TAG, "Requesting queue items");
-
-        try {
-            Ion.with(contextActivity)
-                    .load(ApiHelper.getQueueItemsForCompanyUrl(companyId))
-                    .setTimeout(5000)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null) {
-                                e.printStackTrace();
-                                return;
-                            }
-
-                            try {
-                                List<QueueItem> items = new ArrayList<QueueItem>();
-
-                                JsonArray itemsArray = result.getAsJsonArray("qItems");
-                                for (JsonElement item : itemsArray) {
-                                    try {
-                                        items.add(QueueItem.parseFromJson((JsonObject) item));
-                                    } catch (Exception ex) {
-                                        Log.e(TAG, "Unable to parse queue item: " + ex.getMessage());
-                                        //ex.printStackTrace();
-                                    }
-                                }
-
-                                Log.d(TAG, "Queue items received: " + items.size());
-
-                                for (Company company : companies) {
-                                    if (company.getId().equals(companyId)) {
-                                        company.setQueueItems(items);
-                                        company.setPeopleInQueue(items.size());
-                                    }
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-
-                            if (callbackReceiver != null) {
-                                callbackReceiver.onCallBackReceived(null);
-                            } else {
-                                ((MainActivity) contextActivity).showQueue(companyId);
-                            }
-                        }
-                    });
-        } catch (Exception ex) {
-            Log.e(TAG, "Error while requesting queue items");
-            ex.printStackTrace();
+    public void requestQueuedPeople(final String companyId) {
+        if (queueServiceBound) {
+            queueService.setCurrentCompanyId(companyId);
+            queueService.requestQueuedPeople(companyId);
         }
     }
 
     public void requestQueueEntry(final String companyId, final CallbackReceiver callbackReceiver) {
         Log.d(TAG, "Requesting queue entry");
+
+        if (!queueServiceBound) {
+            initializeQueueService();
+        }
 
         String url = ApiHelper.getAddQueueItemUrl(userName, companyId);
         Log.d(TAG, url);
@@ -262,6 +239,7 @@ public class MobileApp extends Application {
                                 }
 
                                 queueItemId = result.getAsJsonPrimitive("qItemId").getAsString();
+                                queueService.setCurrentQueueId(queueItemId);
                                 Log.d(TAG, "Queue item id: " + queueItemId);
 
                                 QueueItem item = new QueueItem();
@@ -280,13 +258,13 @@ public class MobileApp extends Application {
                             }
 
                             // update queued people list for that company
-                            requestQueuedPeople(companyId, callbackReceiver);
+                            requestQueuedPeople(companyId);
                         }
                     });
         } catch (Exception ex) {
             Log.e(TAG, "Error while requesting queue items");
             ex.printStackTrace();
-            requestQueuedPeople(companyId, callbackReceiver);
+            requestQueuedPeople(companyId);
         }
     }
 
@@ -294,7 +272,6 @@ public class MobileApp extends Application {
         Log.d(TAG, "Requesting queue leave");
 
         String url = ApiHelper.getCancelQueueItemUrl(queueItemId);
-        Log.d(TAG, url);
 
         try {
             Ion.with(contextActivity)
@@ -305,13 +282,11 @@ public class MobileApp extends Application {
                         @Override
                         public void onCompleted(Exception e, JsonObject result) {
                             try {
-                                if (e != null) {
-                                    e.printStackTrace();
-                                    throw new Exception(e.getMessage());
-                                }
+                                queueService.setCurrentCompanyId(null);
+                                queueService.setCurrentQueueId(null);
+                                queueService.cancelNotification();
 
                                 Log.d(TAG, "Queue item canceled: " + queueItemId);
-
                             } catch (Exception ex) {
                                 ex.printStackTrace();
                             }
@@ -323,50 +298,78 @@ public class MobileApp extends Application {
         }
     }
 
-    public void showNotification(int number) {
-        mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    // Defines callbacks for service binding, passed to bindService()
+    private ServiceConnection queueServiceConnection = new ServiceConnection() {
 
-        // Create an intent for the reply action
-        Intent actionIntent = new Intent(this, MainActivity.class);
-        PendingIntent actionPendingIntent =
-                PendingIntent.getActivity(this, 0, actionIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to QueueService, cast the IBinder and get QueueService instance
+            QueueService.QueueServiceBinder binder = (QueueService.QueueServiceBinder) service;
+            queueService = binder.getService();
+            queueServiceBound = true;
 
-        // Create the action
-        NotificationCompat.Action cancelAction =
-                new NotificationCompat.Action.Builder(R.mipmap.ic_launcher,
-                        getString(R.string.cancel_button), actionPendingIntent)
-                        .build();
-
-        NotificationCompat.WearableExtender wearableExtender =
-                new NotificationCompat.WearableExtender()
-                        .addAction(cancelAction)
-                        .setHintHideIcon(false);
-
-        NotificationCompat.Builder mNotifyBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setPriority(NotificationCompat.PRIORITY_MAX)
-                .setAutoCancel(false)
-                .extend(wearableExtender);
-
-        if (number > 2) {
-            mNotifyBuilder.setContentTitle(number + " people in queue");
-            mNotifyBuilder.setContentText("You still have a few minutes before you should get back.");
-        } else {
-            mNotifyBuilder.setContentTitle("Get back, you're next!");
-            mNotifyBuilder.setContentText("You should be called up soon, make sure to be there on time.");
+            Log.d(TAG, "onServiceConnected");
         }
 
-        mNotificationManager.notify(
-                NOTIFICATION_ID,
-                mNotifyBuilder.build());
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            queueServiceBound = false;
+            Log.d(TAG, "onServiceDisconnected");
+        }
+
+
+    };
+
+    // Broadcast receiver for receiving status updates from the IntentService
+    private class ResponseReceiver extends BroadcastReceiver
+    {
+        // Prevents instantiation
+        private ResponseReceiver() {
+        }
+        // Called when the BroadcastReceiver gets an Intent it's registered to receive
+
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "BroadcastReceiver received data");
+            try {
+                Bundle data = intent.getExtras();
+                if (data != null) {
+                    String status = data.getString(QueueService.KEY_DATA_STATUS);
+                    if (status != null) {
+                        if (status.equals(QueueService.DATA_STATUS_READY)) {
+                            //requestCompanies(null);
+                        } else if (status.equals(QueueService.DATA_STATUS_COMPANIES_UPDATED)) {
+                            notifyCallbackReceivers();
+                        } else if (status.equals(QueueService.DATA_STATUS_QUEUE_UPDATED)) {
+                            notifyCallbackReceivers();
+                        } else if (status.equals(QueueService.DATA_STATUS_TICKET_DISMISSED)) {
+                            queueService.cancelNotification();
+                            queueService.stopUpdatingData();
+                            stopQueueService();
+
+                            queueItemId = null;
+                            ((MainActivity) contextActivity).showCompanies();
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
-    public void cancelNotification() {
-        mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(NOTIFICATION_ID);
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        if (queueServiceBound) {
+            unbindService(queueServiceConnection);
+            queueServiceBound = false;
+        }
     }
 
     public Activity getContextActivity() {
@@ -378,6 +381,9 @@ public class MobileApp extends Application {
     }
 
     public List<Company> getCompanies() {
+        if (queueServiceBound) {
+            companies = queueService.getCompanies();
+        }
         return companies;
     }
 
@@ -399,5 +405,35 @@ public class MobileApp extends Application {
 
     public void setQueueItemId(String queueItemId) {
         this.queueItemId = queueItemId;
+    }
+
+    public QueueService getQueueService() {
+        return queueService;
+    }
+
+    public boolean isQueueServiceBound() {
+        return queueServiceBound;
+    }
+
+    public ServiceConnection getQueueServiceConnection() {
+        return queueServiceConnection;
+    }
+
+    public void addCallbackReceiver(CallbackReceiver callbackReceiver) {
+        if (!callbackReceivers.contains(callbackReceiver)) {
+            callbackReceivers.add(callbackReceiver);
+        }
+    }
+
+    public void removeCallbackReceiver(CallbackReceiver callbackReceiver) {
+        if (callbackReceivers.contains(callbackReceiver)) {
+            callbackReceivers.add(callbackReceiver);
+        }
+    }
+
+    public void notifyCallbackReceivers() {
+        for (CallbackReceiver callbackReceiver : callbackReceivers) {
+            callbackReceiver.onCallBackReceived(null);
+        }
     }
 }

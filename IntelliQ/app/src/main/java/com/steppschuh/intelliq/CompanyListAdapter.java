@@ -30,7 +30,7 @@ public class CompanyListAdapter extends ArrayAdapter<Company> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         View rowView = convertView;
 
         Company currentItem = getItem(position);
@@ -59,8 +59,9 @@ public class CompanyListAdapter extends ArrayAdapter<Company> {
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MobileApp) context.getApplication()).requestQueueEntry((String) v.getTag(), null);
-                ((MainActivity) context).showLoading();
+                String companyId = (String) v.getTag();
+                ((MobileApp) context.getApplication()).requestQueueEntry(companyId, null);
+                ((MainActivity) context).showQueue(companyId);
             }
         });
 
