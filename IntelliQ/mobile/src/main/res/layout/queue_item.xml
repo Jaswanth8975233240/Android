@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:card_view="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cardViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp" >
+
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView"
+        card_view:cardElevation="2dp"
+        card_view:cardUseCompatPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/cardViewCoverContainer"
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:id="@+id/cardViewCoverImage"
+                    android:src="@color/primaryLight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" />
+
+                <LinearLayout
+                    android:id="@+id/cardViewTagsContainer"
+                    android:layout_alignParentTop="true"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/cardViewTag1"
+                        android:text="0 people waiting"
+                        style="@style/CardTag" />
+
+                    <TextView
+                        android:id="@+id/cardViewTag2"
+                        android:text="0 minutes to wait"
+                        style="@style/CardTag" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/cardViewContentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewCoverContainer"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/cardViewContentImage"
+                    android:src="@color/primaryLight"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerInside"
+                    android:layout_marginRight="10dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" />
+
+                <TextView
+                    android:id="@+id/cardViewContentHeading"
+                    android:text="Queue Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    style="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:layout_toRightOf="@id/cardViewContentImage"
+                    />
+
+                <TextView
+                    android:id="@+id/cardViewContentSubHeading"
+                    android:text="Prof. Dr. Helmert Straße 2-3"
+                    android:layout_below="@id/cardViewContentHeading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:alpha="0.8"
+                    style="@style/Base.TextAppearance.AppCompat.Body1"
+                    android:layout_toRightOf="@id/cardViewContentImage"
+                    />
+
+
+            </RelativeLayout>
+
+            <View
+                style="@style/Divider"
+                android:layout_below="@id/cardViewContentContainer"/>
+
+            <LinearLayout
+                android:id="@+id/cardViewActionsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/cardViewContentContainer"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/cardViewAction1"
+                    android:text="@string/queue_action_view"
+                    style="@style/CardAction" />
+
+                <TextView
+                    android:id="@+id/cardViewAction2"
+                    android:text="@string/queue_action_directions"
+                    style="@style/CardAction" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

@@ -9,4 +9,7 @@
     <string name="tab_queues_recent">Recent</string>
     <string name="tab_queues_nearby">Nearby</string>
 
+    <string name="queue_action_directions">Get Directions</string>
+    <string name="queue_action_view">View Queue</string>
+
 </resources>

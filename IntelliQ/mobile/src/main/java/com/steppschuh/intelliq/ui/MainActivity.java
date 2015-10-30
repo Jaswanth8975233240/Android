@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         tabs.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
             public int getIndicatorColor(int position) {
-                return ContextCompat.getColor(getApplicationContext(), R.color.colorAccent);
+                return ContextCompat.getColor(getApplicationContext(), R.color.accent);
             }
         });
 
