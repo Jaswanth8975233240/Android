@@ -15,8 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.persistence.DurationInMillis;
+import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
+import com.steppschuh.intelliq.api.FollowersRequest;
 import com.steppschuh.intelliq.ui.widget.SlidingTabLayout;
 
 public class MainActivity extends AppCompatActivity
@@ -28,8 +33,6 @@ public class MainActivity extends AppCompatActivity
     ViewPager pager;
     QueuesTabsViewPagerAdapter adapter;
     SlidingTabLayout tabs;
-    CharSequence Titles[] = {"Nearby","Recent"};
-    int Numboftabs = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
