@@ -10,16 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.octo.android.robospice.JacksonSpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
-import com.steppschuh.intelliq.api.FollowerList;
-import com.steppschuh.intelliq.api.FollowersRequest;
 import com.steppschuh.intelliq.api.JsonSpiceService;
+import com.steppschuh.intelliq.api.request.NearbyQueuesRequest;
+import com.steppschuh.intelliq.api.response.ApiResponse;
 import com.steppschuh.intelliq.data.Queue;
 
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ public class QueuesTabNearby extends Fragment {
     public void onStart() {
         super.onStart();
         spiceManager.start(getContext());
-        performRequest("steppschuh");
+        performApiRequest();
     }
 
     @Override
@@ -75,31 +74,30 @@ public class QueuesTabNearby extends Fragment {
         super.onStop();
     }
 
-    private void performRequest(String user) {
-        FollowersRequest request = new FollowersRequest(user);
+
+    private void performApiRequest() {
+        NearbyQueuesRequest request = new NearbyQueuesRequest(52.393730f, 13.132675f, 5000);
         lastRequestCacheKey = request.createCacheKey();
 
-        spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE, new ListFollowersRequestListener());
-        Log.d(IntelliQ.TAG, "performRequest: " + user);
+        spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE, new ApiResponseListener());
+        Log.d(IntelliQ.TAG, "performApiRequest()");
     }
 
-    private class ListFollowersRequestListener implements RequestListener<FollowerList> {
+    private class ApiResponseListener implements RequestListener<ApiResponse> {
 
         @Override
         public void onRequestFailure(SpiceException e) {
             Log.e(IntelliQ.TAG, "onRequestFailure: " + e.getMessage());
             if (QueuesTabNearby.this.isAdded()) {
                 //update your UI
-
             }
         }
 
         @Override
-        public void onRequestSuccess(FollowerList listFollowers) {
-            Log.d(IntelliQ.TAG, "onRequestSuccess: " + listFollowers.size());
+        public void onRequestSuccess(ApiResponse response) {
+            Log.d(IntelliQ.TAG, "onRequestSuccess: " + response.getStatusMessage());
             if (QueuesTabNearby.this.isAdded()) {
                 //update your UI
-
             }
         }
     }
