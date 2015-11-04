@@ -28,6 +28,9 @@ public class ApiRequestHelper {
     // Queue Items
     public static final String ENDPOINT_QUEUE_ITEM = ENDPOINT_API + "item/";
 
+    // Images
+    public static final String ENDPOINT_IMAGE = "image/";
+
 
     public static String getRequestUrl(String endpoint, Map<String, String> params) {
         String url = HOST + endpoint;

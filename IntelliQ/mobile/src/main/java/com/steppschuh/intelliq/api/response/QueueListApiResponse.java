@@ -1,11 +1,12 @@
 package com.steppschuh.intelliq.api.response;
 
-import com.steppschuh.intelliq.api.QueueEntry;
+import com.steppschuh.intelliq.api.entry.QueueEntry;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QueueListApiResponse extends ApiResponse {
 
     private ArrayList<QueueEntry> content;

@@ -1,8 +1,11 @@
-package com.steppschuh.intelliq.api;
+package com.steppschuh.intelliq.api.entry;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.Comparator;
 import java.util.Date;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QueueItemEntry {
 
     public static final byte STATUS_ALL = -1;

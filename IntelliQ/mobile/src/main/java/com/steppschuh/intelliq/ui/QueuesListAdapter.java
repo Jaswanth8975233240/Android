@@ -14,29 +14,70 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.steppschuh.intelliq.R;
-import com.steppschuh.intelliq.api.QueueEntry;
+import com.steppschuh.intelliq.api.entry.ImageEntry;
+import com.steppschuh.intelliq.api.entry.QueueEntry;
 
 import java.util.ArrayList;
 
 public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.QueueViewHolder> {
 
+    private static final int TYPE_DEFAULT = 0;
+    private static final int TYPE_ERROR = 1;
+
+    private static final int ERROR_NO_DATA = 0;
+
+
     Context context;
     ArrayList<QueueEntry> queues;
+    int error;
 
     public QueuesListAdapter(ArrayList<QueueEntry> queues) {
         this.queues = queues;
     }
 
     @Override
+    public int getItemViewType(int position) {
+        if (queues != null && queues.size() > 0) {
+            return TYPE_DEFAULT;
+        } else {
+            return TYPE_ERROR;
+        }
+    }
+
+    @Override
     public QueueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View v = LayoutInflater.from(context).inflate(R.layout.queue_item, parent, false);
-        QueueViewHolder queueViewHolder = new QueueViewHolder(v);
+        View v;
+        switch (viewType) {
+            case TYPE_ERROR: {
+                v = LayoutInflater.from(context).inflate(R.layout.queue_item_error, parent, false);
+                break;
+            }
+            default: {
+                v = LayoutInflater.from(context).inflate(R.layout.queue_item, parent, false);
+                break;
+            }
+        }
+
+        QueueViewHolder queueViewHolder = new QueueViewHolder(v, viewType);
         return queueViewHolder;
     }
 
     @Override
     public void onBindViewHolder(final QueueViewHolder queueViewHolder, int position) {
+        switch (queueViewHolder.getViewType()) {
+            case TYPE_ERROR: {
+                onBindErrorViewHolder(queueViewHolder, position);
+                break;
+            }
+            default: {
+                onBindDefaultViewHolder(queueViewHolder, position);
+                break;
+            }
+        }
+    }
+
+    private void onBindDefaultViewHolder(final QueueViewHolder queueViewHolder, int position) {
         final QueueEntry queue = queues.get(position);
 
         queueViewHolder.tag1.setVisibility(View.GONE);
@@ -44,8 +85,13 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
 
         if (queue != null) {
             queueViewHolder.contentHeading.setText(queue.getName());
+            queueViewHolder.contentSubHeading.setText(queue.getReadableLocation());
+
             queueViewHolder.coverImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.no_photo));
             queueViewHolder.contentImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.no_logo));
+
+            ImageEntry photo = new ImageEntry(queue.getPhotoImageKeyId(), ImageEntry.TYPE_PHOTO);
+            photo.loadIntoImageView(queueViewHolder.coverImage, context);
 
             queueViewHolder.action2.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -62,9 +108,19 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         }
     }
 
+    private void onBindErrorViewHolder(final QueueViewHolder queueViewHolder, int position) {
+
+    }
+
     @Override
     public int getItemCount() {
-        return queues.size();
+        if (queues != null && queues.size() > 0) {
+            return queues.size();
+        } else {
+            // show the error view
+            return 1;
+        }
+
     }
 
     public ArrayList<QueueEntry> getQueues() {
@@ -75,7 +131,14 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         this.queues = queues;
     }
 
+    public void setError(int error) {
+        this.error = error;
+    }
+
     public static class QueueViewHolder extends RecyclerView.ViewHolder {
+
+        private int viewType;
+
         CardView cardView;
         TextView tag1;
         TextView tag2;
@@ -87,19 +150,42 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         TextView action2;
         ImageView contentImage;
 
-        QueueViewHolder(View itemView) {
+        QueueViewHolder(View itemView, int viewType) {
             super(itemView);
-            cardView = (CardView)itemView.findViewById(R.id.cardView);
-            contentHeading = (TextView)itemView.findViewById(R.id.cardViewContentHeading);
-            contentSubHeading = (TextView)itemView.findViewById(R.id.cardViewContentSubHeading);
+            this.viewType = viewType;
 
-            tag1 = (TextView)itemView.findViewById(R.id.cardViewTag1);
-            tag2 = (TextView)itemView.findViewById(R.id.cardViewTag2);
+            switch (viewType) {
+                case TYPE_ERROR: {
+                    setupErrorItem(itemView);
+                    break;
+                }
+                default: {
+                    setupDefaultItem(itemView);
+                    break;
+                }
+            }
+        }
 
-            action1 = (TextView)itemView.findViewById(R.id.cardViewAction1);
-            action2 = (TextView)itemView.findViewById(R.id.cardViewAction2);
-            coverImage = (ImageView)itemView.findViewById(R.id.cardViewCoverImage);
-            contentImage = (ImageView)itemView.findViewById(R.id.cardViewContentImage);
+        private void setupDefaultItem(View itemView) {
+            cardView = (CardView )itemView.findViewById(R.id.cardView);
+            contentHeading = (TextView) itemView.findViewById(R.id.cardViewContentHeading);
+            contentSubHeading = (TextView) itemView.findViewById(R.id.cardViewContentSubHeading);
+
+            tag1 = (TextView) itemView.findViewById(R.id.cardViewTag1);
+            tag2 = (TextView) itemView.findViewById(R.id.cardViewTag2);
+
+            action1 = (TextView) itemView.findViewById(R.id.cardViewAction1);
+            action2 = (TextView) itemView.findViewById(R.id.cardViewAction2);
+            coverImage = (ImageView) itemView.findViewById(R.id.cardViewCoverImage);
+            contentImage = (ImageView) itemView.findViewById(R.id.cardViewContentImage);
+        }
+
+        private void setupErrorItem(View itemView) {
+
+        }
+
+        public int getViewType() {
+            return viewType;
         }
     }
 

@@ -1,5 +1,6 @@
 package com.steppschuh.intelliq;
 
+import android.app.Activity;
 import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
@@ -10,9 +11,16 @@ public class IntelliQ extends MultiDexApplication {
     public static final String TAG = "IntelliQ";
 
     private boolean initialized = false;
+    private User user;
 
-    public void initialize() {
+    private Activity context;
+
+    public void initialize(Activity context) {
         Log.d(TAG, "Initializing app");
+
+        this.context = context;
+
+        user = new User();
 
         initialized = true;
     }
@@ -23,5 +31,13 @@ public class IntelliQ extends MultiDexApplication {
      */
     public boolean isInitialized() {
         return initialized;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

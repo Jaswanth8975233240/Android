@@ -1,13 +1,23 @@
-package com.steppschuh.intelliq.api;
+package com.steppschuh.intelliq.api.entry;
 
+
+import com.steppschuh.intelliq.api.DatastoreKey;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QueueEntry {
 
     public static final byte VISIBILITY_PRIVATE = 0;
     public static final byte VISIBILITY_PUBLIC = 1;
+
+    public static final int DISTANCE_ANY = -1;
+    public static final int DISTANCE_NARROW = 1000;
+    public static final int DISTANCE_DEFAULT = 3 * DISTANCE_NARROW;
+    public static final int DISTANCE_FAR = 3 * DISTANCE_DEFAULT;
 
     DatastoreKey key;
     long businessKeyId;
@@ -40,6 +50,22 @@ public class QueueEntry {
         latitude = -1;
         longitude = -1;
         averageWaitingTime = TimeUnit.MINUTES.toMillis(5);
+    }
+
+    public String getReadableLocation() {
+        String readableLocation;
+        if (street != null) {
+            readableLocation = street;
+            if (number != null) {
+                readableLocation += " " + number;
+            }
+            if (city != null) {
+                readableLocation += ", " + city;
+            }
+        } else {
+            readableLocation = "";
+        }
+        return readableLocation;
     }
 
     /*
