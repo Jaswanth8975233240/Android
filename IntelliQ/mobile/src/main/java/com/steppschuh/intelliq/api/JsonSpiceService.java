@@ -22,7 +22,7 @@ public class JsonSpiceService extends SpringAndroidSpiceService {
 
     public JsonSpiceService() {
         super();
-        Ln.getConfig().setLoggingLevel(Log.ERROR);
+        //Ln.getConfig().setLoggingLevel(Log.ERROR);
     }
 
     @Override

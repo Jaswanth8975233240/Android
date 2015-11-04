@@ -1,6 +1,9 @@
 package com.steppschuh.intelliq.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.steppschuh.intelliq.R;
-import com.steppschuh.intelliq.data.Queue;
+import com.steppschuh.intelliq.api.QueueEntry;
 
 import java.util.ArrayList;
 
 public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.QueueViewHolder> {
 
     Context context;
-    ArrayList<Queue> queues;
+    ArrayList<QueueEntry> queues;
 
-    public QueuesListAdapter(ArrayList<Queue> queues) {
+    public QueuesListAdapter(ArrayList<QueueEntry> queues) {
         this.queues = queues;
     }
 
@@ -33,8 +36,8 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
     }
 
     @Override
-    public void onBindViewHolder(QueueViewHolder queueViewHolder, int position) {
-        Queue queue = queues.get(position);
+    public void onBindViewHolder(final QueueViewHolder queueViewHolder, int position) {
+        final QueueEntry queue = queues.get(position);
 
         queueViewHolder.tag1.setVisibility(View.GONE);
         queueViewHolder.tag2.setVisibility(View.GONE);
@@ -43,6 +46,19 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
             queueViewHolder.contentHeading.setText(queue.getName());
             queueViewHolder.coverImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.no_photo));
             queueViewHolder.contentImage.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.no_logo));
+
+            queueViewHolder.action2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        String url = String.format("http://maps.google.com/maps?&daddr=%f,%f", queue.getLatitude(), queue.getLongitude());
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                        context.startActivity(intent);
+                    } catch (Exception ex) {
+                        Snackbar.make(queueViewHolder.cardView, R.string.error_directions, Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -51,11 +67,11 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         return queues.size();
     }
 
-    public ArrayList<Queue> getQueues() {
+    public ArrayList<QueueEntry> getQueues() {
         return queues;
     }
 
-    public void setQueues(ArrayList<Queue> queues) {
+    public void setQueues(ArrayList<QueueEntry> queues) {
         this.queues = queues;
     }
 

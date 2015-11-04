@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.steppschuh.intelliq.R;
-import com.steppschuh.intelliq.data.Queue;
 
 import java.util.ArrayList;
 
 public class QueuesTabRecent extends Fragment {
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

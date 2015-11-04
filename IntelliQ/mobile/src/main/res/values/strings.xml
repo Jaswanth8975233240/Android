@@ -12,4 +12,6 @@
     <string name="queue_action_directions">Get Directions</string>
     <string name="queue_action_view">View Queue</string>
 
+    <string name="error_directions">Unable to provide directions</string>
+
 </resources>

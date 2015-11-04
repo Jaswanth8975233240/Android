@@ -2,9 +2,8 @@ package com.steppschuh.intelliq.api;
 
 import java.util.Comparator;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
-public class QueueItem {
+public class QueueItemEntry {
 
     public static final byte STATUS_ALL = -1;
     public static final byte STATUS_WAITING = 0;
@@ -24,7 +23,7 @@ public class QueueItem {
     float latitude;
     float longitude;
 
-    public QueueItem(long queueKeyId) {
+    public QueueItemEntry(long queueKeyId) {
         this.queueKeyId = queueKeyId;
         entryTimestamp = new Date().getTime();
         lastStatusChangeTimestamp = entryTimestamp;
@@ -129,9 +128,9 @@ public class QueueItem {
         this.status = status;
     }
 
-    public static class EntryTimestampComparator implements Comparator<QueueItem> {
+    public static class EntryTimestampComparator implements Comparator<QueueItemEntry> {
         @Override
-        public int compare(QueueItem one, QueueItem another) {
+        public int compare(QueueItemEntry one, QueueItemEntry another) {
             int returnVal = 0;
             if (one.getEntryTimestamp() < another.getEntryTimestamp()) {
                 returnVal = -1;

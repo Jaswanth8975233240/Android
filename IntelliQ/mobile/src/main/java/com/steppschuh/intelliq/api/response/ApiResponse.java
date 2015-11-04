@@ -1,10 +1,9 @@
 package com.steppschuh.intelliq.api.response;
 
-public class ApiResponse {
+public abstract class ApiResponse {
 
     private int statusCode;
     private String statusMessage;
-    private Object content;
 
     public int getStatusCode() {
         return statusCode;
@@ -20,13 +19,5 @@ public class ApiResponse {
 
     public void setStatusMessage(String statusMessage) {
         this.statusMessage = statusMessage;
-    }
-
-    public Object getContent() {
-        return content;
-    }
-
-    public void setContent(Object content) {
-        this.content = content;
     }
 }

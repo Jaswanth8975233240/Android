@@ -4,12 +4,12 @@ package com.steppschuh.intelliq.api;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class Queue {
+public class QueueEntry {
 
     public static final byte VISIBILITY_PRIVATE = 0;
     public static final byte VISIBILITY_PUBLIC = 1;
 
-    long keyId;
+    DatastoreKey key;
     long businessKeyId;
 
     String name;
@@ -18,7 +18,7 @@ public class Queue {
     long averageWaitingTime;
     int waitingPeople;
 
-    ArrayList<QueueItem> queueItems;
+    ArrayList<QueueItemEntry> queueItemEntries;
 
     /**
      * Location
@@ -31,9 +31,9 @@ public class Queue {
     String street;
     String number;
 
-    public Queue(long businessKeyId) {
-        this.businessKeyId = businessKeyId;
-        queueItems = new ArrayList<>();
+    public QueueEntry() {
+        businessKeyId = -1;
+        queueItemEntries = new ArrayList<>();
         visibility = VISIBILITY_PUBLIC;
         photoImageKeyId = -1;
         waitingPeople = -1;
@@ -56,11 +56,11 @@ public class Queue {
         return getDistance(this, latitude, longitude);
     }
 
-    public static float getDistance(Queue queue, float latitude, float longitude) {
-        if (queue.latitude == -1 || queue.longitude == -1 || latitude == -1 || longitude == -1) {
+    public static float getDistance(QueueEntry queueEntry, float latitude, float longitude) {
+        if (queueEntry.latitude == -1 || queueEntry.longitude == -1 || latitude == -1 || longitude == -1) {
             return -1;
         } else {
-            return getDistance(queue.latitude,  queue.longitude, latitude, longitude);
+            return getDistance(queueEntry.latitude,  queueEntry.longitude, latitude, longitude);
         }
     }
 
@@ -81,7 +81,7 @@ public class Queue {
 
     public static float[] offsetLocationToRange(float latitude, float longitude, long distance) {
         float latitudeDelta = Math.abs((float) (distance / 1000 / 111.111));
-        float longitudeDelta = Math.abs((float) (distance / 1000 /  (111.111 * Math.cos(latitude))));
+        float longitudeDelta = Math.abs((float) (distance / 1000 / (111.111 * Math.cos(latitude))));
 
         float latitudeMin = latitude - latitudeDelta;
         float latitudeMax = latitude + latitudeDelta;
@@ -91,16 +91,15 @@ public class Queue {
         return new float[] {latitudeMin, longitudeMin, latitudeMax, longitudeMax};
     }
 
-
     /**
      * Getter & Setter
      */
-    public long getKeyId() {
-        return keyId;
+    public DatastoreKey getKey() {
+        return key;
     }
 
-    public void setKeyId(long keyId) {
-        this.keyId = keyId;
+    public void setKey(DatastoreKey key) {
+        this.key = key;
     }
 
     public long getBusinessKeyId() {
@@ -111,12 +110,12 @@ public class Queue {
         this.businessKeyId = businessKeyId;
     }
 
-    public ArrayList<QueueItem> getQueueItems() {
-        return queueItems;
+    public ArrayList<QueueItemEntry> getQueueItemEntries() {
+        return queueItemEntries;
     }
 
-    public void setQueueItems(ArrayList<QueueItem> queueItems) {
-        this.queueItems = queueItems;
+    public void setQueueItemEntries(ArrayList<QueueItemEntry> queueItemEntries) {
+        this.queueItemEntries = queueItemEntries;
     }
 
     public String getName() {
