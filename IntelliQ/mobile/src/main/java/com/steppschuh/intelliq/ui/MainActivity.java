@@ -18,7 +18,7 @@ import android.view.MenuItem;
 
 import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
-import com.steppschuh.intelliq.User;
+import com.steppschuh.intelliq.api.user.User;
 import com.steppschuh.intelliq.ui.widget.SlidingTabLayout;
 
 public class MainActivity extends AppCompatActivity

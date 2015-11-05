@@ -21,7 +21,7 @@
         <item name="android:background">@android:color/black</item>
     </style>
 
-    <style name="CardAction" parent="Base.TextAppearance.AppCompat.Body2">
+    <style name="CardAction" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/accent</item>

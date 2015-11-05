@@ -44,7 +44,7 @@ public class ApiRequestHelper {
             for (Map.Entry<String, String> param : params.entrySet()) {
                 url += param.getKey() + "=" + param.getValue() + "&";
             }
-            url = url.substring(0, url.length() - 2);
+            url = url.substring(0, url.length() - 1);
         }
 
         Log.v(IntelliQ.TAG, "API request url built: " + url);

@@ -1,7 +1,6 @@
-package com.steppschuh.intelliq;
+package com.steppschuh.intelliq.api.user;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,6 +21,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.steppschuh.intelliq.IntelliQ;
+import com.steppschuh.intelliq.R;
+
 import java.util.ArrayList;
 
 public class User {
@@ -39,16 +41,23 @@ public class User {
     private ArrayList<Long> queueEntryIds;
     private ArrayList<Long> queueItemEntryIds;
 
+    private ArrayList<LocationChangedListener> locationChangedListeners;
+
     public User() {
         latitude = -1;
         longitude = -1;
 
         queueEntryIds = new ArrayList<>();
         queueItemEntryIds = new ArrayList<>();
+        locationChangedListeners = new ArrayList<>();
     }
 
+    /**
+     * Location handling
+     */
     public void updateLocation(Activity context) {
-        if (hasGrantedLocationPermission(context)) {
+        if (!hasGrantedLocationPermission(context)) {
+            setLocation(-1, -1);
             requestLocationPermission(context, false);
             return;
         }
@@ -57,9 +66,7 @@ public class User {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             //noinspection ResourceType
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            latitude = (float) location.getLatitude();
-            longitude = (float) location.getLongitude();
-            Log.d(IntelliQ.TAG, "User location updated: " + latitude + " , " + longitude);
+            setLocation((float) location.getLatitude(), (float) location.getLongitude());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -70,7 +77,7 @@ public class User {
     }
 
     public void requestLocationPermission(Activity context, boolean force) {
-        if (hasGrantedLocationPermission(context)) {
+        if (!hasGrantedLocationPermission(context)) {
 
             // Should we show an explanation?
             if (!force && ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -170,6 +177,41 @@ public class User {
     }
 
     /**
+     * Location observer handling
+     */
+    public void registerLocationChangedListener(LocationChangedListener locationChangedListener) {
+        if (!locationChangedListeners.contains(locationChangedListener)) {
+            locationChangedListeners.add(locationChangedListener);
+        }
+    }
+
+    public void unregisterLocationChangedListener(LocationChangedListener locationChangedListener) {
+        if (locationChangedListeners.contains(locationChangedListener)) {
+            locationChangedListeners.remove(locationChangedListener);
+        }
+    }
+
+    public void notifyLocationChangedListeners(float latitude, float longitude) {
+        for (LocationChangedListener locationChangedListener : locationChangedListeners) {
+            try {
+                locationChangedListener.onLocationChanged(latitude, longitude);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void notifyLocationChangedListeners(String postalCode) {
+        for (LocationChangedListener locationChangedListener : locationChangedListeners) {
+            try {
+                locationChangedListener.onLocationChanged(postalCode);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * Getter & Setter
      */
     public String getName() {
@@ -194,22 +236,21 @@ public class User {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+        notifyLocationChangedListeners(postalCode);
     }
 
     public float getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
     public float getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLocation(float latitude, float longitude) {
+        this.latitude = latitude;
         this.longitude = longitude;
+        notifyLocationChangedListeners(latitude, longitude);
     }
 
     public ArrayList<Long> getQueueEntryIds() {

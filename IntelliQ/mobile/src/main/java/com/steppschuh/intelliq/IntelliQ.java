@@ -1,9 +1,10 @@
 package com.steppschuh.intelliq;
 
 import android.app.Activity;
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
+
+import com.steppschuh.intelliq.api.user.User;
 
 
 public class IntelliQ extends MultiDexApplication {

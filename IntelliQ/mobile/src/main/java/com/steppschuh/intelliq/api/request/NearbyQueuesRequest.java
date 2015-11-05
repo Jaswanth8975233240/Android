@@ -1,8 +1,7 @@
 package com.steppschuh.intelliq.api.request;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
-import com.steppschuh.intelliq.User;
-import com.steppschuh.intelliq.api.response.ApiResponse;
+import com.steppschuh.intelliq.api.user.User;
 import com.steppschuh.intelliq.api.response.QueueListApiResponse;
 
 import java.util.HashMap;
@@ -25,6 +24,8 @@ public class NearbyQueuesRequest extends SpringAndroidSpiceRequest<QueueListApiR
     public NearbyQueuesRequest(String postalCode) {
         super(QueueListApiResponse.class);
         this.postalCode = postalCode;
+        latitude = -1;
+        longitude = -1;
     }
 
     @Override

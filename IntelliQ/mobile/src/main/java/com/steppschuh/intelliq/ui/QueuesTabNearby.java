@@ -23,6 +23,7 @@ import com.steppschuh.intelliq.api.JsonSpiceService;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
 import com.steppschuh.intelliq.api.request.NearbyQueuesRequest;
 import com.steppschuh.intelliq.api.response.QueueListApiResponse;
+import com.steppschuh.intelliq.api.user.LocationChangedListener;
 import com.steppschuh.intelliq.ui.widget.StatusHelper;
 import com.steppschuh.intelliq.ui.widget.StatusView;
 
@@ -30,7 +31,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 
-public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LocationChangedListener {
 
     IntelliQ app;
 
@@ -70,6 +71,7 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
     public void onStart() {
         super.onStart();
         spiceManager.start(getContext());
+        app.getUser().registerLocationChangedListener(this);
         onRefresh();
     }
 
@@ -78,19 +80,30 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
         if (spiceManager.isStarted()) {
             spiceManager.shouldStop();
         }
+        app.getUser().unregisterLocationChangedListener(this);
         super.onStop();
     }
 
     @Override
     public void onRefresh() {
+        // this will trigger a location update and onLocationChanged will be called
         app.getUser().updateLocation(getActivity());
-        performApiRequest();
     }
 
+    @Override
+    public void onLocationChanged(float latitude, float longitude) {
+        Log.d(IntelliQ.TAG, "onLocationChanged: " + String.valueOf(latitude) + " , " + String.valueOf(latitude));
+        requestQueues();
+    }
 
-    private void performApiRequest() {
+    @Override
+    public void onLocationChanged(String postalCode) {
+        Log.d(IntelliQ.TAG, "onLocationChanged: " + postalCode);
+        requestQueues();
+    }
+
+    private void requestQueues() {
         swipeRefreshLayout.setRefreshing(true);
-
         NearbyQueuesRequest request = null;
 
         // check if some location info is available

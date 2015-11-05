@@ -59,9 +59,9 @@ public class StatusHelper {
 
     public static StatusView getMissingLocationPermissionError(Activity context) {
         StatusView status = new StatusView(context);
-        status.getStatusHeading().setText(context.getString(R.string.status_error_unknown_location_title));
-        status.getStatusSubHeading().setText(context.getString(R.string.status_error_unknown_location_message));
-        status.getStatusActionButton().setText(context.getString(R.string.action_retry));
+        status.getStatusHeading().setText(context.getString(R.string.status_error_missing_location_permission_title));
+        status.getStatusSubHeading().setText(context.getString(R.string.status_error_missing_location_permission_message));
+        status.getStatusActionButton().setText(context.getString(R.string.action_settings));
         return status;
     }
 

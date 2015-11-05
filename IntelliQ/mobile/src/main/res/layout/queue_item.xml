@@ -114,14 +114,15 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_below="@id/cardViewContentContainer"
-                android:padding="14dp">
+                android:paddingLeft="14dp"
+                android:paddingRight="14dp">
 
-                <TextView
+                <Button
                     android:id="@+id/cardViewAction1"
                     android:text="@string/queue_action_view"
                     style="@style/CardAction" />
 
-                <TextView
+                <Button
                     android:id="@+id/cardViewAction2"
                     android:text="@string/queue_action_directions"
                     style="@style/CardAction" />

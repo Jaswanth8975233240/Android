@@ -32,7 +32,7 @@
     <string name="status_error_unknown_location_title">Location unknown</string>
     <string name="status_error_unknown_location_message">We can\'t figure out your approximate location, please make sure that your device has a network or GPS connection.</string>
     <string name="status_error_missing_location_permission_title">Location permission missing</string>
-    <string name="status_error_missing_location_permission">@string/rationale_location_message</string>
+    <string name="status_error_missing_location_permission_message">@string/rationale_location_message</string>
 
     <string name="error_directions">Unable to provide directions</string>
     <string name="error_invalid_postal_code">Invalid postal code</string>
