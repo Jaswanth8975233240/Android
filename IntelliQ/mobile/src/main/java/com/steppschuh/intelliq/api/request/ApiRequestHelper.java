@@ -1,5 +1,9 @@
 package com.steppschuh.intelliq.api.request;
 
+import android.util.Log;
+
+import com.steppschuh.intelliq.IntelliQ;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -42,6 +46,8 @@ public class ApiRequestHelper {
             }
             url = url.substring(0, url.length() - 2);
         }
+
+        Log.v(IntelliQ.TAG, "API request url built: " + url);
 
         return url;
     }

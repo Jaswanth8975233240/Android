@@ -1,13 +1,17 @@
 package com.steppschuh.intelliq;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -22,6 +26,7 @@ import java.util.ArrayList;
 
 public class User {
 
+    public static final int PERMISSION_REQUEST_SETTINGS = 0;
     public static final int PERMISSION_REQUEST_LOCATION = 1;
 
     private String name;
@@ -43,14 +48,14 @@ public class User {
     }
 
     public void updateLocation(Activity context) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (hasGrantedLocationPermission(context)) {
             requestLocationPermission(context, false);
             return;
         }
 
         try {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            //noinspection ResourceType
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             latitude = (float) location.getLatitude();
             longitude = (float) location.getLongitude();
@@ -60,9 +65,12 @@ public class User {
         }
     }
 
+    public boolean hasGrantedLocationPermission(Activity context) {
+        return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
     public void requestLocationPermission(Activity context, boolean force) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (hasGrantedLocationPermission(context)) {
 
             // Should we show an explanation?
             if (!force && ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -131,9 +139,31 @@ public class User {
         builder.show();
     }
 
-    public boolean isValidPostalCode(String code) {
+    public void openPermissionSettings(Activity context) {
+        Intent settingsIntent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + context.getPackageName()));
+        settingsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+        settingsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivityForResult(settingsIntent, PERMISSION_REQUEST_SETTINGS);
+    }
+
+    public boolean hasValidPostalCode() {
+        return isValidPostalCode(postalCode);
+    }
+
+    public static boolean isValidPostalCode(String code) {
         if (code != null && code.length() > 0) {
             // TODO: validate better
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasValidLocation() {
+        return isValidLocation(latitude, longitude);
+    }
+
+    public static boolean isValidLocation(float latitude, float longitude) {
+        if (latitude != -1 && longitude != -1) {
             return true;
         }
         return false;

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:card_view="http://schemas.android.com/apk/res-auto" xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/statusViewContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="30dp"
+    android:paddingBottom="30dp"
+    android:gravity="center"
+    android:layout_gravity="center">
+
+
+    <RelativeLayout
+        android:id="@+id/statusImageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <ImageView
+            android:id="@+id/statusImage"
+            android:tint="@color/status_text"
+            android:src="@drawable/ic_warning_white_500px"
+            android:scaleType="fitCenter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/statusHeading"
+        android:layout_below="@id/statusImageContainer"
+        style="@style/Base.TextAppearance.AppCompat.Headline"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:text="@string/status_error_unknown_title"
+        android:textColor="@color/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/statusSubHeading"
+        android:layout_below="@id/statusHeading"
+        style="@style/Base.TextAppearance.AppCompat.Body1"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:alpha="0.8"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="5dp"
+        android:text="@string/status_error_unknown_message"
+        android:textColor="@color/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/statusAction"
+        android:text="@string/action_retry"
+        android:textColor="@color/status_text"
+        android:layout_centerInParent="true"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_below="@id/statusSubHeading"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

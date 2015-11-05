@@ -1,6 +1,7 @@
 package com.steppschuh.intelliq.api.request;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
+import com.steppschuh.intelliq.User;
 import com.steppschuh.intelliq.api.response.ApiResponse;
 import com.steppschuh.intelliq.api.response.QueueListApiResponse;
 
@@ -11,6 +12,7 @@ public class NearbyQueuesRequest extends SpringAndroidSpiceRequest<QueueListApiR
 
     private float latitude;
     private float longitude;
+    private String postalCode;
     private long distance;
 
     public NearbyQueuesRequest(float latitude, float longitude, long distance) {
@@ -20,12 +22,24 @@ public class NearbyQueuesRequest extends SpringAndroidSpiceRequest<QueueListApiR
         this.distance = distance;
     }
 
+    public NearbyQueuesRequest(String postalCode) {
+        super(QueueListApiResponse.class);
+        this.postalCode = postalCode;
+    }
+
     @Override
     public QueueListApiResponse loadDataFromNetwork() throws Exception {
         Map<String, String> params = new HashMap<>();
-        params.put("latitude", String.valueOf(latitude));
-        params.put("longitude", String.valueOf(longitude));
-        params.put("distance", String.valueOf(distance));
+
+        if (User.isValidLocation(latitude, longitude)) {
+            params.put("latitude", String.valueOf(latitude));
+            params.put("longitude", String.valueOf(longitude));
+            params.put("distance", String.valueOf(distance));
+        } else if (User.isValidPostalCode(postalCode)) {
+            params.put("postalCode", String.valueOf(postalCode));
+        } else {
+            throw new Exception("Invalid location info provided");
+        }
 
         String url = ApiRequestHelper.getRequestUrl(ApiRequestHelper.ENDPOINT_QUEUE_NEARBY, params);
 

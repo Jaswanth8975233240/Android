@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.entry.ImageEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
+import com.steppschuh.intelliq.ui.widget.StatusView;
 
 import java.util.ArrayList;
 
@@ -24,15 +25,18 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
     private static final int TYPE_DEFAULT = 0;
     private static final int TYPE_ERROR = 1;
 
-    private static final int ERROR_NO_DATA = 0;
-
-
     Context context;
     ArrayList<QueueEntry> queues;
-    int error;
+    StatusView statusView;
 
     public QueuesListAdapter(ArrayList<QueueEntry> queues) {
         this.queues = queues;
+    }
+
+    public void showStatusView(StatusView statusView) {
+        this.statusView = statusView;
+        queues = null;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -50,7 +54,7 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         View v;
         switch (viewType) {
             case TYPE_ERROR: {
-                v = LayoutInflater.from(context).inflate(R.layout.queue_item_error, parent, false);
+                v = statusView;
                 break;
             }
             default: {
@@ -116,11 +120,12 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
     public int getItemCount() {
         if (queues != null && queues.size() > 0) {
             return queues.size();
-        } else {
+        } else if (statusView != null) {
             // show the error view
             return 1;
+        } else {
+            return 0;
         }
-
     }
 
     public ArrayList<QueueEntry> getQueues() {
@@ -131,8 +136,8 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         this.queues = queues;
     }
 
-    public void setError(int error) {
-        this.error = error;
+    public void setStatusView(StatusView statusView) {
+        this.statusView = statusView;
     }
 
     public static class QueueViewHolder extends RecyclerView.ViewHolder {

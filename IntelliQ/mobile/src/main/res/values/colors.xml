@@ -8,4 +8,7 @@
     <color name="black_6">#66000000</color>
     <color name="black_9">#99000000</color>
 
+    <color name="status_background">#FFFFFF</color>
+    <color name="status_text">#BBBBBB</color>
+
 </resources>
