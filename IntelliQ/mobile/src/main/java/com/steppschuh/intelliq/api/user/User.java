@@ -56,7 +56,9 @@ public class User {
      * Location handling
      */
     public void updateLocation(Activity context) {
+        Log.v(IntelliQ.TAG, "Location update requested");
         if (!hasGrantedLocationPermission(context)) {
+            Log.w(IntelliQ.TAG, "Location permission not yet granted");
             setLocation(-1, -1);
             requestLocationPermission(context, false);
             return;
@@ -66,9 +68,16 @@ public class User {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             //noinspection ResourceType
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if (location == null) {
+                // no GPS available, try using the network provide
+                //noinspection ResourceType
+                location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            }
+
             setLocation((float) location.getLatitude(), (float) location.getLongitude());
         } catch (Exception ex) {
             ex.printStackTrace();
+            setLocation(-1, -1);
         }
     }
 

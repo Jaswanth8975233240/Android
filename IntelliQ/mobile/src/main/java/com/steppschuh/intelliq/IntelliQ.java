@@ -17,7 +17,7 @@ public class IntelliQ extends MultiDexApplication {
     private Activity context;
 
     public void initialize(Activity context) {
-        Log.d(TAG, "Initializing app");
+        Log.v(TAG, "Initializing app");
 
         this.context = context;
 

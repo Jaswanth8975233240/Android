@@ -4,33 +4,37 @@ import android.app.Activity;
 import android.view.View;
 
 import com.steppschuh.intelliq.R;
-import com.steppschuh.intelliq.ui.QueuesListAdapter;
+import com.steppschuh.intelliq.ui.BusinessListAdapter;
 
 public class StatusHelper {
 
-    public static void showStatus(StatusView status, QueuesListAdapter queuesListAdapter, View.OnClickListener onClickListener) {
+    public static void showStatus(StatusView status, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
         status.getStatusActionButton().setOnClickListener(onClickListener);
-        queuesListAdapter.showStatusView(status);
+        businessListAdapter.showStatusView(status);
     }
 
-    public static void showUnknownError(Activity context, QueuesListAdapter queuesListAdapter, View.OnClickListener onClickListener) {
-        showStatus(getUnknownError(context), queuesListAdapter, onClickListener);
+    public static void showUnknownError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getUnknownError(context), businessListAdapter, onClickListener);
     }
 
-    public static void showNetworkError(Activity context, QueuesListAdapter queuesListAdapter, View.OnClickListener onClickListener) {
-        showStatus(getNetworkError(context), queuesListAdapter, onClickListener);
+    public static void showNetworkError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getNetworkError(context), businessListAdapter, onClickListener);
     }
 
-    public static void showNoDataError(Activity context, QueuesListAdapter queuesListAdapter, View.OnClickListener onClickListener) {
-        showStatus(getNoDataError(context), queuesListAdapter, onClickListener);
+    public static void showApiError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getApiError(context), businessListAdapter, onClickListener);
     }
 
-    public static void showMissingLocationPermissionError(Activity context, QueuesListAdapter queuesListAdapter, View.OnClickListener onClickListener) {
-        showStatus(getMissingLocationPermissionError(context), queuesListAdapter, onClickListener);
+    public static void showNoDataError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getNoDataError(context), businessListAdapter, onClickListener);
     }
 
-    public static void showUnknownLocationError(Activity context, QueuesListAdapter queuesListAdapter, View.OnClickListener onClickListener) {
-        showStatus(getUnknownLocationError(context), queuesListAdapter, onClickListener);
+    public static void showMissingLocationPermissionError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getMissingLocationPermissionError(context), businessListAdapter, onClickListener);
+    }
+
+    public static void showUnknownLocationError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getUnknownLocationError(context), businessListAdapter, onClickListener);
     }
 
     public static StatusView getUnknownError(Activity context) {
@@ -45,6 +49,14 @@ public class StatusHelper {
         StatusView status = new StatusView(context);
         status.getStatusHeading().setText(context.getString(R.string.status_error_network_title));
         status.getStatusSubHeading().setText(context.getString(R.string.status_error_network_message));
+        status.getStatusActionButton().setText(context.getString(R.string.action_retry));
+        return status;
+    }
+
+    public static StatusView getApiError(Activity context) {
+        StatusView status = new StatusView(context);
+        status.getStatusHeading().setText(context.getString(R.string.status_error_api_title));
+        status.getStatusSubHeading().setText(context.getString(R.string.status_error_api_message));
         status.getStatusActionButton().setText(context.getString(R.string.action_retry));
         return status;
     }

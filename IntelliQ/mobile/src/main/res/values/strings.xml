@@ -18,19 +18,21 @@
     <string name="queue_action_view">View Queue</string>
 
     <string name="rationale_location_title">Location</string>
-    <string name="rationale_location_message">We need access to your approximate location in order to find available queues in your area.\n\nPlease grant the permission and we\'ll start looking for nearby queues.</string>
+    <string name="rationale_location_message">We need access to your approximate location in order to find available businessEntries in your area.\n\nPlease grant the permission and we\'ll start looking for nearby businessEntries.</string>
 
     <string name="request_postal_code_title">Postal Code</string>
     <string name="request_postal_code_message">Because we don\'t have access to your location right now, please provide your current postal code instead.</string>
 
     <string name="status_error_unknown_title">Something went wrong</string>
     <string name="status_error_unknown_message">We\'re not quite sure what, though. Please let us know about this if restarting the app doesn\'t solve the issue.</string>
+    <string name="status_error_api_title">Server error</string>
+    <string name="status_error_api_message">Unfortunately our servers couldn\'t handle this request. We\'ll do our best to fix this soon.</string>
     <string name="status_error_network_title">Network issues</string>
-    <string name="status_error_network_message">We had issues reaching our servers, please make sure that you have a working internet connection.</string>
-    <string name="status_error_no_data_title">No queues found</string>
+    <string name="status_error_network_message">We couldn\'t reach our servers, please make sure that you have a working internet connection.</string>
+    <string name="status_error_no_data_title">No businessEntries found</string>
     <string name="status_error_no_data_message">Unfortunately we couldn\'t find any queue nearby. Why don\'t you let some people know that they can create a queue for free?</string>
     <string name="status_error_unknown_location_title">Location unknown</string>
-    <string name="status_error_unknown_location_message">We can\'t figure out your approximate location, please make sure that your device has a network or GPS connection.</string>
+    <string name="status_error_unknown_location_message">We can\'t figure out your approximate location, please make sure that your device has a network or GPS connection. Open Maps to trigger a location update.</string>
     <string name="status_error_missing_location_permission_title">Location permission missing</string>
     <string name="status_error_missing_location_permission_message">@string/rationale_location_message</string>
 

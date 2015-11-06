@@ -3,8 +3,10 @@ package com.steppschuh.intelliq.api.entry;
 import android.content.Context;
 import android.renderscript.ScriptIntrinsicYuvToRGB;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 import com.steppschuh.intelliq.IntelliQ;
@@ -37,7 +39,11 @@ public class ImageEntry {
     }
 
     public String getUrl(int width) {
-        return getUrl(key.getId(), imageType, String.valueOf(width));
+        return getUrl(String.valueOf(width));
+    }
+
+    public String getUrl(String width) {
+        return getUrl(key.getId(), imageType, width);
     }
 
     public static String getUrl(long keyId, String imageType, String size) {
@@ -45,22 +51,35 @@ public class ImageEntry {
     }
 
     public void loadIntoImageView(ImageView imageView, Context context) {
-        String url = getUrl();
-        Picasso.with(context)
-                .load(url)
-                .placeholder(R.drawable.no_photo)
-                .error(R.drawable.no_photo)
-                .into(imageView);
+        loadIntoImageView(imageView, null, context);
     }
 
     public void loadIntoImageView(ImageView imageView, Transformation transformation, Context context) {
-        String url = getUrl();
+        loadIntoImageView(imageView, transformation, context, null);
+    }
+
+    public void loadIntoImageView(ImageView imageView, Transformation transformation, Context context, Callback callback) {
+        String imageWidth = SIZE_ORIGINAL;
+        if (imageView != null) {
+            int imageViewWidth = imageView.getWidth();
+            if (imageViewWidth > 0) {
+                imageWidth = String.valueOf(imageViewWidth);
+            }
+        }
+
+        if (transformation != null) {
+
+        } else {
+
+        }
+
+        String url = getUrl(imageWidth);
         Picasso.with(context)
                 .load(url)
                 .transform(transformation)
                 .placeholder(R.drawable.no_photo)
                 .error(R.drawable.no_photo)
-                .into(imageView);
+                .into(imageView, callback);
     }
 
     public String getImageExtension() {

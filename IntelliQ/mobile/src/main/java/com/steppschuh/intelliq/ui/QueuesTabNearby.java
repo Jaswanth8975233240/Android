@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.octo.android.robospice.SpiceManager;
+import com.octo.android.robospice.exception.NetworkException;
+import com.octo.android.robospice.exception.NoNetworkException;
 import com.octo.android.robospice.exception.RequestCancelledException;
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -20,13 +22,16 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.JsonSpiceService;
+import com.steppschuh.intelliq.api.entry.BusinessEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
 import com.steppschuh.intelliq.api.request.NearbyQueuesRequest;
+import com.steppschuh.intelliq.api.response.BusinessListApiResponse;
 import com.steppschuh.intelliq.api.response.QueueListApiResponse;
 import com.steppschuh.intelliq.api.user.LocationChangedListener;
 import com.steppschuh.intelliq.ui.widget.StatusHelper;
 import com.steppschuh.intelliq.ui.widget.StatusView;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
@@ -39,7 +44,7 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
     private String lastRequestCacheKey;
 
     RecyclerView recyclerView;
-    QueuesListAdapter queuesListAdapter;
+    BusinessListAdapter businessListAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
@@ -52,11 +57,11 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
     private View setupUi(View v) {
-        ArrayList<QueueEntry> queues = new ArrayList<>();
-        queuesListAdapter = new QueuesListAdapter(queues);
+        ArrayList<BusinessEntry> businessEntries = new ArrayList<>();
+        businessListAdapter = new BusinessListAdapter(businessEntries);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        recyclerView.setAdapter(queuesListAdapter);
+        recyclerView.setAdapter(businessListAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -117,7 +122,7 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
             // no location info at all, show error messages
             if (app.getUser().hasGrantedLocationPermission(getActivity())) {
                 // we have the permission but no data
-                StatusHelper.showUnknownLocationError(getActivity(), queuesListAdapter, new View.OnClickListener() {
+                StatusHelper.showUnknownLocationError(getActivity(), businessListAdapter, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onRefresh();
@@ -125,7 +130,7 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
                 });
             } else {
                 // permission denied
-                StatusHelper.showMissingLocationPermissionError(getActivity(), queuesListAdapter, new View.OnClickListener() {
+                StatusHelper.showMissingLocationPermissionError(getActivity(), businessListAdapter, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         app.getUser().openPermissionSettings(getActivity());
@@ -138,11 +143,11 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
         if (request != null) {
             lastRequestCacheKey = request.createCacheKey();
             spiceManager.execute(request, lastRequestCacheKey, DurationInMillis.ONE_MINUTE, new ApiResponseListener());
-            Log.d(IntelliQ.TAG, "Requesting nearby queues with cache key: " + lastRequestCacheKey);
+            Log.d(IntelliQ.TAG, "Requesting nearby businessEntries with cache key: " + lastRequestCacheKey);
         }
     }
 
-    private class ApiResponseListener implements RequestListener<QueueListApiResponse> {
+    private class ApiResponseListener implements RequestListener<BusinessListApiResponse> {
 
         @Override
         public void onRequestFailure(SpiceException e) {
@@ -153,8 +158,8 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
                 Log.e(IntelliQ.TAG, "HttpClientErrorException: " + exception.getMessage() + " (" + exception.getStatusCode() + ")");
 
                 StatusView status = StatusHelper.getNetworkError(getActivity());
-                status.getStatusSubHeading().setText(status.getStatusSubHeading().getText() + "\n\n" + exception.getMessage());
-                StatusHelper.showStatus(status, queuesListAdapter, new View.OnClickListener() {
+                status.getStatusSubHeading().setText(status.getStatusSubHeading().getText() + "\n\nException: " + exception.getMessage());
+                StatusHelper.showStatus(status, businessListAdapter, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onRefresh();
@@ -164,10 +169,20 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
                 // don't show an error message, just retry
                 Log.e(IntelliQ.TAG, "RequestCancelledException: " + e.getMessage());
                 onRefresh();
+            } else if (e instanceof NetworkException || e instanceof NoNetworkException) {
+                Log.e(IntelliQ.TAG, "NetworkException: " + e.getMessage());
+                StatusHelper.showNetworkError(getActivity(), businessListAdapter, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onRefresh();
+                    }
+                });
             } else {
                 // damn, unknown error
                 Log.e(IntelliQ.TAG, "Unknown onRequestFailure: " + e.getMessage());
-                StatusHelper.showUnknownError(getActivity(), queuesListAdapter, new View.OnClickListener() {
+                StatusView status = StatusHelper.getUnknownError(getActivity());
+                status.getStatusSubHeading().setText(status.getStatusSubHeading().getText() + "\n\nException: " + e.getMessage());
+                StatusHelper.showStatus(status, businessListAdapter, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onRefresh();
@@ -179,14 +194,27 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
         }
 
         @Override
-        public void onRequestSuccess(QueueListApiResponse response) {
-            if (response.getContent().size() > 0) {
-                // we got some data
-                queuesListAdapter.setQueues(response.getContent());
-                queuesListAdapter.notifyDataSetChanged();
+        public void onRequestSuccess(BusinessListApiResponse response) {
+            if (response.getStatusCode() == HttpStatus.OK.value())  {
+                // API call was successful
+                if (response.getContent().size() > 0) {
+                    // we got some data
+                    businessListAdapter.setBusinessEntries(response.getContent());
+                    businessListAdapter.notifyDataSetChanged();
+                } else {
+                    // request was alright, but no businessEntries found
+                    StatusHelper.showNoDataError(getActivity(), businessListAdapter, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onRefresh();
+                        }
+                    });
+                }
             } else {
-                // request was alright, but no queues found
-                StatusHelper.showNoDataError(getActivity(), queuesListAdapter, new View.OnClickListener() {
+                // API returned an error code
+                StatusView status = StatusHelper.getApiError(getActivity());
+                status.getStatusSubHeading().setText(status.getStatusSubHeading().getText() + "\n\nException: " + response.getStatusMessage());
+                StatusHelper.showStatus(status, businessListAdapter, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         onRefresh();

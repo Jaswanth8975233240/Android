@@ -19,49 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/cardViewCoverContainer"
                 android:clickable="true"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="200dp">
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/cardViewCoverImage"
-                    android:src="@color/primaryLight"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true" />
+                <include layout="@layout/business_item_queue" />
 
-                <View
-                    android:id="@+id/cardViewCoverOverlay"
-                    android:alpha="0"
-                    android:background="@color/primary"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:id="@+id/cardViewTagsContainer"
-                    android:layout_alignParentTop="true"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="28dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/cardViewTag1"
-                        android:text="0 people waiting"
-                        style="@style/CardTag" />
-
-                    <TextView
-                        android:id="@+id/cardViewTag2"
-                        android:text="0 minutes to wait"
-                        style="@style/CardTag" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/cardViewContentContainer"
@@ -73,7 +40,7 @@
 
                 <ImageView
                     android:id="@+id/cardViewContentImage"
-                    android:src="@color/primaryLight"
+                    android:src="@color/primary"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerInside"
@@ -83,7 +50,7 @@
 
                 <TextView
                     android:id="@+id/cardViewContentHeading"
-                    android:text="Queue Name"
+                    android:text="Business Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
@@ -93,7 +60,7 @@
 
                 <TextView
                     android:id="@+id/cardViewContentSubHeading"
-                    android:text="Prof. Dr. Helmert Straße 2-3"
+                    android:text="Some location info, distance if available"
                     android:layout_below="@id/cardViewContentHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,33 +70,7 @@
                     android:layout_toRightOf="@id/cardViewContentImage"
                     />
 
-
             </RelativeLayout>
-
-            <View
-                style="@style/Divider"
-                android:layout_below="@id/cardViewContentContainer"/>
-
-            <LinearLayout
-                android:id="@+id/cardViewActionsContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@id/cardViewContentContainer"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp">
-
-                <Button
-                    android:id="@+id/cardViewAction1"
-                    android:text="@string/queue_action_view"
-                    style="@style/CardAction" />
-
-                <Button
-                    android:id="@+id/cardViewAction2"
-                    android:text="@string/queue_action_directions"
-                    style="@style/CardAction" />
-
-            </LinearLayout>
 
         </RelativeLayout>
 
