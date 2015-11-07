@@ -1,29 +1,36 @@
 package com.steppschuh.intelliq.ui.widget;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.graphics.Palette;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
-import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.entry.ImageEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
+import com.steppschuh.intelliq.ui.AnimationHelper;
 import com.steppschuh.intelliq.ui.BlurTransformation;
 import com.steppschuh.intelliq.ui.ImageHelper;
 
 public class BusinessItemQueueView extends RelativeLayout {
 
-    RelativeLayout itemContainer;
-    TextView itemCoverHeading;
-    ImageView itemCoverImage;
-    View itemCoverOverlay;
+    public static final int COVER_BLUR_RADIUS = 5;
+    public static final int COVER_SAMPLING_FACTOR = 2;
+
+    RelativeLayout queueContainer;
+    TextView queueName;
+    ImageView queueImage;
+    View queueImageOverlay;
+
+    QueueEntry queueEntry;
+
+    private BusinessItemQueueView.OnItemClickListener onItemClickListener;
 
     public BusinessItemQueueView(Context context) {
         super(context);
@@ -35,19 +42,25 @@ public class BusinessItemQueueView extends RelativeLayout {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.business_item_queue, this);
-        itemContainer = (RelativeLayout) findViewById(R.id.itemContainer);
-        itemCoverHeading = (TextView) findViewById(R.id.itemCoverHeading);
-        itemCoverImage = (ImageView) findViewById(R.id.itemCoverImage);
-        itemCoverOverlay = findViewById(R.id.itemCoverOverlay);
-
+        inflate(getContext(), R.layout.view_business_item_queue, this);
+        queueContainer = (RelativeLayout) findViewById(R.id.queueContainer);
+        queueName = (TextView) findViewById(R.id.queueName);
+        queueImage = (ImageView) findViewById(R.id.queueImage);
+        queueImageOverlay = findViewById(R.id.queueImageOverlay);
     }
 
     public void createFromQueueEntry(QueueEntry queueEntry) {
-        itemCoverHeading.setText(queueEntry.getName());
+        this.queueEntry = queueEntry;
+
+        queueName.setText(queueEntry.getName());
+
+        // prepare image view, fade in when colors are ready
+        queueImage.setAlpha(0f);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            queueImage.setTransitionName("queueImage." + queueEntry.getKey().getId());
+        }
         ImageEntry photo = new ImageEntry(queueEntry.getPhotoImageKeyId(), ImageEntry.TYPE_PHOTO);
-        //photo.loadIntoImageView(itemCoverImage, getContext());
-        photo.loadIntoImageView(itemCoverImage, new BlurTransformation(getContext(), 4), getContext(), new Callback() {
+        photo.loadIntoImageView(queueImage, new BlurTransformation(getContext(), COVER_BLUR_RADIUS, COVER_SAMPLING_FACTOR), getContext(), new Callback() {
             @Override
             public void onSuccess() {
                 updateColors();
@@ -55,55 +68,72 @@ public class BusinessItemQueueView extends RelativeLayout {
 
             @Override
             public void onError() {
-
+                // fallback drawable will be visible
+                AnimationHelper.fadeToOpacity(queueImage, 1f, AnimationHelper.DURATION_SLOW);
             }
         });
     }
 
     private void updateColors() {
-        Log.v(IntelliQ.TAG, "Updating color palette");
-        Palette.from(ImageHelper.drawableToBitmap(itemCoverImage.getDrawable())).generate(new Palette.PaletteAsyncListener() {
+        Palette.from(ImageHelper.drawableToBitmap(queueImage.getDrawable())).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
-                Palette.Swatch swatch = palette.getVibrantSwatch();
-                int vibrantColor = palette.getVibrantColor(ContextCompat.getColor(getContext(), R.color.primary));
-                int titleTextColor = swatch.getTitleTextColor();
-                int bodyTextColor = swatch.getBodyTextColor();
+                int primaryColor = ContextCompat.getColor(getContext(), R.color.primary);
+                int vibrantColor = palette.getVibrantColor(primaryColor);
 
-                itemCoverOverlay.setBackgroundColor(vibrantColor);
-                Log.v(IntelliQ.TAG, "Palette updated");
+                AnimationHelper.fadeToBackgroundColor(queueImageOverlay, primaryColor, vibrantColor, AnimationHelper.DURATION_SLOW);
+                AnimationHelper.fadeToOpacity(queueImage, 1f, AnimationHelper.DURATION_SLOW);
             }
         });
     }
 
-    public RelativeLayout getItemContainer() {
-        return itemContainer;
+    public void setOnItemClickListener(final OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+        queueContainer.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(queueEntry, BusinessItemQueueView.this);
+                }
+            }
+        });
     }
 
-    public void setItemContainer(RelativeLayout itemContainer) {
-        this.itemContainer = itemContainer;
+    public interface OnItemClickListener {
+
+        void onItemClick(QueueEntry queueEntry, BusinessItemQueueView view);
+
     }
 
-    public TextView getItemCoverHeading() {
-        return itemCoverHeading;
+    public RelativeLayout getQueueContainer() {
+        return queueContainer;
     }
 
-    public void setItemCoverHeading(TextView itemCoverHeading) {
-        this.itemCoverHeading = itemCoverHeading;
+    public void setQueueContainer(RelativeLayout queueContainer) {
+        this.queueContainer = queueContainer;
     }
 
-    public ImageView getItemCoverImage() {
-        return itemCoverImage;
+    public TextView getQueueName() {
+        return queueName;
     }
 
-    public void setItemCoverImage(ImageView itemCoverImage) {
-        this.itemCoverImage = itemCoverImage;
+    public void setQueueName(TextView queueName) {
+        this.queueName = queueName;
     }
 
-    public View getItemCoverOverlay() {
-        return itemCoverOverlay;
+    public ImageView getQueueImage() {
+        return queueImage;
     }
 
-    public void setItemCoverOverlay(View itemCoverOverlay) {
-        this.itemCoverOverlay = itemCoverOverlay;
+    public void setQueueImage(ImageView queueImage) {
+        this.queueImage = queueImage;
     }
+
+    public View getQueueImageOverlay() {
+        return queueImageOverlay;
+    }
+
+    public void setQueueImageOverlay(View queueImageOverlay) {
+        this.queueImageOverlay = queueImageOverlay;
+    }
+
 }

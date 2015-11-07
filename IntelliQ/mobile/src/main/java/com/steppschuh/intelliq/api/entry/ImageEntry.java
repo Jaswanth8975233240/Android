@@ -67,19 +67,21 @@ public class ImageEntry {
             }
         }
 
-        if (transformation != null) {
-
-        } else {
-
-        }
-
         String url = getUrl(imageWidth);
-        Picasso.with(context)
-                .load(url)
-                .transform(transformation)
-                .placeholder(R.drawable.no_photo)
-                .error(R.drawable.no_photo)
-                .into(imageView, callback);
+        if (transformation != null) {
+            Picasso.with(context)
+                    .load(url)
+                    .transform(transformation)
+                    .placeholder(R.drawable.no_photo)
+                    .error(R.drawable.no_photo)
+                    .into(imageView, callback);
+        } else {
+            Picasso.with(context)
+                    .load(url)
+                    .placeholder(R.drawable.no_photo)
+                    .error(R.drawable.no_photo)
+                    .into(imageView, callback);
+        }
     }
 
     public String getImageExtension() {

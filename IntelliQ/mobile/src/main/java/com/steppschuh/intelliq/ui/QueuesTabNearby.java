@@ -1,16 +1,20 @@
 package com.steppschuh.intelliq.ui;
 
-import android.support.v4.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.exception.NetworkException;
@@ -26,8 +30,8 @@ import com.steppschuh.intelliq.api.entry.BusinessEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
 import com.steppschuh.intelliq.api.request.NearbyQueuesRequest;
 import com.steppschuh.intelliq.api.response.BusinessListApiResponse;
-import com.steppschuh.intelliq.api.response.QueueListApiResponse;
 import com.steppschuh.intelliq.api.user.LocationChangedListener;
+import com.steppschuh.intelliq.ui.widget.BusinessItemQueueView;
 import com.steppschuh.intelliq.ui.widget.StatusHelper;
 import com.steppschuh.intelliq.ui.widget.StatusView;
 
@@ -49,7 +53,7 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.queues_tab_nearby, container,false);
+        View v = inflater.inflate(R.layout.fragment_queues_tab_nearby, container,false);
 
         app = (IntelliQ) getActivity().getApplication();
 
@@ -59,6 +63,48 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
     private View setupUi(View v) {
         ArrayList<BusinessEntry> businessEntries = new ArrayList<>();
         businessListAdapter = new BusinessListAdapter(businessEntries);
+        businessListAdapter.setOnItemClickListener(new BusinessItemQueueView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(QueueEntry queueEntry, BusinessItemQueueView businessItemQueueView) {
+                // get parent business entry
+                BusinessEntry parentBusinessEntry = null;
+                for (BusinessEntry businessEntry : businessListAdapter.getBusinessEntries()) {
+                    if (businessEntry.getKey().getId() == queueEntry.getBusinessKeyId()) {
+                        parentBusinessEntry = businessEntry;
+                    }
+                }
+
+                // create new details fragment for queue
+                QueuesDetailsFragment queuesDetailsFragmentFragment = new QueuesDetailsFragment();
+                queuesDetailsFragmentFragment.setBusinessEntry(parentBusinessEntry);
+                queuesDetailsFragmentFragment.setQueueEntry(queueEntry);
+                FragmentTransaction trans;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Set shared and scene transitions on this fragment
+                    setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.trans_move));
+                    setExitTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.fade));
+
+                    // Set shared and scene transitions on new fragment
+                    ImageView image = businessItemQueueView.getQueueImage();
+                    queuesDetailsFragmentFragment.setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.trans_move));
+                    queuesDetailsFragmentFragment.setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.fade));
+                    queuesDetailsFragmentFragment.setImageTransitionName(image.getTransitionName());
+
+                    trans = getActivity().getSupportFragmentManager().beginTransaction();
+                    trans.replace(R.id.coordinatorLayout, queuesDetailsFragmentFragment);
+                    trans.addToBackStack(null);
+                    trans.addSharedElement(image, image.getTransitionName());
+                } else {
+                    trans = getActivity().getSupportFragmentManager().beginTransaction();
+                    trans.replace(R.id.coordinatorLayout, queuesDetailsFragmentFragment);
+                    trans.addToBackStack(null);
+                }
+                trans.commit();
+            }
+
+        });
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(businessListAdapter);

@@ -36,7 +36,7 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
 
     public void showStatusView(StatusView statusView) {
         if (getItemCount() == 1 && queues == null) {
-            // already showing a status view
+            // already showing a view_status view
             //this.notifyItemRemoved(0);
         }
         this.statusView = statusView;
@@ -64,7 +64,7 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
                 break;
             }
             default: {
-                v = LayoutInflater.from(context).inflate(R.layout.queue_item, parent, false);
+                v = LayoutInflater.from(context).inflate(R.layout.view_queue_item, parent, false);
                 break;
             }
         }
@@ -127,7 +127,7 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
         if (queues != null && queues.size() > 0) {
             return queues.size();
         } else if (statusView != null) {
-            // show the status view
+            // show the view_status view
             return 1;
         } else {
             return 0;
@@ -179,8 +179,8 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
 
         private void setupDefaultItem(View itemView) {
             cardView = (CardView )itemView.findViewById(R.id.cardView);
-            contentHeading = (TextView) itemView.findViewById(R.id.cardViewContentHeading);
-            contentSubHeading = (TextView) itemView.findViewById(R.id.cardViewContentSubHeading);
+            contentHeading = (TextView) itemView.findViewById(R.id.businessName);
+            contentSubHeading = (TextView) itemView.findViewById(R.id.businessShortDescription);
 
             tag1 = (TextView) itemView.findViewById(R.id.cardViewTag1);
             tag2 = (TextView) itemView.findViewById(R.id.cardViewTag2);
@@ -188,7 +188,7 @@ public class QueuesListAdapter extends RecyclerView.Adapter<QueuesListAdapter.Qu
             action1 = (Button) itemView.findViewById(R.id.cardViewAction1);
             action2 = (Button) itemView.findViewById(R.id.cardViewAction2);
             coverImage = (ImageView) itemView.findViewById(R.id.cardViewCoverImage);
-            contentImage = (ImageView) itemView.findViewById(R.id.cardViewContentImage);
+            contentImage = (ImageView) itemView.findViewById(R.id.businessImage);
         }
 
         private void setupErrorItem(View itemView) {

@@ -14,6 +14,16 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="FabStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="borderWidth">0dp</item>
+        <item name="elevation">6dp</item>
+        <item name="pressedTranslationZ">12dp</item>
+        <item name="rippleColor">@android:color/white</item>
+    </style>
+
     <style name="Divider">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1dp</item>
@@ -41,6 +51,16 @@
         <item name="android:paddingBottom">5dp</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="QueueDetailTitleCollapsed" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="QueueDetailTitleExpanded" parent="QueueDetailTitleCollapsed">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:alpha">1</item>;
+        <item name="android:textSize">25sp</item>
     </style>
 
 </resources>

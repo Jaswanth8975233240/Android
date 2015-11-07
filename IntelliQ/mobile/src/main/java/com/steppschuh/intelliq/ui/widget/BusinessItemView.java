@@ -1,9 +1,7 @@
 package com.steppschuh.intelliq.ui.widget;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,9 +17,11 @@ import java.util.ArrayList;
 public class BusinessItemView extends RelativeLayout {
 
     LinearLayout contentCoverContainer;
-    TextView contentHeading;
-    TextView contentSubHeading;
-    ImageView contentImage;
+    TextView businessName;
+    TextView businessShortDescription;
+    ImageView businessImage;
+
+    private BusinessItemQueueView.OnItemClickListener onItemClickListener;
 
     public BusinessItemView(Context context) {
         super(context);
@@ -33,24 +33,25 @@ public class BusinessItemView extends RelativeLayout {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.business_item, this);
+        inflate(getContext(), R.layout.view_business_item, this);
         contentCoverContainer = (LinearLayout) findViewById(R.id.cardViewCoverContainer);
-        contentHeading = (TextView) findViewById(R.id.cardViewContentHeading);
-        contentSubHeading = (TextView) findViewById(R.id.cardViewContentSubHeading);
-        contentImage = (ImageView) findViewById(R.id.cardViewContentImage);
+        businessName = (TextView) findViewById(R.id.businessName);
+        businessShortDescription = (TextView) findViewById(R.id.businessShortDescription);
+        businessImage = (ImageView) findViewById(R.id.businessImage);
     }
 
     public void createFromBusinessEntry(BusinessEntry businessEntry) {
-        contentHeading.setText(businessEntry.getName());
-        contentSubHeading.setText(businessEntry.getName());
+        businessName.setText(businessEntry.getName());
+        businessShortDescription.setText(businessEntry.getName());
 
         ImageEntry logo = new ImageEntry(businessEntry.getLogoImageKeyId(), ImageEntry.TYPE_LOGO);
-        logo.loadIntoImageView(contentImage, getContext());
+        logo.loadIntoImageView(businessImage, getContext());
 
         ArrayList<BusinessItemQueueView> businessItemQueueViews = new ArrayList<>();
         for (QueueEntry queueEntry : businessEntry.getQueues()) {
             BusinessItemQueueView queueView = new BusinessItemQueueView(getContext());
             queueView.createFromQueueEntry(queueEntry);
+            queueView.setOnItemClickListener(onItemClickListener);
             businessItemQueueViews.add(queueView);
         }
         setQueueItems(businessItemQueueViews);
@@ -63,6 +64,10 @@ public class BusinessItemView extends RelativeLayout {
         }
     }
 
+    public void setOnItemClickListener(BusinessItemQueueView.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
     public LinearLayout getContentCoverContainer() {
         return contentCoverContainer;
     }
@@ -71,27 +76,27 @@ public class BusinessItemView extends RelativeLayout {
         this.contentCoverContainer = contentCoverContainer;
     }
 
-    public TextView getContentHeading() {
-        return contentHeading;
+    public TextView getBusinessName() {
+        return businessName;
     }
 
-    public void setContentHeading(TextView contentHeading) {
-        this.contentHeading = contentHeading;
+    public void setBusinessName(TextView businessName) {
+        this.businessName = businessName;
     }
 
-    public TextView getContentSubHeading() {
-        return contentSubHeading;
+    public TextView getBusinessShortDescription() {
+        return businessShortDescription;
     }
 
-    public void setContentSubHeading(TextView contentSubHeading) {
-        this.contentSubHeading = contentSubHeading;
+    public void setBusinessShortDescription(TextView businessShortDescription) {
+        this.businessShortDescription = businessShortDescription;
     }
 
-    public ImageView getContentImage() {
-        return contentImage;
+    public ImageView getBusinessImage() {
+        return businessImage;
     }
 
-    public void setContentImage(ImageView contentImage) {
-        this.contentImage = contentImage;
+    public void setBusinessImage(ImageView businessImage) {
+        this.businessImage = businessImage;
     }
 }

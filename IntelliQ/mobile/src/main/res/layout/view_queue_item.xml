@@ -64,7 +64,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/cardViewContentContainer"
+                android:id="@+id/businessContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -72,7 +72,7 @@
                 android:padding="14dp">
 
                 <ImageView
-                    android:id="@+id/cardViewContentImage"
+                    android:id="@+id/businessImage"
                     android:src="@color/primaryLight"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
@@ -82,25 +82,25 @@
                     android:layout_alignParentTop="true" />
 
                 <TextView
-                    android:id="@+id/cardViewContentHeading"
+                    android:id="@+id/businessName"
                     android:text="Queue Name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
                     style="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:layout_toRightOf="@id/cardViewContentImage"
+                    android:layout_toRightOf="@id/businessImage"
                     />
 
                 <TextView
-                    android:id="@+id/cardViewContentSubHeading"
+                    android:id="@+id/businessShortDescription"
                     android:text="Prof. Dr. Helmert Straße 2-3"
-                    android:layout_below="@id/cardViewContentHeading"
+                    android:layout_below="@id/businessName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:alpha="0.8"
                     style="@style/Base.TextAppearance.AppCompat.Body1"
-                    android:layout_toRightOf="@id/cardViewContentImage"
+                    android:layout_toRightOf="@id/businessImage"
                     />
 
 
@@ -108,14 +108,14 @@
 
             <View
                 style="@style/Divider"
-                android:layout_below="@id/cardViewContentContainer"/>
+                android:layout_below="@id/businessContainer"/>
 
             <LinearLayout
                 android:id="@+id/cardViewActionsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_below="@id/cardViewContentContainer"
+                android:layout_below="@id/businessContainer"
                 android:paddingLeft="14dp"
                 android:paddingRight="14dp">
 

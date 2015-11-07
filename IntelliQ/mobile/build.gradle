@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "com.steppschuh.intelliq"
@@ -13,11 +13,29 @@ android {
         multiDexEnabled true
     }
 
+    productFlavors {
+        // Define separate dev and prod product flavors.
+        dev {
+            // dev utilizes minSDKVersion = 21 to allow the Android gradle plugin
+            // to pre-dex each module and produce an APK that can be tested on
+            // Android Lollipop without time consuming dex merging processes.
+            minSdkVersion 21
+        }
+        prod {
+            // The actual minSdkVersion for the application.
+            minSdkVersion 16
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dexOptions {
+        preDexLibraries = false
     }
 
     packagingOptions {
@@ -37,8 +55,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    wearApp project(':wear')
-    testCompile 'junit:junit:4.12'
+    //wearApp project(':wear')
+    //testCompile 'junit:junit:4.12'
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.google.android.gms:play-services:8.1.0'
     compile 'com.android.support:design:23.1.0'

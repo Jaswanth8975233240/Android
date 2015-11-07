@@ -2,7 +2,6 @@ package com.steppschuh.intelliq.ui.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -33,7 +32,7 @@ public class StatusView extends RelativeLayout {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.status, this);
+        inflate(getContext(), R.layout.view_status, this);
         statusHeading = (TextView) findViewById(R.id.statusHeading);
         statusSubHeading = (TextView) findViewById(R.id.statusSubHeading);
         statusImageContainer = (RelativeLayout) findViewById(R.id.statusImageContainer);

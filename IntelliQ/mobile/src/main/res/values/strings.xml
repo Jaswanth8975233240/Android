@@ -1,9 +1,10 @@
 <resources>
     <string name="app_name">IntelliQ</string>
 
+    <string name="loremipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas neque mauris, pharetra eu consectetur sit amet, pulvinar vel neque. Sed nec nisi eu quam sodales pharetra sit amet id velit. In hac habitasse platea dictumst. Sed congue turpis euismod, euismod purus eget, eleifend augue.</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
 
     <string name="action_ok">OK</string>
     <string name="action_settings">Settings</string>
@@ -16,6 +17,9 @@
 
     <string name="queue_action_directions">Get Directions</string>
     <string name="queue_action_view">View Queue</string>
+
+    <string name="queue_estimation_people">people in queue</string>
+    <string name="queue_estimation_time">minutes to wait</string>
 
     <string name="rationale_location_title">Location</string>
     <string name="rationale_location_message">We need access to your approximate location in order to find available businessEntries in your area.\n\nPlease grant the permission and we\'ll start looking for nearby businessEntries.</string>

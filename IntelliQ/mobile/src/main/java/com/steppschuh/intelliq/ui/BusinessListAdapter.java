@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.steppschuh.intelliq.api.entry.BusinessEntry;
+import com.steppschuh.intelliq.ui.widget.BusinessItemQueueView;
 import com.steppschuh.intelliq.ui.widget.BusinessItemView;
 import com.steppschuh.intelliq.ui.widget.StatusView;
 
@@ -20,19 +21,20 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
     ArrayList<BusinessEntry> businessEntries;
     StatusView statusView;
 
+    private BusinessItemQueueView.OnItemClickListener onItemClickListener;
+
     public BusinessListAdapter(ArrayList<BusinessEntry> businessEntries) {
         this.businessEntries = businessEntries;
     }
 
     public void showStatusView(StatusView statusView) {
         if (getItemCount() == 1 && businessEntries == null) {
-            // already showing a status view
+            // already showing a view_status view
             //this.notifyItemRemoved(0);
         }
         this.statusView = statusView;
         businessEntries = null;
         this.notifyItemChanged(0);
-        //this.notifyDataSetChanged();
     }
 
     @Override
@@ -54,7 +56,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
                 break;
             }
             default: {
-                //v = LayoutInflater.from(context).inflate(R.layout.business_item, parent, false);
+                //v = LayoutInflater.from(context).inflate(R.layout.view_business_item, parent, false);
                 v = new BusinessItemView(context);
                 break;
             }
@@ -82,6 +84,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
         final BusinessEntry businessEntry = businessEntries.get(position);
 
         if (businessEntry != null) {
+            businessViewHolder.getBusinessItemView().setOnItemClickListener(onItemClickListener);
             businessViewHolder.getBusinessItemView().createFromBusinessEntry(businessEntry);
         }
     }
@@ -95,7 +98,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
         if (businessEntries != null && businessEntries.size() > 0) {
             return businessEntries.size();
         } else if (statusView != null) {
-            // show the status view
+            // show the view_status view
             return 1;
         } else {
             return 0;
@@ -135,6 +138,10 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
         public BusinessItemView getBusinessItemView() {
             return businessItemView;
         }
+    }
+
+    public void setOnItemClickListener(BusinessItemQueueView.OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
 }
