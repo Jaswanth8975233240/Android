@@ -2,13 +2,16 @@ package com.steppschuh.intelliq.ui;
 
 import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
-import android.animation.IntEvaluator;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.graphics.Color;
+import android.app.Activity;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
-import static android.animation.ValueAnimator.*;
+import com.steppschuh.intelliq.R;
+
+import static android.animation.ValueAnimator.AnimatorUpdateListener;
+import static android.animation.ValueAnimator.ofObject;
 
 public class AnimationHelper {
 
@@ -43,5 +46,24 @@ public class AnimationHelper {
         });
         valueAnimator.setDuration(duration);
         valueAnimator.start();
+    }
+
+    public static void fadeStatusBarToDefaultColor(final Activity activity) {
+        fadeStatusBarToColor(activity, ContextCompat.getColor(activity, R.color.primaryDark), DURATION_FAST);
+    }
+
+    public static void fadeStatusBarToColor(final Activity activity, int targetColor, long duration) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int currentColor = activity.getWindow().getStatusBarColor();
+            ValueAnimator colorAnimation = ofObject(new ArgbEvaluator(), currentColor, targetColor);
+            colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animator) {
+                    activity.getWindow().setStatusBarColor((Integer) animator.getAnimatedValue());
+                }
+            });
+            colorAnimation.setDuration(duration);
+            colorAnimation.start();
+        }
     }
 }

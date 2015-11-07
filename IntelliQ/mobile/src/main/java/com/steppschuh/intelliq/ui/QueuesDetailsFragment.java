@@ -151,6 +151,12 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
     }
 
     @Override
+    public void onDestroy() {
+        AnimationHelper.fadeStatusBarToDefaultColor(getActivity());
+        super.onDestroy();
+    }
+
+    @Override
     public void onRefresh() {
 
     }
@@ -186,6 +192,7 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
                 collapsingToolbarLayout.setStatusBarScrimColor(darkMutedColor);
 
                 AnimationHelper.fadeToBackgroundColor(queueDetailBar, primaryColor, darkMutedColor, AnimationHelper.DURATION_SLOW);
+                AnimationHelper.fadeStatusBarToColor(getActivity(), darkMutedColor, AnimationHelper.DURATION_SLOW);
             }
         });
     }

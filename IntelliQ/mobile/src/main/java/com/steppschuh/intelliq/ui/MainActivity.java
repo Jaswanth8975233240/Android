@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.steppschuh.intelliq.IntelliQ;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.add(contentRootLayout.getId(), content).commit();
         }
 
+        setStatusBarColor(ContextCompat.getColor(this, R.color.primaryDark));
     }
 
     @Override
@@ -116,6 +119,13 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public void setStatusBarColor(int color) {
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(color);
+    }
+
     /**
      * Getter & Setter
      */
@@ -126,5 +136,9 @@ public class MainActivity extends AppCompatActivity
     public DrawerLayout getDrawerLayout() {
         return drawerLayout;
     }
+
+
+
+
 
 }

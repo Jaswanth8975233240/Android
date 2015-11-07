@@ -79,8 +79,9 @@ public class BusinessItemQueueView extends RelativeLayout {
             public void onGenerated(Palette palette) {
                 int primaryColor = ContextCompat.getColor(getContext(), R.color.primary);
                 int vibrantColor = palette.getVibrantColor(primaryColor);
+                int darkMutedColor = palette.getDarkMutedColor(primaryColor);
 
-                AnimationHelper.fadeToBackgroundColor(queueImageOverlay, primaryColor, vibrantColor, AnimationHelper.DURATION_SLOW);
+                AnimationHelper.fadeToBackgroundColor(queueImageOverlay, primaryColor, darkMutedColor, AnimationHelper.DURATION_SLOW);
                 AnimationHelper.fadeToOpacity(queueImage, 1f, AnimationHelper.DURATION_SLOW);
             }
         });
