@@ -4,7 +4,9 @@ import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.os.Build;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 
@@ -20,6 +22,9 @@ public class AnimationHelper {
     public static final int DURATION_SLOW = 1000;
     public static final int DURATION_CASUAL = 2500;
 
+    /**
+     * Any view
+     */
     public static void fadeToBackgroundColor(final View view, int currentColor, int targetColor, long duration) {
         ValueAnimator colorAnimation = ofObject(new ArgbEvaluator(), currentColor, targetColor);
         colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
@@ -48,6 +53,25 @@ public class AnimationHelper {
         valueAnimator.start();
     }
 
+    /**
+     * FAB
+     */
+    public static void fadeFabToBackgroundColor(final FloatingActionButton fab, int targetColor, long duration) {
+        int currentColor = fab.getBackgroundTintList().getDefaultColor();
+        ValueAnimator colorAnimation = ofObject(new ArgbEvaluator(), currentColor, targetColor);
+        colorAnimation.addUpdateListener(new AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                fab.setBackgroundTintList(ColorStateList.valueOf((Integer) animator.getAnimatedValue()));
+            }
+        });
+        colorAnimation.setDuration(duration);
+        colorAnimation.start();
+    }
+
+    /**
+     * Status bar
+     */
     public static void fadeStatusBarToDefaultColor(final Activity activity) {
         fadeStatusBarToColor(activity, ContextCompat.getColor(activity, R.color.primaryDark), DURATION_FAST);
     }

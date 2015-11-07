@@ -46,6 +46,8 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
     BusinessEntry businessEntry;
     QueueEntry queueEntry;
 
+    FloatingActionButton fab;
+
     ImageView queueImage;
     View queueImageOverlay;
     TextView businessName;
@@ -82,6 +84,7 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
         // setup views
+        fab = (FloatingActionButton) v.findViewById(R.id.fab);
         businessName = (TextView) v.findViewById(R.id.businessName);
         businessShortDescription = (TextView) v.findViewById(R.id.businessShortDescription);
         businessImage = (ImageView) v.findViewById(R.id.businessImage);
@@ -108,6 +111,9 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
     }
 
     private void createFrom(BusinessEntry businessEntry, QueueEntry queueEntry) {
+        if (businessEntry == null || queueEntry == null) {
+            return;
+        }
         collapsingToolbarLayout.setTitle(queueEntry.getName());
         businessName.setText(businessEntry.getName());
         businessShortDescription.setText(businessEntry.getName());
@@ -184,15 +190,22 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
             public void onGenerated(Palette palette) {
                 int primaryColor = ContextCompat.getColor(getContext(), R.color.primary);
                 int vibrantColor = palette.getVibrantColor(primaryColor);
-                int darkMutedColor = palette.getDarkMutedColor(primaryColor);
+                int vibrantDarkColor = palette.getDarkVibrantColor(vibrantColor);
+                int mutedColor = palette.getMutedColor(primaryColor);
+                int mutedDarkColor = palette.getDarkMutedColor(mutedColor);
 
-                AnimationHelper.fadeToBackgroundColor(queueImageOverlay, primaryColor, vibrantColor, AnimationHelper.DURATION_SLOW);
                 AnimationHelper.fadeToOpacity(queueImage, 1f, AnimationHelper.DURATION_SLOW);
-                collapsingToolbarLayout.setContentScrimColor(darkMutedColor);
-                collapsingToolbarLayout.setStatusBarScrimColor(darkMutedColor);
 
-                AnimationHelper.fadeToBackgroundColor(queueDetailBar, primaryColor, darkMutedColor, AnimationHelper.DURATION_SLOW);
-                AnimationHelper.fadeStatusBarToColor(getActivity(), darkMutedColor, AnimationHelper.DURATION_SLOW);
+                // vibrant views
+                AnimationHelper.fadeFabToBackgroundColor(fab, vibrantColor, AnimationHelper.DURATION_SLOW);
+                AnimationHelper.fadeToBackgroundColor(queueImageOverlay, primaryColor, vibrantColor, AnimationHelper.DURATION_SLOW);
+
+                // muted views
+                collapsingToolbarLayout.setContentScrimColor(mutedDarkColor);
+                collapsingToolbarLayout.setStatusBarScrimColor(mutedDarkColor);
+                AnimationHelper.fadeToBackgroundColor(queueDetailBar, primaryColor, mutedDarkColor, AnimationHelper.DURATION_SLOW);
+                AnimationHelper.fadeStatusBarToColor(getActivity(), mutedDarkColor, AnimationHelper.DURATION_SLOW);
+
             }
         });
     }
