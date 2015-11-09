@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
 
@@ -33,23 +34,52 @@ public class User {
 
     private String name;
     private String mail;
+    private String idToken;
+    private String photoUrl;
 
     private String postalCode;
     private float latitude;
     private float longitude;
 
+    private GoogleSignInAccount googleAccount;
+
     private ArrayList<Long> queueEntryIds;
     private ArrayList<Long> queueItemEntryIds;
 
     private ArrayList<LocationChangedListener> locationChangedListeners;
+    private ArrayList<UserChangedListener> userChangedListeners;
 
     public User() {
-        latitude = -1;
-        longitude = -1;
+        latitude = -1.0f;
+        longitude = -1.0f;
 
         queueEntryIds = new ArrayList<>();
         queueItemEntryIds = new ArrayList<>();
         locationChangedListeners = new ArrayList<>();
+        userChangedListeners = new ArrayList<>();
+    }
+
+    /**
+     * Account handling
+     */
+    public boolean isSignedIn() {
+        if (googleAccount != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void updateFromGoogleAccount() {
+        Log.d(IntelliQ.TAG, "Updating user from Google account");
+        if (googleAccount != null) {
+            name = googleAccount.getDisplayName();
+            mail = googleAccount.getEmail();
+            idToken = googleAccount.getIdToken();
+            photoUrl = googleAccount.getPhotoUrl().toString();
+        }
+
+        notifyUserChangedListeners();
     }
 
     /**
@@ -59,7 +89,7 @@ public class User {
         Log.v(IntelliQ.TAG, "Location update requested");
         if (!hasGrantedLocationPermission(context)) {
             Log.w(IntelliQ.TAG, "Location permission not yet granted");
-            setLocation(-1, -1);
+            setLocation(-1.0f, -1.0f);
             requestLocationPermission(context, false);
             return;
         }
@@ -179,7 +209,7 @@ public class User {
     }
 
     public static boolean isValidLocation(float latitude, float longitude) {
-        if (latitude != -1 && longitude != -1) {
+        if (latitude != -1.0f && longitude != -1.0f) {
             return true;
         }
         return false;
@@ -221,6 +251,43 @@ public class User {
     }
 
     /**
+     * User observer handling
+     */
+    public void registerUserChangedListener(UserChangedListener userChangedListener) {
+        if (!userChangedListeners.contains(userChangedListener)) {
+            userChangedListeners.add(userChangedListener);
+        }
+    }
+
+    public void unregisterUserChangedListener(UserChangedListener userChangedListener) {
+        if (userChangedListeners.contains(userChangedListener)) {
+            userChangedListeners.remove(userChangedListener);
+        }
+    }
+
+    public void notifyUserChangedListeners() {
+        for (UserChangedListener userChangedListener : userChangedListeners) {
+            try {
+                userChangedListener.onUserChanged(this);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Interfaces
+     */
+    public interface LocationChangedListener {
+        public abstract void onLocationChanged(float latitude, float longitude);
+        public abstract void onLocationChanged(String postalCode);
+    }
+
+    public interface UserChangedListener {
+        public abstract void onUserChanged(User user);
+    }
+
+    /**
      * Getter & Setter
      */
     public String getName() {
@@ -237,6 +304,22 @@ public class User {
 
     public void setMail(String mail) {
         this.mail = mail;
+    }
+
+    public String getIdToken() {
+        return idToken;
+    }
+
+    public void setIdToken(String idToken) {
+        this.idToken = idToken;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getPostalCode() {
@@ -276,5 +359,14 @@ public class User {
 
     public void setQueueItemEntryIds(ArrayList<Long> queueItemEntryIds) {
         this.queueItemEntryIds = queueItemEntryIds;
+    }
+
+    public GoogleSignInAccount getGoogleAccount() {
+        return googleAccount;
+    }
+
+    public void setGoogleAccount(GoogleSignInAccount googleAccount) {
+        this.googleAccount = googleAccount;
+        updateFromGoogleAccount();
     }
 }

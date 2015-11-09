@@ -3,7 +3,6 @@ package com.steppschuh.intelliq.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -23,6 +22,7 @@ public class QueuesListFragment extends Fragment {
 
     IntelliQ app;
 
+    View fragment;
     Toolbar toolbar;
     ViewPager queuesTabsViewPager;
     QueuesTabsViewPagerAdapter queuesTabsViewPagerAdapter;
@@ -30,31 +30,56 @@ public class QueuesListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_queues, container,false);
+        fragment = inflater.inflate(R.layout.fragment_queues, container,false);
 
         app = (IntelliQ) getActivity().getApplication();
 
-        return setupUi(v);
+        setupToolbar();
+        setupUi();
+
+        return fragment;
     }
 
-    private View setupUi(View v) {
-        // setting up the navigation
-        toolbar = (Toolbar) v.findViewById(R.id.toolbar);
+    private void setupToolbar() {
+        toolbar = (Toolbar) fragment.findViewById(R.id.toolbar);
         ((MainActivity) getActivity()).setSupportActionBar(toolbar);
 
         DrawerLayout drawerLayout = ((MainActivity) getActivity()).getDrawerLayout();
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                ((MainActivity) getActivity()).onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                ((MainActivity) getActivity()).onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                ((MainActivity) getActivity()).onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                ((MainActivity) getActivity()).onDrawerStateChanged(newState);
+            }
+        };
         drawerLayout.setDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener((MainActivity) getActivity());
-
+    private void setupUi() {
         // setting up the tab view
-        queuesTabsViewPagerAdapter =  new QueuesTabsViewPagerAdapter(getActivity().getSupportFragmentManager(), getActivity());
-        queuesTabsViewPager = (ViewPager) v.findViewById(R.id.queuesTabsViewPager);
+        queuesTabsViewPagerAdapter = new QueuesTabsViewPagerAdapter(getActivity().getSupportFragmentManager(), getActivity());
+        queuesTabsViewPager = (ViewPager) fragment.findViewById(R.id.queuesTabsViewPager);
         queuesTabsViewPager.setAdapter(queuesTabsViewPagerAdapter);
-        queuesTabsLayout = (SlidingTabLayout) v.findViewById(R.id.tabs);
+        queuesTabsLayout = (SlidingTabLayout) fragment.findViewById(R.id.tabs);
         queuesTabsLayout.setDistributeEvenly(false);
         queuesTabsLayout.setCustomTabColorizer(new SlidingTabLayout.TabColorizer() {
             @Override
@@ -65,7 +90,7 @@ public class QueuesListFragment extends Fragment {
         queuesTabsLayout.setViewPager(queuesTabsViewPager);
 
         // setting up the FAB
-        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) fragment.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,8 +98,6 @@ public class QueuesListFragment extends Fragment {
                         .setAction("Action", null).show();
             }
         });
-
-        return v;
     }
 
     @Override

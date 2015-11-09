@@ -30,7 +30,7 @@ import com.steppschuh.intelliq.api.entry.BusinessEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
 import com.steppschuh.intelliq.api.request.NearbyQueuesRequest;
 import com.steppschuh.intelliq.api.response.BusinessListApiResponse;
-import com.steppschuh.intelliq.api.user.LocationChangedListener;
+import com.steppschuh.intelliq.api.user.User;
 import com.steppschuh.intelliq.ui.widget.BusinessItemQueueView;
 import com.steppschuh.intelliq.ui.widget.StatusHelper;
 import com.steppschuh.intelliq.ui.widget.StatusView;
@@ -40,7 +40,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 
-public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRefreshListener, LocationChangedListener {
+public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRefreshListener, User.LocationChangedListener {
 
     IntelliQ app;
 
@@ -174,6 +174,7 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
                         onRefresh();
                     }
                 });
+                app.getUser().requestPostalCode(getActivity());
             } else {
                 // permission denied
                 StatusHelper.showMissingLocationPermissionError(getActivity(), businessListAdapter, new View.OnClickListener() {
