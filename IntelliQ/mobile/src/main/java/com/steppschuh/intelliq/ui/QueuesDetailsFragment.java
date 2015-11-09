@@ -54,6 +54,7 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
     TextView businessShortDescription;
     ImageView businessImage;
 
+    TextView queueDescription;
     LinearLayout queueDetailBar;
     RelativeLayout queueDetailBarLeft;
     RelativeLayout queueDetailBarRight;
@@ -96,6 +97,7 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             queueImage.setTransitionName(imageTransitionName);
         }
+        queueDescription = (TextView) v.findViewById(R.id.queueDescription);
 
         queueDetailBar = (LinearLayout) v.findViewById(R.id.queueDetailBar);
         queueDetailBarLeft = (RelativeLayout) v.findViewById(R.id.queueDetailBarLeft);
@@ -114,9 +116,11 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
         if (businessEntry == null || queueEntry == null) {
             return;
         }
+
+        // business description
         collapsingToolbarLayout.setTitle(queueEntry.getName());
         businessName.setText(businessEntry.getName());
-        businessShortDescription.setText(businessEntry.getName());
+        businessShortDescription.setText(businessEntry.getReadableDescription(app));
 
         ImageEntry logo = new ImageEntry(businessEntry.getLogoImageKeyId(), ImageEntry.TYPE_LOGO);
         logo.loadIntoImageView(businessImage, getContext());
@@ -139,6 +143,11 @@ public class QueuesDetailsFragment extends Fragment implements SwipeRefreshLayou
                 AnimationHelper.fadeToOpacity(queueImage, 1f, AnimationHelper.DURATION_SLOW);
             }
         });
+
+        // queue description
+        queueDetailBarValueLeft.setText(queueEntry.getReadableNumberOfWaitingPeople());
+        queueDetailBarValueRight.setText(queueEntry.getReadableNumberOfRemainingMinutes());
+        queueDescription.setText(queueEntry.getDescription());
     }
 
     @Override

@@ -137,6 +137,16 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
 
     @Override
     public void onRefresh() {
+        if (businessListAdapter.getBusinessEntries() == null || businessListAdapter.getBusinessEntries().size() == 0) {
+            // show loading status view
+            StatusHelper.showLoadingQueuesStatus(getActivity(), businessListAdapter, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onRefresh();
+                }
+            });
+        }
+
         // this will trigger a location update and onLocationChanged will be called
         app.getUser().updateLocation(getActivity());
     }

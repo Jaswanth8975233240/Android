@@ -73,7 +73,7 @@ public class AnimationHelper {
      * Status bar
      */
     public static void fadeStatusBarToDefaultColor(final Activity activity) {
-        fadeStatusBarToColor(activity, ContextCompat.getColor(activity, R.color.primaryDark), DURATION_FAST);
+        fadeStatusBarToColor(activity, ContextCompat.getColor(activity, R.color.primary), DURATION_FAST);
     }
 
     public static void fadeStatusBarToColor(final Activity activity, int targetColor, long duration) {

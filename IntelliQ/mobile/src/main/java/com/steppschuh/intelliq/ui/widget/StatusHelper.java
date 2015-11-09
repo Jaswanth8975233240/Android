@@ -13,6 +13,10 @@ public class StatusHelper {
         businessListAdapter.showStatusView(status);
     }
 
+    public static void showLoadingQueuesStatus(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
+        showStatus(getLoadingQueuesStatus(context), businessListAdapter, onClickListener);
+    }
+
     public static void showUnknownError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
         showStatus(getUnknownError(context), businessListAdapter, onClickListener);
     }
@@ -35,6 +39,14 @@ public class StatusHelper {
 
     public static void showUnknownLocationError(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
         showStatus(getUnknownLocationError(context), businessListAdapter, onClickListener);
+    }
+
+    public static StatusView getLoadingQueuesStatus(Activity context) {
+        StatusView status = new StatusView(context);
+        status.getStatusHeading().setText(context.getString(R.string.status_loading_queues_title));
+        status.getStatusSubHeading().setText(context.getString(R.string.status_loading_queues_message));
+        status.getStatusActionButton().setText(context.getString(R.string.action_retry));
+        return status;
     }
 
     public static StatusView getUnknownError(Activity context) {

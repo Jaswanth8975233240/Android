@@ -1,5 +1,6 @@
 package com.steppschuh.intelliq.api.entry;
 
+import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.api.DatastoreKey;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -18,6 +19,19 @@ public class BusinessEntry {
     ArrayList<QueueEntry> queues;
 
     public BusinessEntry() {
+    }
+
+    public String getReadableDescription(IntelliQ app) {
+        if (queues != null && queues.size() > 0) {
+            if (app.getUser().hasValidLocation()) {
+                float latitude = app.getUser().getLatitude();
+                float longitude = app.getUser().getLongitude();
+                return queues.get(0).getReadableDistanceTo(latitude, longitude, app);
+            } else {
+                return queues.get(0).getReadableLocation();
+            }
+        }
+        return "";
     }
 
     /**

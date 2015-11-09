@@ -1,7 +1,11 @@
 package com.steppschuh.intelliq.api.entry;
 
 
+import android.content.Context;
+
+import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.DatastoreKey;
+import com.steppschuh.intelliq.api.user.User;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
@@ -23,6 +27,8 @@ public class QueueEntry {
     long businessKeyId;
 
     String name;
+    String description;
+    boolean requiresSignIn;
     byte visibility;
     long photoImageKeyId;
     long averageWaitingTime;
@@ -49,9 +55,13 @@ public class QueueEntry {
         waitingPeople = -1;
         latitude = -1;
         longitude = -1;
+        requiresSignIn = false;
         averageWaitingTime = TimeUnit.MINUTES.toMillis(5);
     }
 
+    /**
+     * Readable string generators
+     */
     public String getReadableLocation() {
         String readableLocation;
         if (street != null) {
@@ -68,7 +78,71 @@ public class QueueEntry {
         return readableLocation;
     }
 
-    /*
+    public String getReadableDistanceTo(float sourceLatitude, float sourceLongitude, Context context) {
+        String readableDistance;
+
+        if (User.isValidLocation(latitude, longitude) && User.isValidLocation(sourceLatitude, sourceLongitude)) {
+            float distance = getDistanceTo(sourceLatitude, sourceLongitude);
+            int roundedDistance;
+            String unit = context.getString(R.string.unit_meters);
+
+            if (distance < 15) {
+                return context.getString(R.string.distance_on_spot);
+            } else if (distance < 50) {
+                return context.getString(R.string.distance_super_close);
+            } else if (distance < 100) {
+                return context.getString(R.string.distance_close);
+            } else if (distance < 200) {
+                roundedDistance = Math.round(distance / 5) * 5;
+            } else if (distance < 200) {
+                roundedDistance = Math.round(distance / 10) * 10;
+            } else if (distance < 1000) {
+                roundedDistance = Math.round(distance / 25) * 25;
+            } else {
+                roundedDistance = Math.round(distance / 1000);
+                if (roundedDistance == 1) {
+                    unit = context.getString(R.string.unit_kilometer);
+                } else {
+                    unit = context.getString(R.string.unit_kilometers);
+                }
+            }
+
+            readableDistance = String.valueOf(roundedDistance) + " " + unit + " ";
+            return context.getString(R.string.distance_from_place).replace("[VALUE]", readableDistance);
+        } else {
+            return "";
+        }
+    }
+
+    public String getReadableNumberOfWaitingPeople() {
+        String readableNumber = "?";
+        if (waitingPeople >= 0) {
+            readableNumber = String.valueOf(waitingPeople);
+        }
+        return readableNumber;
+    }
+
+    public String getReadableNumberOfRemainingMinutes() {
+        String readableNumber = "?";
+        float remainingMinutes = calculateRemainingWaitingTime();
+        if (remainingMinutes >= 0) {
+            readableNumber = String.valueOf(Math.round(remainingMinutes));
+        }
+        return readableNumber;
+    }
+
+    /**
+     * Waiting time calculations
+     */
+    public float calculateRemainingWaitingTime() {
+        float remaining = -1.0f;
+        if (waitingPeople >= 0 && averageWaitingTime >= 0) {
+            remaining = waitingPeople * averageWaitingTime;
+        }
+        return remaining;
+    }
+
+    /**
      * Methods for calculating the distance between two locations in meters
      */
     public boolean hasValidLocation() {
@@ -150,6 +224,22 @@ public class QueueEntry {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isRequiresSignIn() {
+        return requiresSignIn;
+    }
+
+    public void setRequiresSignIn(boolean requiresSignIn) {
+        this.requiresSignIn = requiresSignIn;
     }
 
     public byte getVisibility() {

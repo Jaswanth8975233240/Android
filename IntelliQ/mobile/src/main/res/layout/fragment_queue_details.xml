@@ -61,7 +61,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/itemContentContainer"
+            android:id="@+id/queueContentContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -71,7 +71,7 @@
             <include layout="@layout/view_queue_estimations_bar"/>
 
             <TextView
-                android:id="@+id/itemContentDescription"
+                android:id="@+id/queueDescription"
                 android:text="@string/loremipsum"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"

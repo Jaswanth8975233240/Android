@@ -6,12 +6,34 @@
 
     <string name="loremipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas neque mauris, pharetra eu consectetur sit amet, pulvinar vel neque. Sed nec nisi eu quam sodales pharetra sit amet id velit. In hac habitasse platea dictumst. Sed congue turpis euismod, euismod purus eget, eleifend augue.</string>
 
+    <string name="unit_meters">meters</string>
+    <string name="unit_kilometer">kilometer</string>
+    <string name="unit_kilometers">kilometers</string>
+    <string name="unit_minute">minute</string>
+    <string name="unit_minutes">minutes</string>
+    <string name="unit_hour">hour</string>
+    <string name="unit_hours">hours</string>
+
+    <string name="distance_on_spot">You\'re here</string>
+    <string name="distance_super_close">Should be in sight</string>
+    <string name="distance_close">Just around the corner</string>
+    <string name="distance_from_place">[VALUE] from your place</string>
+    <string name="distance_beeline">[VALUE] beeline</string>
+
     <!-- Navigation -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="navigation_group_account">Account</string>
     <string name="navigation_group_queues">Queues</string>
     <string name="navigation_group_communicate">Communicate</string>
+    <string name="navigation_item_queues_nearby">Nearyby Queues</string>
+    <string name="navigation_item_queues_search">Search for Queues</string>
+    <string name="navigation_item_queues_create">Create a Queue</string>
+    <string name="navigation_item_feedback">Send Feedback</string>
+    <string name="navigation_item_share">Share App</string>
+
+    <string name="navigation_signed_out_heading">No account connected</string>
+    <string name="navigation_signed_out_subheading">Some queue operators will only assign tickets to signed in users to prevent misuse.</string>
 
 
     <!-- Actions -->
@@ -42,6 +64,8 @@
 
     <!-- Status -->
     <string name="status_loading">Loading</string>
+    <string name="status_loading_queues_title">Looking for queues</string>
+    <string name="status_loading_queues_message">Please hang on a few seconds, we are looking for matching queues.</string>
     <string name="status_error_unknown_title">Something went wrong</string>
     <string name="status_error_unknown_message">We\'re not quite sure what, though. Please let us know about this if restarting the app doesn\'t solve the issue.</string>
     <string name="status_error_api_title">Server error</string>

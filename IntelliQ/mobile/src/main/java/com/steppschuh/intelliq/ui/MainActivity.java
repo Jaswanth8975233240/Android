@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -55,10 +56,13 @@ public class MainActivity extends AppCompatActivity
     // navigation
     NavigationView navigation;
     RelativeLayout navigationRootLayout;
+    RelativeLayout navigationContainerSignedIn;
+    RelativeLayout navigationContainerSignedOut;
     TextView userName;
     TextView userDescription;
     ImageView userImage;
     ImageView navigationMoreButton;
+    SignInButton navigationSignInButtonGoogle;
 
 
     @Override
@@ -166,6 +170,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onUserChanged(User user) {
+        Log.v(IntelliQ.TAG, "User changed");
         updateNavigation();
     }
 
@@ -232,23 +237,29 @@ public class MainActivity extends AppCompatActivity
      * Navigation
      */
     private void initializeNavigation() {
+        AnimationHelper.fadeStatusBarToDefaultColor(this);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerListener(this);
 
         navigation = (NavigationView) findViewById(R.id.navigation);
+        navigation.setNavigationItemSelectedListener(this);
 
         View headerLayout = navigation.inflateHeaderView(R.layout.view_navigation_header);
         navigationRootLayout = (RelativeLayout) headerLayout.findViewById(R.id.navigationContainer);
-        userName = (TextView) headerLayout.findViewById(R.id.navigationUserName);
-        userDescription = (TextView) headerLayout.findViewById(R.id.navigationUserDescription);
-        userImage = (ImageView) headerLayout.findViewById(R.id.navigationUserImage);
+        navigationContainerSignedIn = (RelativeLayout) headerLayout.findViewById(R.id.navigationContainerSignedIn);
+        navigationContainerSignedOut = (RelativeLayout) headerLayout.findViewById(R.id.navigationContainerSignedOut);
 
-        userImage.setOnClickListener(new View.OnClickListener() {
+        navigationSignInButtonGoogle = (SignInButton) headerLayout.findViewById(R.id.navigationSignInButtonGoogle);
+        navigationSignInButtonGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signInGoogleAccount();
             }
         });
+
+        userName = (TextView) headerLayout.findViewById(R.id.navigationUserName);
+        userDescription = (TextView) headerLayout.findViewById(R.id.navigationUserDescription);
+        userImage = (ImageView) headerLayout.findViewById(R.id.navigationUserImage);
 
         navigationMoreButton = (ImageView) headerLayout.findViewById(R.id.navigationMore);
         navigationMoreButton.setOnClickListener(new View.OnClickListener() {
@@ -256,35 +267,68 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View v) {
                 MenuItem navigationItemAccount = navigation.getMenu().findItem(R.id.navigationItemAccount);
                 if (navigationItemAccount.isVisible()) {
-                    navigationItemAccount.setVisible(false);
-                    navigationMoreButton.setImageDrawable(getDrawable(R.drawable.ic_expand_more_black_48dp));
+                    hideAccountMenu();
                 } else {
-                    navigationItemAccount.setVisible(true);
-                    navigationMoreButton.setImageDrawable(getDrawable(R.drawable.ic_expand_less_black_48dp));
+                    showAccountMenu();
                 }
             }
         });
+
 
         updateNavigation();
     }
 
     public void updateNavigation() {
+        Log.v(IntelliQ.TAG, "Updating navigation");
         if (app.getUser().isSignedIn()) {
+            navigationContainerSignedIn.setVisibility(View.VISIBLE);
+            navigationContainerSignedOut.setVisibility(View.GONE);
+
             userName.setText(app.getUser().getName());
             userDescription.setText(app.getUser().getMail());
 
             Picasso.with(this)
                     .load(app.getUser().getPhotoUrl())
                     .transform(new CircleTransformation())
-                    .placeholder(R.drawable.no_photo)
-                    .error(R.drawable.no_photo)
                     .into(userImage);
 
+            navigation.getMenu().findItem(R.id.navigationItemSignIn).setEnabled(false);
+            navigation.getMenu().findItem(R.id.navigationItemSignOut).setEnabled(true);
+            navigation.getMenu().findItem(R.id.navigationItemRevokeAccess).setEnabled(true);
+
         } else {
-            // TODO: show signin buttons
+            navigationContainerSignedIn.setVisibility(View.GONE);
+            navigationContainerSignedOut.setVisibility(View.VISIBLE);
+
+            navigation.getMenu().findItem(R.id.navigationItemSignIn).setEnabled(true);
+            navigation.getMenu().findItem(R.id.navigationItemSignOut).setEnabled(false);
+            navigation.getMenu().findItem(R.id.navigationItemRevokeAccess).setEnabled(false);
         }
 
+        invalidateOptionsMenu();
         drawerLayout.requestLayout();
+    }
+
+    private void showAccountMenu() {
+        MenuItem navigationItemAccount = navigation.getMenu().findItem(R.id.navigationItemAccount);
+        navigationItemAccount.setVisible(true);
+        navigationMoreButton.setImageDrawable(getDrawable(R.drawable.ic_arrow_drop_up_black_48dp));
+
+        // hide all other items
+        //navigation.getMenu().setGroupVisible(R.id.navigationGroupQueues, false);
+        navigation.getMenu().findItem(R.id.navigationItemQueues).setVisible(false);
+        navigation.getMenu().findItem(R.id.navigationItemCommunicate).setVisible(false);
+    }
+
+    private void hideAccountMenu() {
+        MenuItem navigationItemAccount = navigation.getMenu().findItem(R.id.navigationItemAccount);
+        navigationItemAccount.setVisible(false);
+        navigationMoreButton.setImageDrawable(getDrawable(R.drawable.ic_arrow_drop_down_black_48dp));
+
+        // show all other items
+        //navigation.getMenu().setGroupVisible(R.id.navigationGroupQueues, true);
+        navigation.getMenu().findItem(R.id.navigationItemQueues).setVisible(true);
+        navigation.getMenu().findItem(R.id.navigationItemCommunicate).setVisible(true);
     }
 
     @Override
@@ -325,31 +369,45 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        boolean keepDrawerOpen = false;
         int id = item.getItemId();
 
-        if (id == R.id.nav_camara) {
-
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        switch (id) {
+            case R.id.navigationItemSignIn: {
+                signInGoogleAccount();
+                hideAccountMenu();
+                keepDrawerOpen = true;
+                break;
+            }
+            case R.id.navigationItemSignOut: {
+                signOutGoogleAccount();
+                hideAccountMenu();
+                keepDrawerOpen = true;
+                break;
+            }
+            case R.id.navigationItemRevokeAccess: {
+                revokeGoogleAccountAccess();
+                hideAccountMenu();
+                keepDrawerOpen = true;
+                break;
+            }
         }
 
-        drawerLayout.closeDrawer(GravityCompat.START);
+        if (!keepDrawerOpen) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
+
+
 
     /**
      * Authentication with Google
      */
     private void initializeGoogleSignIn() {
         try {
+            Log.v(IntelliQ.TAG, "Setting up Google sign in");
+
             // Configure sign-in to request the user's ID, email address, and basic
             // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -375,11 +433,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void signInGoogleAccount() {
+        Log.v(IntelliQ.TAG, "Signing in using Google");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(signInIntent, REQUEST_GOOGLE_SIGN_IN);
     }
 
     private void signOutGoogleAccount() {
+        Log.v(IntelliQ.TAG, "Signing out from Google");
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -390,6 +450,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void revokeGoogleAccountAccess() {
+        Log.v(IntelliQ.TAG, "Revoking Google account access");
         Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override

@@ -1,10 +1,10 @@
 package com.steppschuh.intelliq.ui;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.api.entry.BusinessEntry;
 import com.steppschuh.intelliq.ui.widget.BusinessItemQueueView;
 import com.steppschuh.intelliq.ui.widget.BusinessItemView;
@@ -17,7 +17,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
     private static final int TYPE_DEFAULT = 0;
     private static final int TYPE_ERROR = 1;
 
-    Context context;
+    IntelliQ app;
     ArrayList<BusinessEntry> businessEntries;
     StatusView statusView;
 
@@ -48,7 +48,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
 
     @Override
     public BusinessItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context = parent.getContext();
+        app = ((IntelliQ) parent.getContext().getApplicationContext());
         View v;
         switch (viewType) {
             case TYPE_ERROR: {
@@ -56,8 +56,8 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
                 break;
             }
             default: {
-                //v = LayoutInflater.from(context).inflate(R.layout.view_business_item, parent, false);
-                v = new BusinessItemView(context);
+                //v = LayoutInflater.from(app).inflate(R.layout.view_business_item, parent, false);
+                v = new BusinessItemView(app);
                 break;
             }
         }
@@ -85,7 +85,7 @@ public class BusinessListAdapter extends RecyclerView.Adapter<BusinessListAdapte
 
         if (businessEntry != null) {
             businessViewHolder.getBusinessItemView().setOnItemClickListener(onItemClickListener);
-            businessViewHolder.getBusinessItemView().createFromBusinessEntry(businessEntry);
+            businessViewHolder.getBusinessItemView().createFromBusinessEntry(businessEntry, app);
         }
     }
 

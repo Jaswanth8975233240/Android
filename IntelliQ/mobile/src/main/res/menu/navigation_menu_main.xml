@@ -7,47 +7,78 @@
         android:title="@string/navigation_group_account">
         <menu>
             <item android:id="@+id/navigationItemSignIn"
-                android:icon="@android:drawable/ic_menu_share"
+                android:icon="@drawable/ic_person_black_48dp"
                 android:title="@string/action_sign_in" />
 
             <item android:id="@+id/navigationItemSignOut"
-                android:icon="@android:drawable/ic_menu_share"
+                android:icon="@drawable/ic_person_outline_black_48dp"
                 android:title="@string/action_sign_out" />
 
             <item android:id="@+id/navigationItemRevokeAccess"
-                android:icon="@android:drawable/ic_menu_share"
+                android:icon="@drawable/ic_clear_white_48dp"
                 android:title="@string/action_revoke_access" />
 
         </menu>
     </item>
 
+    <!--
     <group
         android:id="@+id/navigationGroupQueues"
         android:checkableBehavior="single">
-        <item android:id="@+id/nav_camara"
-            android:icon="@android:drawable/ic_menu_camera"
-            android:title="Import" />
-        <item android:id="@+id/nav_gallery"
-            android:icon="@android:drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item android:id="@+id/nav_slideshow"
-            android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item android:id="@+id/nav_manage"
-            android:icon="@android:drawable/ic_menu_manage"
-            android:title="Tools" />
+
+        <item android:id="@+id/navigationItemQueuesNearby"
+            android:icon="@drawable/ic_location_on_black_48dp"
+            android:title="@string/navigation_item_queues_nearby" />
+
+        <item android:id="@+id/navigationItemQueuesSearch"
+            android:icon="@drawable/ic_search_black_48dp"
+            android:title="@string/navigation_item_queues_search" />
+
+        <item android:id="@+id/navigationItemQueuesCreate"
+            android:icon="@drawable/ic_add_white_48dp"
+            android:title="@string/navigation_item_queues_create" />
+
     </group>
+    -->
+
+    <item
+        android:id="@+id/navigationItemQueues"
+        android:title="@string/navigation_group_queues">
+        <menu>
+
+            <group
+                android:id="@+id/navigationGroupQueues"
+                android:checkableBehavior="single">
+
+                <item android:id="@+id/navigationItemQueuesNearby"
+                    android:icon="@drawable/ic_location_on_black_48dp"
+                    android:title="@string/navigation_item_queues_nearby" />
+
+                <item android:id="@+id/navigationItemQueuesSearch"
+                    android:icon="@drawable/ic_search_black_48dp"
+                    android:title="@string/navigation_item_queues_search" />
+
+                <item android:id="@+id/navigationItemQueuesCreate"
+                    android:icon="@drawable/ic_add_white_48dp"
+                    android:title="@string/navigation_item_queues_create" />
+
+            </group>
+        </menu>
+    </item>
 
     <item
         android:id="@+id/navigationItemCommunicate"
         android:title="@string/navigation_group_communicate">
         <menu>
-            <item android:id="@+id/nav_share"
-                android:icon="@android:drawable/ic_menu_share"
-                android:title="Share" />
-            <item android:id="@+id/nav_send"
-                android:icon="@android:drawable/ic_menu_send"
-                android:title="Send" />
+
+            <item android:id="@+id/navigationItemShare"
+                android:icon="@drawable/ic_share_black_48dp"
+                android:title="@string/navigation_item_share" />
+
+            <item android:id="@+id/navigationItemFeedback"
+                android:icon="@drawable/ic_rate_review_black_48dp"
+                android:title="@string/navigation_item_feedback" />
+
         </menu>
     </item>
 

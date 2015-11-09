@@ -71,6 +71,7 @@ public class QueuesListFragment extends Fragment {
             }
         };
         drawerLayout.setDrawerListener(toggle);
+
         toggle.syncState();
     }
 

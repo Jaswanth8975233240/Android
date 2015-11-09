@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.entry.BusinessEntry;
 import com.steppschuh.intelliq.api.entry.ImageEntry;
@@ -40,9 +41,9 @@ public class BusinessItemView extends RelativeLayout {
         businessImage = (ImageView) findViewById(R.id.businessImage);
     }
 
-    public void createFromBusinessEntry(BusinessEntry businessEntry) {
+    public void createFromBusinessEntry(BusinessEntry businessEntry, IntelliQ app) {
         businessName.setText(businessEntry.getName());
-        businessShortDescription.setText(businessEntry.getName());
+        businessShortDescription.setText(businessEntry.getReadableDescription(app));
 
         ImageEntry logo = new ImageEntry(businessEntry.getLogoImageKeyId(), ImageEntry.TYPE_LOGO);
         logo.loadIntoImageView(businessImage, getContext());
