@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             Fragment content = new QueuesListFragment();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(contentRootLayout.getId(), content).commit();
+            fragmentTransaction.add(contentRootLayout.getId(), content, QueuesListFragment.class.getSimpleName()).commit();
         }
 
         setStatusBarColor(ContextCompat.getColor(this, R.color.primaryDark));

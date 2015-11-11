@@ -7,9 +7,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionInflater;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,9 +66,12 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
         businessListAdapter = new BusinessListAdapter(businessEntries);
         businessListAdapter.setOnItemClickListener(new BusinessItemQueueView.OnItemClickListener() {
 
+            /**
+             * Show the queue details fragment if an item was clicked
+             */
             @Override
             public void onItemClick(QueueEntry queueEntry, BusinessItemQueueView businessItemQueueView) {
-                // get parent business entry
+                // get the queues parent business entry
                 BusinessEntry parentBusinessEntry = null;
                 for (BusinessEntry businessEntry : businessListAdapter.getBusinessEntries()) {
                     if (businessEntry.getKey().getId() == queueEntry.getBusinessKeyId()) {
@@ -75,12 +79,13 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
                     }
                 }
 
-                // create new details fragment for queue
-                QueuesDetailsFragment queuesDetailsFragmentFragment = new QueuesDetailsFragment();
-                queuesDetailsFragmentFragment.setBusinessEntry(parentBusinessEntry);
-                queuesDetailsFragmentFragment.setQueueEntry(queueEntry);
-                FragmentTransaction trans;
+                // create a new details fragment for that queue
+                QueuesDetailsFragment queuesDetailsFragment = new QueuesDetailsFragment();
+                queuesDetailsFragment.setBusinessEntry(parentBusinessEntry);
+                queuesDetailsFragment.setQueueEntry(queueEntry);
 
+                // setup the fragment transaction
+                FragmentTransaction trans;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     // Set shared and scene transitions on this fragment
                     setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.trans_move));
@@ -88,19 +93,23 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
 
                     // Set shared and scene transitions on new fragment
                     ImageView image = businessItemQueueView.getQueueImage();
-                    queuesDetailsFragmentFragment.setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.trans_move));
-                    queuesDetailsFragmentFragment.setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.fade));
-                    queuesDetailsFragmentFragment.setImageTransitionName(image.getTransitionName());
+                    queuesDetailsFragment.setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.trans_move));
+                    queuesDetailsFragment.setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.fade));
+                    queuesDetailsFragment.setImageTransitionName(image.getTransitionName());
 
                     trans = getActivity().getSupportFragmentManager().beginTransaction();
-                    trans.replace(R.id.coordinatorLayout, queuesDetailsFragmentFragment);
+                    //trans.replace(R.id.coordinatorLayout, queuesDetailsFragmentFragment);
+                    trans.add(R.id.contentRoot, queuesDetailsFragment, QueuesDetailsFragment.class.getSimpleName());
                     trans.addToBackStack(null);
                     trans.addSharedElement(image, image.getTransitionName());
                 } else {
                     trans = getActivity().getSupportFragmentManager().beginTransaction();
-                    trans.replace(R.id.coordinatorLayout, queuesDetailsFragmentFragment);
+                    //trans.replace(R.id.coordinatorLayout, queuesDetailsFragment);
+                    trans.add(R.id.contentRoot, queuesDetailsFragment, QueuesDetailsFragment.class.getSimpleName());
                     trans.addToBackStack(null);
                 }
+
+                // perform the transaction
                 trans.commit();
             }
 
@@ -109,7 +118,17 @@ public class QueuesTabNearby extends Fragment implements SwipeRefreshLayout.OnRe
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setAdapter(businessListAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        // set number of columns
+        DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+        float screenWidth = displayMetrics.widthPixels / displayMetrics.density;
+        float itemWidth = 400;
+        int numberOfColumns = (int) Math.floor(screenWidth / itemWidth);
+        numberOfColumns = Math.max(1, numberOfColumns);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), numberOfColumns);
+
+        recyclerView.setLayoutManager(gridLayoutManager);
 
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);

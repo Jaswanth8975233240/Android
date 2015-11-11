@@ -107,7 +107,7 @@ public class QueueEntry {
                 }
             }
 
-            readableDistance = String.valueOf(roundedDistance) + " " + unit + " ";
+            readableDistance = String.valueOf(roundedDistance) + " " + unit;
             return context.getString(R.string.distance_from_place).replace("[VALUE]", readableDistance);
         } else {
             return "";
@@ -124,7 +124,7 @@ public class QueueEntry {
 
     public String getReadableNumberOfRemainingMinutes() {
         String readableNumber = "?";
-        float remainingMinutes = calculateRemainingWaitingTime();
+        float remainingMinutes = calculateRemainingWaitingTime() / 1000 / 60;
         if (remainingMinutes >= 0) {
             readableNumber = String.valueOf(Math.round(remainingMinutes));
         }

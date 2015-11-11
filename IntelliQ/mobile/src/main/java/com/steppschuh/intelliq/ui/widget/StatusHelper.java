@@ -1,6 +1,9 @@
 package com.steppschuh.intelliq.ui.widget;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.steppschuh.intelliq.R;
@@ -9,8 +12,35 @@ import com.steppschuh.intelliq.ui.BusinessListAdapter;
 public class StatusHelper {
 
     public static void showStatus(StatusView status, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {
-        status.getStatusActionButton().setOnClickListener(onClickListener);
-        businessListAdapter.showStatusView(status);
+        if (businessListAdapter != null) {
+            status.getStatusActionButton().setOnClickListener(onClickListener);
+            businessListAdapter.showStatusView(status);
+        }
+    }
+
+    public static void showStatus(final StatusView status, Context context, final View.OnClickListener onClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setTitle(status.getStatusHeading().getText());
+        builder.setMessage(status.getStatusSubHeading().getText());
+
+        // Set up the dialog buttons
+        builder.setPositiveButton(context.getString(R.string.action_got_it), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNeutralButton(status.getStatusActionButton().getText(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onClickListener.onClick(status.getStatusActionButton());
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
     }
 
     public static void showLoadingQueuesStatus(Activity context, BusinessListAdapter businessListAdapter, View.OnClickListener onClickListener) {

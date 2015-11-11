@@ -53,6 +53,41 @@ public class AnimationHelper {
         valueAnimator.start();
     }
 
+    public static void fadeInView(final View view, long duration) {
+        float fromValue = 0.0f;
+        float toValue = 1.0f;
+        view.setAlpha(fromValue);
+        view.setVisibility(View.VISIBLE);
+        view.requestLayout();
+        ValueAnimator valueAnimator = ofObject(new FloatEvaluator(), fromValue, toValue);
+        valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.setAlpha((float) animator.getAnimatedValue());
+            }
+        });
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
+    public static void fadeOutView(final View view, long duration) {
+        float fromValue = 1.0f;
+        final float toValue = 0.0f;
+        view.setAlpha(fromValue);
+        ValueAnimator valueAnimator = ofObject(new FloatEvaluator(), fromValue, toValue);
+        valueAnimator.addUpdateListener(new AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.setAlpha((float) animator.getAnimatedValue());
+                if ((float) animator.getAnimatedValue() == toValue) {
+                    view.setVisibility(View.GONE);
+                }
+            }
+        });
+        valueAnimator.setDuration(duration);
+        valueAnimator.start();
+    }
+
     /**
      * FAB
      */

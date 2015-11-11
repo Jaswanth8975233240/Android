@@ -27,6 +27,7 @@ public class QueuesListFragment extends Fragment {
     ViewPager queuesTabsViewPager;
     QueuesTabsViewPagerAdapter queuesTabsViewPagerAdapter;
     SlidingTabLayout queuesTabsLayout;
+    FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class QueuesListFragment extends Fragment {
         queuesTabsLayout.setViewPager(queuesTabsViewPager);
 
         // setting up the FAB
-        FloatingActionButton fab = (FloatingActionButton) fragment.findViewById(R.id.fab);
+        fab = (FloatingActionButton) fragment.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,10 +105,12 @@ public class QueuesListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        AnimationHelper.fadeInView(fab, AnimationHelper.DURATION_DEFAULT);
     }
 
     @Override
     public void onStop() {
+        AnimationHelper.fadeOutView(fab, AnimationHelper.DURATION_DEFAULT);
         super.onStop();
     }
 
