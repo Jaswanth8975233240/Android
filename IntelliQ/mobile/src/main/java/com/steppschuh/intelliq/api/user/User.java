@@ -97,14 +97,30 @@ public class User {
         try {
             LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             //noinspection ResourceType
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (location == null) {
-                // no GPS available, try using the network provide
-                //noinspection ResourceType
-                location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location gpsLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            //noinspection ResourceType
+            Location networkLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            if (gpsLocation == null && networkLocation == null) {
+                throw new Exception("No location info available");
             }
 
-            setLocation((float) location.getLatitude(), (float) location.getLongitude());
+            boolean useNetwork = false;
+
+            if (gpsLocation == null) {
+                useNetwork = true;
+            } else {
+                if (gpsLocation.getTime() < networkLocation.getTime()) {
+                    useNetwork = true;
+                }
+            }
+
+            if (useNetwork) {
+                setLocation((float) networkLocation.getLatitude(), (float) networkLocation.getLongitude());
+            } else {
+                setLocation((float) gpsLocation.getLatitude(), (float) gpsLocation.getLongitude());
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             setLocation(-1, -1);

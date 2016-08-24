@@ -1,6 +1,7 @@
 <resources>
     <string name="server_client_id">1008259459239-ic0lmsu9hhl6i929pav41u8smjbbc86s.apps.googleusercontent.com</string>
     <string name="app_client_id">1008259459239-hlmd8qnm626idv1b9b2p4bd8pfjdtndp.apps.googleusercontent.com</string>
+    <string name="app_debug_client_id">1008259459239-hj2tlbdbvk3qo8ar56dqf24s3atck2br.apps.googleusercontent.com</string>
 
     <string name="app_name">IntelliQ</string>
 
@@ -68,11 +69,13 @@
     <string name="status_loading_queues_message">Please hang on a few seconds, we are looking for matching queues.</string>
     <string name="status_error_unknown_title">Something went wrong</string>
     <string name="status_error_unknown_message">We\'re not quite sure what, though. Please let us know about this if restarting the app doesn\'t solve the issue.</string>
+    <string name="status_error_sign_in_title">Sign in failed</string>
+    <string name="status_error_sign_in_message">Authentication was not successful,</string>
     <string name="status_error_api_title">Server error</string>
     <string name="status_error_api_message">Unfortunately our servers couldn\'t handle this request. We\'ll do our best to fix this soon.</string>
     <string name="status_error_network_title">Network issues</string>
     <string name="status_error_network_message">We couldn\'t reach our servers, please make sure that you have a working internet connection.</string>
-    <string name="status_error_no_data_title">No businessEntries found</string>
+    <string name="status_error_no_data_title">No queues found</string>
     <string name="status_error_no_data_message">Unfortunately we couldn\'t find any queue nearby. Why don\'t you let some people know that they can create a queue for free?</string>
     <string name="status_error_unknown_location_title">Location unknown</string>
     <string name="status_error_unknown_location_message">We can\'t figure out your approximate location, please make sure that your device has a network or GPS connection. Open Maps to trigger a location update.</string>

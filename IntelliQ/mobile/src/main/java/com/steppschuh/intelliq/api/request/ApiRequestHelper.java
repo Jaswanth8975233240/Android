@@ -4,12 +4,11 @@ import android.util.Log;
 
 import com.steppschuh.intelliq.IntelliQ;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class ApiRequestHelper {
 
-    public static final int API_VERSION = 1;
+    public static final int API_VERSION = 2;
     public static final String DEFAULT_HOST = "http://intelliq.me/";
     public static final String VERSIONED_HOST = "http://" + API_VERSION + "-dot-intelliq-me.appspot.com/";
     public static final String HOST = VERSIONED_HOST;

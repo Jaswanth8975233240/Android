@@ -21,6 +21,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -412,13 +413,13 @@ public class MainActivity extends AppCompatActivity
             // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
-                    //.requestIdToken(getString(R.string.app_client_id))
+                    .requestIdToken(getString(R.string.server_client_id))
                     .build();
 
             // Build a GoogleApiClient with access to the Google Sign-In API and the
             // options specified by gso.
             googleApiClient = new GoogleApiClient.Builder(this)
-                    .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
+                    .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                         @Override
                         public void onConnectionFailed(ConnectionResult connectionResult) {
                             Log.w(IntelliQ.TAG, "Google API client connection failed");
@@ -441,32 +442,37 @@ public class MainActivity extends AppCompatActivity
     private void signOutGoogleAccount() {
         Log.v(IntelliQ.TAG, "Signing out from Google");
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        app.getUser().setGoogleAccount(null);
-                    }
-                });
+            new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    app.getUser().setGoogleAccount(null);
+                }
+            });
     }
 
     private void revokeGoogleAccountAccess() {
         Log.v(IntelliQ.TAG, "Revoking Google account access");
         Auth.GoogleSignInApi.revokeAccess(googleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        app.getUser().setGoogleAccount(null);
-                    }
-                });
+            new ResultCallback<Status>() {
+                @Override
+                public void onResult(Status status) {
+                    app.getUser().setGoogleAccount(null);
+                }
+            });
     }
 
     private void handleGoogleSignInResult(GoogleSignInResult result) {
         Log.d(IntelliQ.TAG, "Google sign in result: " + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
+
+            Log.d(IntelliQ.TAG, "ID: " + acct.getId());
+            Log.d(IntelliQ.TAG, "ID token: " + acct.getIdToken());
+
             app.getUser().setGoogleAccount(acct);
         } else {
             app.getUser().setGoogleAccount(null);
+            Toast.makeText(this, getString(R.string.status_error_sign_in_title), Toast.LENGTH_LONG).show();
         }
     }
 
