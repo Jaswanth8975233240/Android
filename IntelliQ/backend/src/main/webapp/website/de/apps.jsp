@@ -90,7 +90,7 @@
 		<div id="modal-contact" class="modal">
 			<div class="modal-content">
 				<h4>Kontakt</h4>
-				<p>Wenn Sie Anregungen oder Fragen zu IntelliQ haben, kontaktieren Sie uns bitte jeder Zeit. Wir werden schnellst möglich auf Ihre Anfrage zurück kommen.</p>
+				<p>Wenn Sie Anregungen oder Fragen zu IntelliQ haben, kontaktieren Sie uns bitte jederzeit. Wir werden schnellst möglich auf Ihre Anfrage zurück kommen.</p>
 	
 				<div class="row">
 					<form class="col s12">

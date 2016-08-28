@@ -18,12 +18,12 @@
 					<h1 class="header center white-text light">IntelliQ.me</h1>
 					<div class="row center">
 						<h5 class="header col s12 light">
-							Das intelligente Warteschlangen System für zufriedene Kunden
+							Das intelligente Warteschlangen-System für zufriedene Kunden
 						</h5>
 	
 					</div>
 					<div class="row center">
-						<a href="javascript:openContactForm();" class="btn-large waves-effect waves-light accent-color">Details fordern</a>
+						<a href="javascript:openContactForm();" class="btn-large waves-effect waves-light accent-color">Details anfordern</a>
 					</div>
 					<br>
 					<br>
@@ -49,7 +49,7 @@
 							<h5 class="center">Weniger Wartezeit</h5>
 	
 							<p class="light">Ihre Kunden werden durch die IntelliQ app darüber informiert, wie viele Leute noch vor ihnen an der Reihe sind und erhalten eine Schätzung über die verbleibende Wartezeit.
-								So können sie Ihre Zeit auch außerhalb Ihres Wartezimmers nutzen. Die App wird Ihre Kunden rechtzeitig daran erinnern sich wieder in Ihr Unternehmen zu begeben, sollten sie Ihr Wartezimmer
+								So können sie ihre Zeit auch außerhalb Ihres Wartezimmers nutzen. Die App wird Ihre Kunden rechtzeitig daran erinnern, sich wieder in Ihr Unternehmen zu begeben, sollten sie Ihr Wartezimmer
 								verlassen haben.</p>
 						</div>
 					</div>
@@ -73,7 +73,7 @@
 							</h2>
 							<h5 class="center">Mehr zufriedene Kunden</h5>
 	
-							<p class="light">Die Zeit im Wartezimmer wird generell als unangenehm empfunden, unabhängig davon wie gut Sie es gestallten. Mit IntelliQ können Ihre Kunden die Wartezeit nach eigenem
+							<p class="light">Die Zeit im Wartezimmer wird generell als unangenehm empfunden, unabhängig davon, wie gut Sie es gestalten. Mit IntelliQ können Ihre Kunden die Wartezeit nach eigenem
 								Ermessen nutzen und bringen so keine negativen Erfahrungen beim Warten mit Ihrem Unternehmen in Verbindung. Zudem bietet Ihnen die Gewissheit über verbleibende Wartezeit einen
 								Wettbewerbsvorteil.</p>
 						</div>
