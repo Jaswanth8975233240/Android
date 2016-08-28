@@ -172,5 +172,6 @@
     <%@include file="../includes/en/common_footer.jsp"%>
     <script src="${staticUrl}js/edit_queue.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtc8JtwfK8qT9TX8Tkln4nd7IwR0rP9dY&callback=initializeMap"></script>
+    <script src="${staticUrl}js/manage.js" defer></script>
   </body>
 </html>

@@ -4,7 +4,7 @@
 				<div class="row">
 					<div class="col l6 s12">
 						<h5 class="white-text">Über IntelliQ.me</h5>
-						<p class="grey-text text-lighten-4">Wir denken, dass niemand seine Zeit mit warten vergeuden muss. Egal wo - die Zeit bis Sie an der Reihe sind sollten Sie effektiv nutzen können. IntelliQ ist
+						<p class="grey-text text-lighten-4">Wir denken, dass niemand seine Zeit mit Warten vergeuden muss. Egal wo - die Zeit, bis Sie an der Reihe sind, sollten Sie effektiv nutzen können. IntelliQ ist
 							ein intelligentes System um Warteschlangen zu managen und bietet allen Nutzern Vorhersagen über Ihre Wartezeit.</p>
 					</div>
 					<div class="col l3 s12">
@@ -21,7 +21,7 @@
 						<ul>
 							<li><a class="white-text" href="https://play.google.com/store/apps/details?id=com.steppschuh.intelliq">Android App</a></li>
 							<li><a class="white-text" href="https://itunes.apple.com/pg/app/intelliq/id1019495717">iOS App</a></li>
-							<li><a class="white-text" href="${rootUrl}/admin/">Admin Bereich</a></li>
+							<li><a class="white-text" href="${rootUrl}/manage/">Admin Bereich</a></li>
 							<li><a class="white-text" href="${rootUrl}/press/">Press</a></li>
 						</ul>
 					</div>
@@ -30,7 +30,6 @@
 			<div class="footer-copyright">
 				<div class="container">
 					Mit Liebe entwickelt von 
-					<a class="accent-color-text text-lighten-3" href="http://markus-petrykowski.de/">Markus</a> und 
 					<a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Stephan</a>
 				</div>
 			</div>

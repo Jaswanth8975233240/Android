@@ -69,7 +69,6 @@
     <script src="${staticUrl}js/general.js"></script>
     <script src="${staticUrl}js/authenticator.js" defer></script>
     <script src="${staticUrl}js/api.js" defer></script>
-    <script src="${staticUrl}js/manage.js" defer></script>
     <script src="${staticUrl}js/ui.js" defer></script>
     <script src="${staticUrl}js/animationui.js" defer></script>
     <script src="https://apis.google.com/js/platform.js?onload=initGoogleSignIn" defer></script>

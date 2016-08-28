@@ -68,5 +68,6 @@
     </main>
     <%@include file="../includes/en/common_footer.jsp"%>
     <script src="${staticUrl}js/edit_business.js"></script>
+    <script src="${staticUrl}js/manage.js" defer></script>
   </body>
 </html>
