@@ -1,7 +1,7 @@
 <resources>
     <string name="server_client_id">1008259459239-ic0lmsu9hhl6i929pav41u8smjbbc86s.apps.googleusercontent.com</string>
-    <string name="app_client_id">1008259459239-hlmd8qnm626idv1b9b2p4bd8pfjdtndp.apps.googleusercontent.com</string>
-    <string name="app_debug_client_id">1008259459239-hj2tlbdbvk3qo8ar56dqf24s3atck2br.apps.googleusercontent.com</string>
+    <string name="app_client_id">1008259459239-k2a5eul8m47hjia98q8o4og0j5v9ohq3.apps.googleusercontent.com</string>
+    <string name="app_debug_client_id">1008259459239-n4m47n17ggbeg4huoffkuea0vqouj0s8.apps.googleusercontent.com</string>
 
     <string name="app_name">IntelliQ</string>
 
