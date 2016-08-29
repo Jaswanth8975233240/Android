@@ -1,16 +1,13 @@
 package com.intelliq.appengine.api;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.appengine.api.search.query.QueryParser.primitive_return;
-import com.sun.org.apache.bcel.internal.generic.ATHROW;
 
 public final class Authenticator {
 
