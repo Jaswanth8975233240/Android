@@ -24,7 +24,7 @@ var intelliqApi = function(){
   api.HOST_INTELLIQ_ME = "http://intelliq.me/";
 
   // Development server
-  api.HOST_LOCAL = "http://localhost:8888/";
+  api.HOST_LOCAL = "http://localhost:8080/";
 
   // App Engine (for api requests)
   api.APP_ENGINE_VERSION = 2;
