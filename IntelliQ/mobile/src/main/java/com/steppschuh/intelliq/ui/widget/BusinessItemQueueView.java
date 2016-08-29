@@ -15,8 +15,8 @@ import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.entry.ImageEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
 import com.steppschuh.intelliq.ui.AnimationHelper;
-import com.steppschuh.intelliq.ui.BlurTransformation;
-import com.steppschuh.intelliq.ui.ImageHelper;
+import com.steppschuh.intelliq.ui.image.BlurTransformation;
+import com.steppschuh.intelliq.ui.image.ImageHelper;
 
 public class BusinessItemQueueView extends RelativeLayout {
 

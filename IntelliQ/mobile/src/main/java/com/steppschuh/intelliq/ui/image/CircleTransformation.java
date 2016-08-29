@@ -1,4 +1,4 @@
-package com.steppschuh.intelliq.ui;
+package com.steppschuh.intelliq.ui.image;
 
 /*
  * Copyright 2014 Julian Shen

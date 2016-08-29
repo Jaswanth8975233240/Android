@@ -37,6 +37,7 @@ import com.squareup.picasso.Picasso;
 import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.user.User;
+import com.steppschuh.intelliq.ui.image.CircleTransformation;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, User.UserChangedListener, DrawerLayout.DrawerListener {
@@ -53,7 +54,6 @@ public class MainActivity extends AppCompatActivity
     FrameLayout contentRootLayout;
     DrawerLayout drawerLayout;
 
-
     // navigation
     NavigationView navigation;
     RelativeLayout navigationRootLayout;
@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity
     ImageView userImage;
     ImageView navigationMoreButton;
     SignInButton navigationSignInButtonGoogle;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity
             // If the user has not previously signed in on this device or the sign-in has expired,
             // this asynchronous branch will attempt to sign in the user silently.  Cross-device
             // single sign-on will occur in this branch.
-            showloadingDialog();
+            showLoadingDialog();
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
@@ -171,7 +170,7 @@ public class MainActivity extends AppCompatActivity
      */
     @Override
     public void onUserChanged(User user) {
-        Log.v(IntelliQ.TAG, "User changed");
+        Log.v(IntelliQ.TAG, "User changed: " + user);
         updateNavigation();
     }
 
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * General UI
      */
-    private void showloadingDialog() {
+    private void showLoadingDialog() {
         if (loadingDialog == null) {
             loadingDialog = new ProgressDialog(this);
             loadingDialog.setMessage(getString(R.string.status_loading));

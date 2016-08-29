@@ -38,6 +38,7 @@ import com.steppschuh.intelliq.api.entry.ImageEntry;
 import com.steppschuh.intelliq.api.entry.QueueEntry;
 import com.steppschuh.intelliq.api.request.QueueDetailsRequest;
 import com.steppschuh.intelliq.api.response.BusinessApiResponse;
+import com.steppschuh.intelliq.ui.image.ImageHelper;
 import com.steppschuh.intelliq.ui.widget.StatusHelper;
 import com.steppschuh.intelliq.ui.widget.StatusView;
 

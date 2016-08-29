@@ -9,7 +9,7 @@ import com.steppschuh.intelliq.api.user.User;
 
 public class IntelliQ extends MultiDexApplication {
 
-    public static final String TAG = "IntelliQ";
+    public static final String TAG = IntelliQ.class.getSimpleName();
 
     private boolean initialized = false;
     private User user;

@@ -1,19 +1,14 @@
 package com.steppschuh.intelliq.api.entry;
 
 import android.content.Context;
-import android.renderscript.ScriptIntrinsicYuvToRGB;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
-import com.steppschuh.intelliq.IntelliQ;
 import com.steppschuh.intelliq.R;
 import com.steppschuh.intelliq.api.DatastoreKey;
 import com.steppschuh.intelliq.api.request.ApiRequestHelper;
-import com.steppschuh.intelliq.ui.BlurTransformation;
 
 public class ImageEntry {
 

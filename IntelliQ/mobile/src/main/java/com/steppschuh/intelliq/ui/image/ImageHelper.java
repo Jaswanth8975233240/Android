@@ -1,4 +1,4 @@
-package com.steppschuh.intelliq.ui;
+package com.steppschuh.intelliq.ui.image;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
