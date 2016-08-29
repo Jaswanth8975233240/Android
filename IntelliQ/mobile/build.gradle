@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.steppschuh.intelliq"
@@ -65,4 +65,9 @@ dependencies {
     compile 'com.octo.android.robospice:robospice-spring-android:1.4.14'
     compile 'com.octo.android.robospice:robospice:1.4.14'
     compile 'com.android.support:palette-v7:24.2.0'
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile 'com.google.android.gms:play-services-analytics:9.4.0'
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
+    compile 'com.firebase:firebase-client-android:2.3.1'
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
 }

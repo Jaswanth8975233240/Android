@@ -1,0 +1,445 @@
+
+
+
+nav ul a,
+nav .brand-logo {
+  color: #FFFFFF;
+}
+
+.nav-wrapper ul li a i {
+  cursor: pointer;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  min-height: 60%;
+}
+
+p {
+  line-height: 2rem;
+}
+
+a {
+  color: #663fb4;
+  cursor: pointer;
+}
+
+.fill-width {
+  width: 100%;
+}
+
+.vertical-spacing {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.card-spacing {
+  margin: 0.5rem 0 1rem 0;
+}
+
+.button-collapse {
+  color: #26a69a;
+}
+
+.parallax-container {
+  min-height: 380px;
+  line-height: 0;
+  height: auto;
+  color: rgba(255,255,255,.9);
+}
+.parallax-container .section {
+  width: 100%;
+}
+
+.btn-large {
+	margin-bottom: 5px;	
+}
+
+.collection .collection-item.avatar {
+	min-height: 0px;
+}
+
+.secondary-content .material-icons {
+	font-size: 34px;
+}
+
+.collection {
+	margin: 0px;
+}
+
+.collection-item .title {
+	float: top;
+}
+
+.collection-item .status {
+	opacity: 0.5;
+	margin-right: 10px;
+}
+
+.collection-item .ticket {
+	opacity: 0.3;
+}
+
+.card {
+  overflow: hidden;
+}
+
+.card .card-image-div {
+	background-color: #EEE;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+  background-position: center; 
+}
+
+.card .card-content .card-title, .card-title .material-icons {
+	line-height: 1.5;
+}
+
+.card .card-action a {
+	color: #663fb4;
+}
+
+.card .card-action a:hover {
+	color: #5133a6;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+  color: #663fb4;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
+  color: #5133a6;
+}
+
+.card-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.card-content a {
+  color: #444;
+}
+
+.card-image {
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.card-image img {
+    vertical-align: middle;
+}
+
+.fill .col {
+    padding: 0px;
+}
+
+.tile-container {
+   float: left;
+   position: relative;
+   width: 100%;
+   padding-bottom: 100%;
+}
+
+.tile {
+   position: absolute;
+   left: 0px;
+   right: 0px;
+   top: 0px;
+   bottom: 0px;
+   overflow: hidden;
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tile:hover .tile-title, body.touch .boxInner.touchFocus .tile-title {
+   margin-bottom: 0;
+}
+
+@media only screen and (max-width : 480px) {
+   .tile_container {
+      width: 50%;
+      padding-bottom: 0%;
+   }
+}
+
+.tile-title {
+  color: #fff;
+  bottom: 0;
+  left: 0;
+  padding: 20px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 300;
+  text-shadow: 0px 0px 10px #000;
+}
+
+.overlay-content {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.overlay-content .valign-wrapper {
+  height: 100%;
+}
+
+.wrap {
+   overflow: hidden;
+   margin: 10px;
+}
+.box {
+   float: left;
+   position: relative;
+   width: 20%;
+   padding-bottom: 20%;
+}
+.boxInner {
+   position: absolute;
+   left: 0px;
+   right: 0px;
+   top: 0px;
+   bottom: 0px;
+   overflow: hidden;
+}
+.boxInner img {
+   width: 100%;
+}
+.boxInner .titleBox {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-bottom: -50px;
+  background: #000;
+  background: rgba(0, 0, 0, 0.5);
+  color: #FFF;
+  padding: 0px;
+  text-align: center;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+.boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
+   margin-bottom: 0;
+}
+@media only screen and (max-width : 480px) {
+   .box {
+      width: 50%;
+      padding-bottom: 0%;
+   }
+}
+.overflowable {
+  overflow: visible;
+}
+
+.link-box {
+  border: 1px solid #CCC;
+  background-color: #EFEFEF;
+  overflow: scroll;
+  max-height: 200px;
+  white-space: nowrap;
+  font-size: 10px;
+  font-family: "Lucida Console", "Monaco", monospace;
+}
+
+.collapsible-body .link-box {
+  border: none;
+  margin: 0;
+  padding: 2rem;
+}
+
+@media only screen and (max-width : 992px) {
+  .parallax-container .section {
+    position: absolute;
+    top: 40%;
+  }
+  #index-banner .section {
+    top: 10%;
+  }
+}
+
+@media only screen and (max-width : 600px) {
+  #index-banner .section {
+    top: 0;
+  }
+}
+
+.background-image-container {
+  position: fixed;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+}
+
+.background-image-container img {
+  position: absolute;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  opacity: 0.7;
+}
+
+.parallax img {
+  opacity: 0.7;
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+  font-size: inherit;
+}
+
+footer.page-footer {
+  margin: 0;
+}
+
+/**
+* Progress
+**/
+.progress {
+  background-color: #d1c5e8;
+}
+
+.progress .determinate {
+  background-color: #663fb4;
+}
+
+.progress .indeterminate {
+  background-color: #663fb4; }
+
+/**
+* Forms
+**/
+/* label color */
+.input-field label, label {
+ color: #000;
+}
+/* label focus color */
+.input-field input[type=text]:focus + label,
+.input-field input[type=number]:focus + label,
+.input-field input[type=email]:focus + label {
+ color: #663fb4;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus,
+.input-field input[type=number]:focus,
+.input-field input[type=email]:focus {
+ border-bottom: 1px solid #663fb4;
+ box-shadow: 0 1px 0 0 #663fb4;
+}
+/* valid color */
+.input-field input[type=text].valid,
+.input-field input[type=number].valid,
+.input-field input[type=email].valid {
+ border-bottom: 1px solid #000;
+ box-shadow: 0 1px 0 0 #000;
+}
+/* invalid color */
+.input-field input[type=text].invalid,
+.input-field input[type=number].invalid,
+.input-field input[type=email].invalid {
+ border-bottom: 1px solid #000;
+ box-shadow: 0 1px 0 0 #000;
+}
+/* Radio With gap */
+[type="radio"].with-gap:checked + label:before {
+  border: 2px solid #663fb4;
+}
+
+[type="radio"].with-gap:checked + label:after {
+  border: 2px solid #663fb4;
+  background-color: #663fb4;
+ }
+
+[type="radio"].with-gap:checked + label:before {
+  border: 2px solid #663fb4;
+}
+/* icon prefix focus color */
+.input-field .prefix.active {
+ color: #663fb4;
+}
+.dropdown-content li > a, .dropdown-content li > span {
+  color: #663fb4;
+}
+
+/**
+* Collections
+**/
+.collection .collection-item.avatar {
+  min-height: 0px;
+}
+
+.secondary-content .material-icons {
+  font-size: 34px;
+}
+
+.collection {
+  margin: 0px;
+}
+
+.collection-item .title {
+  float: top;
+}
+
+.collection-item .status {
+  opacity: 0.5;
+  margin-right: 10px;
+}
+
+.collection-item .ticket {
+  opacity: 0.3;
+}
+
+/**
+* Corporate design colors
+**/
+.primary-color {
+  background-color: #663fb4 !important;
+}
+
+.primary-color-dark {
+  background-color: #5133a6 !important;
+}
+
+.primary-color-light {
+  background-color: #d1c5e8 !important;
+}
+
+.accent-color {
+  background-color: #fd4482 !important;
+}
+
+.primary-color-text {
+  color: #663fb4 !important;
+}
+
+.primary-color-dark-text {
+  color: #5133a6 !important;
+}
+
+.primary-color-light-text {
+  color: #d1c5e8 !important;
+}
+
+.accent-color-text {
+  color: #fd4482 !important;
+}
