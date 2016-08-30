@@ -9,22 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.fileupload.util.Streams;
-
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.labs.repackaged.com.google.common.io.ByteStreams;
+import com.google.common.io.ByteStreams;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.datastore.BusinessHelper;
-import com.intelliq.appengine.datastore.EntryManager;
 import com.intelliq.appengine.datastore.ImageHelper;
 import com.intelliq.appengine.datastore.QueueHelper;
 import com.intelliq.appengine.datastore.entries.BusinessEntry;
 import com.intelliq.appengine.datastore.entries.ImageEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.queries.ImageQuery;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.util.Streams;
 
 @SuppressWarnings("serial")
 public class ImageServlet extends HttpServlet {

@@ -2,6 +2,7 @@ package com.intelliq.appengine.api;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.json.gson.GsonFactory;
 
 import java.security.GeneralSecurityException;
 import java.util.Date;
