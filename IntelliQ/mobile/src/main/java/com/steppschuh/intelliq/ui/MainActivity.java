@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity
     FrameLayout contentRootLayout;
     DrawerLayout drawerLayout;
 
-
     // navigation
     NavigationView navigation;
     RelativeLayout navigationRootLayout;
