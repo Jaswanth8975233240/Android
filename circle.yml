@@ -1,0 +1,25 @@
+#
+# Build configuration for Circle CI 
+#
+
+general:
+    artifacts:
+        - "IntelliQ/mobile/build/reports/tests/"
+        - "IntelliQ/backend/build/reports/tests/"
+
+machine:
+    environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+
+dependencies:
+    override:
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,android-23,extra-google-m2repository,extra-google-google_play_services,extra-android-support
+        - echo y | android update sdk --no-ui --all --filter build-tools-23.0.3
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./IntelliQ/gradlew dependencies
+
+test:
+    override:
+        - (cd IntelliQ && ./gradlew mobile:test):
+            timeout: 600
+        - (cd IntelliQ && ./gradlew backend:test):
+            timeout: 600
