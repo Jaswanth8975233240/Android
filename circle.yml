@@ -2,6 +2,10 @@
 # Build configuration for Circle CI 
 #
 
+general:
+    artifacts:
+        - "IntelliQ/mobile/build/reports/tests/"
+
 machine:
     environment:
         ANDROID_HOME: /usr/local/android-sdk-linux
@@ -16,3 +20,7 @@ test:
     override:
         - (cd IntelliQ && ./gradlew mobile:test):
             timeout: 600
+
+#    post:
+#        - mkdir $CIRCLE_ARTIFACTS/mobile
+#        - mv IntelliQ/mobile/build/reports/tests/ $CIRCLE_ARTIFACTS/mobile
