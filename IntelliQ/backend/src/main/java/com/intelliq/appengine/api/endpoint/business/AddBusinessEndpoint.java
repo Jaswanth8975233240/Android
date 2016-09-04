@@ -23,6 +23,7 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.logging.BusinessLogging;
 
 
 public class AddBusinessEndpoint extends Endpoint {
@@ -96,8 +97,9 @@ public class AddBusinessEndpoint extends Endpoint {
 			queues.add(queueEntry);
 			businessEntry.setQueues(queues);
 		}
-		
+
 		response.setContent(businessEntry);
+		BusinessLogging.logCreation(businessEntry, user);
 		return response;
 	}	
 	

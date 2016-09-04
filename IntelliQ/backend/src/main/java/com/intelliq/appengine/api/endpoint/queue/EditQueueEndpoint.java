@@ -20,6 +20,7 @@ import com.intelliq.appengine.datastore.entries.BusinessEntry;
 import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.logging.QueueLogging;
 
 
 public class EditQueueEndpoint extends Endpoint {
@@ -68,6 +69,7 @@ public class EditQueueEndpoint extends Endpoint {
 		long queueKeyId = request.getParameterAsLong("queueKeyId", -1);
 		
 		try {
+			UserEntry user = request.getUser();
 			QueueEntry queueEntry = QueueHelper.getEntryByKeyId(queueKeyId);
 			queueEntry.parseFromRequest(request);
 			QueueHelper.saveEntry(queueEntry);
@@ -75,6 +77,7 @@ public class EditQueueEndpoint extends Endpoint {
 			//TODO: add action
 			
 			response.setContent(queueEntry);
+			QueueLogging.logEdit(queueEntry, user);
 		} catch (JDOObjectNotFoundException exception) {
 			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
 			response.setException(new Exception("Unable to find requested queue"));

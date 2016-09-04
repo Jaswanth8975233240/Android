@@ -24,6 +24,7 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.logging.BusinessLogging;
 
 
 public class EditBusinessEndpoint extends Endpoint {
@@ -67,6 +68,7 @@ public class EditBusinessEndpoint extends Endpoint {
 		long businessKeyId = request.getParameterAsLong("businessKeyId", -1);
 		
 		try {
+			UserEntry user = request.getUser();
 			BusinessEntry businessEntry = BusinessHelper.getEntryByKeyId(businessKeyId);
 			businessEntry.parseFromRequest(request);
 			BusinessHelper.saveEntry(businessEntry);
@@ -74,6 +76,7 @@ public class EditBusinessEndpoint extends Endpoint {
 			//TODO: add action
 			
 			response.setContent(businessEntry);
+			BusinessLogging.logEdit(businessEntry, user);
 		} catch (JDOObjectNotFoundException exception) {
 			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
 			response.setException(new Exception("Unable to find requested business"));

@@ -18,6 +18,7 @@ import com.intelliq.appengine.datastore.UserHelper;
 import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.logging.QueueLogging;
 
 
 public class AddQueueEndpoint extends Endpoint {
@@ -86,9 +87,10 @@ public class AddQueueEndpoint extends Endpoint {
 		
 		// add permission for queue
 		PermissionHelper.grantPermission(user, queueEntry, PermissionEntry.PERMISSION_OWN);
-		
+
 		response.setContent(queueEntry);
-		return response;
+        QueueLogging.logCreation(queueEntry, user);
+        return response;
 	}	
 	
 }

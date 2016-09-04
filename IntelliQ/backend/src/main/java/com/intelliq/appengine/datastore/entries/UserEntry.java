@@ -99,7 +99,16 @@ public class UserEntry {
 			return false;
 		}
 	}
-	
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(name);
+		if (key != null) {
+			sb.append(" (").append(key.getId()).append(")");
+		}
+		return sb.toString();
+	}
+
 	public Key getKey() {
 		return key;
 	}

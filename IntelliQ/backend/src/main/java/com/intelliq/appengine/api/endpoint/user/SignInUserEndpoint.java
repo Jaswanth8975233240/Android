@@ -1,6 +1,8 @@
 package com.intelliq.appengine.api.endpoint.user;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +14,11 @@ import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
 import com.intelliq.appengine.datastore.UserHelper;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.logging.SlackLog;
+import com.intelliq.appengine.logging.UserLogging;
+
+import net.steppschuh.slackmessagebuilder.message.attachment.Attachment;
+import net.steppschuh.slackmessagebuilder.message.attachment.AttachmentField;
 
 
 public class SignInUserEndpoint extends Endpoint {
@@ -42,8 +49,8 @@ public class SignInUserEndpoint extends Endpoint {
 			existingUser = request.getUserFromToken(parsedUser);
 			existingUser.getStats().setLastSignIn((new Date()).getTime());
 			UserHelper.saveEntry(existingUser);
-			
-			log.info("User " + existingUser.getName() + " signed in");
+
+			//UserLogging.logSignIn(existingUser);
 			response.setContent(existingUser);
 			return response;
 		} catch (Exception ex) {
@@ -53,10 +60,10 @@ public class SignInUserEndpoint extends Endpoint {
 		// add the user
 		Key userKey = UserHelper.saveEntry(parsedUser);
 		parsedUser.setKey(userKey);
-		
-		log.info("User " + parsedUser.getName() + " signed up");
+
+        UserLogging.logSignUp(parsedUser);
 		response.setContent(parsedUser);
 		return response;
-	}	
-	
+	}
+
 }

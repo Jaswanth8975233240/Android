@@ -4,22 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jdo.JDOObjectNotFoundException;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
 
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.PermissionSet;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
-import com.intelliq.appengine.datastore.QueueHelper;
 import com.intelliq.appengine.datastore.UserHelper;
 import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
-import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.logging.SlackLog;
 
 
 public class GetUserEndpoint extends Endpoint {
@@ -74,6 +70,7 @@ public class GetUserEndpoint extends Endpoint {
 		} catch (JDOObjectNotFoundException exception) {
 			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
 			response.setException(new Exception("Unable to find requested user"));
+            SlackLog.v(this, "User not found: " + userKeyId);
 		}
 		return response;
 	}	
