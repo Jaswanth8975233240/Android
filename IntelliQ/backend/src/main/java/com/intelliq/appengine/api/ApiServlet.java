@@ -1,5 +1,10 @@
 package com.intelliq.appengine.api;
 
+import com.google.appengine.api.memcache.stdimpl.GCacheFactory;
+import com.intelliq.appengine.RequestFilter;
+import com.intelliq.appengine.api.endpoint.Endpoint;
+import com.intelliq.appengine.api.endpoint.EndpointManager;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,15 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.memcache.jsr107cache.GCacheFactory;
-import com.google.appengine.api.users.User;
-import com.intelliq.appengine.RequestFilter;
-import com.intelliq.appengine.api.endpoint.Endpoint;
-import com.intelliq.appengine.api.endpoint.EndpointManager;
-import com.intelliq.appengine.datastore.BusinessHelper;
-import com.intelliq.appengine.datastore.QueueHelper;
-import com.intelliq.appengine.datastore.QueueItemHelper;
 
 @SuppressWarnings("serial")
 public class ApiServlet extends HttpServlet {

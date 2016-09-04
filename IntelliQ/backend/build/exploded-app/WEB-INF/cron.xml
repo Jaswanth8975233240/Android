@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<cronentries>
-  <cron>
-    <url>/chron/clean/datastore/</url>
-    <description>Invoke datastore cleanup</description>
-    <schedule>every monday 03:00</schedule>
-  </cron>
-</cronentries>
