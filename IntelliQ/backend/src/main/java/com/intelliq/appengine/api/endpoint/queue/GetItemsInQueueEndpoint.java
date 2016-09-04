@@ -16,34 +16,34 @@ import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 
 public class GetItemsInQueueEndpoint extends Endpoint {
 
-	@Override
-	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_QUEUE_ITEMS;
-	}
-	
-	@Override
-	public List<String> getRequiredParameters(ApiRequest request) {
-		List<String> parameters = new ArrayList<String>();
-		parameters.add("queueKeyId");
-		return parameters;
-	}
+    @Override
+    public String getEndpointPath() {
+        return EndpointManager.ENDPOINT_QUEUE_ITEMS;
+    }
 
-	@Override
-	public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
-		ApiResponse response = new ApiResponse();
-		
-		long queueKeyId = request.getParameterAsLong("queueKeyId", -1);
-		int offset = request.getParameterAsInt("offset", 0);
-		int count = request.getParameterAsInt("count", 100);
+    @Override
+    public List<String> getRequiredParameters(ApiRequest request) {
+        List<String> parameters = new ArrayList<String>();
+        parameters.add("queueKeyId");
+        return parameters;
+    }
 
-		try {
-			List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, offset, count);						
-			response.setContent(entries);
-		} catch (JDOObjectNotFoundException exception) {
-			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
-			response.setException(new Exception("Unable to find requested queue"));
-		}
-		return response;
-	}	
-	
+    @Override
+    public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
+        ApiResponse response = new ApiResponse();
+
+        long queueKeyId = request.getParameterAsLong("queueKeyId", -1);
+        int offset = request.getParameterAsInt("offset", 0);
+        int count = request.getParameterAsInt("count", 100);
+
+        try {
+            List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, offset, count);
+            response.setContent(entries);
+        } catch (JDOObjectNotFoundException exception) {
+            response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
+            response.setException(new Exception("Unable to find requested queue"));
+        }
+        return response;
+    }
+
 }
