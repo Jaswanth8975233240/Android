@@ -21,151 +21,151 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class ApiServlet extends HttpServlet {
 
-	private static final Logger log = Logger.getLogger(ApiServlet.class.getName());
+    private static final Logger log = Logger.getLogger(ApiServlet.class.getName());
 
-	private Cache cache;
+    private Cache cache;
 
-	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-		ApiRequest apiRequest = new ApiRequest(req);
-		String requestUrl = apiRequest.getUrl();
+        ApiRequest apiRequest = new ApiRequest(req);
+        String requestUrl = apiRequest.getUrl();
 
-		String response = null;
-		ApiResponse apiResponse = new ApiResponse();
+        String response = null;
+        ApiResponse apiResponse = new ApiResponse();
 
-		try {
-			Endpoint endpoint = EndpointManager.getEndpointForRequest(apiRequest);
-			if (endpoint == null) {
-				throw new Exception("Unknown endpoint called");
-			}
-			
-			if (shouldUseCache(req)) {
-				response = getCachedResponse(req);
-			}
+        try {
+            Endpoint endpoint = EndpointManager.getEndpointForRequest(apiRequest);
+            if (endpoint == null) {
+                throw new Exception("Unknown endpoint called");
+            }
 
-			if (response == null) {
-				// no cached response available
-				apiResponse = endpoint.processRequest(apiRequest);
-				response = apiResponse.toJSON();
-				addResponseToCache(req, response);
-			} else {
-				log.severe("Response loaded from cache");
-			}
-		} catch (Exception e) {
-			apiResponse.setException(e);
-			response = apiResponse.toJSON();
-			e.printStackTrace();
-		}
+            if (shouldUseCache(req)) {
+                response = getCachedResponse(req);
+            }
 
-		resp.setContentType("application/json; charset=UTF-8");
-		resp.addHeader("Access-Control-Allow-Origin", "*");
-		resp.getWriter().write(response);
-		resp.getWriter().flush();
-		resp.getWriter().close();
-	}
-	
-	public void doGetOld(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+            if (response == null) {
+                // no cached response available
+                apiResponse = endpoint.processRequest(apiRequest);
+                response = apiResponse.toJSON();
+                addResponseToCache(req, response);
+            } else {
+                log.severe("Response loaded from cache");
+            }
+        } catch (Exception e) {
+            apiResponse.setException(e);
+            response = apiResponse.toJSON();
+            e.printStackTrace();
+        }
 
-		ApiRequest apiRequest = new ApiRequest(req);
-		String requestUrl = req.getRequestURL().toString();
+        resp.setContentType("application/json; charset=UTF-8");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.getWriter().write(response);
+        resp.getWriter().flush();
+        resp.getWriter().close();
+    }
 
-		String response = null;
-		ApiResponse responseObject = new ApiResponse();
+    public void doGetOld(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 
-		try {
-			if (shouldUseCache(req)) {
-				response = getCachedResponse(req);
-			}
+        ApiRequest apiRequest = new ApiRequest(req);
+        String requestUrl = req.getRequestURL().toString();
 
-			if (response == null) {
-				// no cached response available
-				if (requestUrl.contains("/test/")) {
-					responseObject = processTestRequest(req);
-				} else if (requestUrl.contains("/header/")) {
-					responseObject = processHeaderRequest(req);
-				} else {
-					RequestFilter.forwardRequest(getServletContext(), req, resp, "/intelliq/");
-					return;
-				}
-				response = responseObject.toJSON();
-				addResponseToCache(req, response);
-			} else {
-				log.severe("Response loaded from cache");
-			}
-		} catch (Exception e) {
-			responseObject.setException(e);
-			response = responseObject.toJSON();
-			e.printStackTrace();
-		}
+        String response = null;
+        ApiResponse responseObject = new ApiResponse();
 
-		resp.setContentType("application/json; charset=UTF-8");
-		resp.addHeader("Access-Control-Allow-Origin", "*");
-		resp.getWriter().write(response);
-		resp.getWriter().flush();
-		resp.getWriter().close();
-	}
+        try {
+            if (shouldUseCache(req)) {
+                response = getCachedResponse(req);
+            }
 
-	public boolean shouldUseCache(HttpServletRequest req) {
-		cache = getCache();
-		String invalidateCacheParam = req.getParameter("invalidateCache");
-		boolean invalidateCache = invalidateCacheParam != null && invalidateCacheParam.equals("true");
-		
-		if (!invalidateCache && !req.getRequestURL().toString().contains("/header/")) {
-			//TODO: return true
-			return false;
-		} else {
-			return false;
-		}
-	}
+            if (response == null) {
+                // no cached response available
+                if (requestUrl.contains("/test/")) {
+                    responseObject = processTestRequest(req);
+                } else if (requestUrl.contains("/header/")) {
+                    responseObject = processHeaderRequest(req);
+                } else {
+                    RequestFilter.forwardRequest(getServletContext(), req, resp, "/intelliq/");
+                    return;
+                }
+                response = responseObject.toJSON();
+                addResponseToCache(req, response);
+            } else {
+                log.severe("Response loaded from cache");
+            }
+        } catch (Exception e) {
+            responseObject.setException(e);
+            response = responseObject.toJSON();
+            e.printStackTrace();
+        }
 
-	public Cache getCache() {
-		Cache newCache = null;
-		try {
-			CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
-			Map properties = new HashMap<>();
-			properties.put(GCacheFactory.EXPIRATION_DELTA, 30); // cache for 30 seconds
-			newCache = cacheFactory.createCache(properties);
-		} catch (Exception ex) {
-			log.warning("Unable to create cache");
-		}
-		return newCache;
-	}
+        resp.setContentType("application/json; charset=UTF-8");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.getWriter().write(response);
+        resp.getWriter().flush();
+        resp.getWriter().close();
+    }
 
-	public String getCachedResponse(HttpServletRequest req) {
-		String response = null;
-		try {
-			String cacheKey = RequestFilter.getFullUrlFromRequest(req);
-			response = (String) cache.get(cacheKey);
-		} catch (Exception ex) {
+    public boolean shouldUseCache(HttpServletRequest req) {
+        cache = getCache();
+        String invalidateCacheParam = req.getParameter("invalidateCache");
+        boolean invalidateCache = invalidateCacheParam != null && invalidateCacheParam.equals("true");
 
-		}
-		return response;
-	}
+        if (!invalidateCache && !req.getRequestURL().toString().contains("/header/")) {
+            //TODO: return true
+            return false;
+        } else {
+            return false;
+        }
+    }
 
-	public void addResponseToCache(HttpServletRequest req, String response) {
-		try {
-			String cacheKey = RequestFilter.getFullUrlFromRequest(req);
-			cache.put(cacheKey, response);
-		} catch (Exception ex) {
+    public Cache getCache() {
+        Cache newCache = null;
+        try {
+            CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+            Map properties = new HashMap<>();
+            properties.put(GCacheFactory.EXPIRATION_DELTA, 30); // cache for 30 seconds
+            newCache = cacheFactory.createCache(properties);
+        } catch (Exception ex) {
+            log.warning("Unable to create cache");
+        }
+        return newCache;
+    }
 
-		}
-	}
+    public String getCachedResponse(HttpServletRequest req) {
+        String response = null;
+        try {
+            String cacheKey = RequestFilter.getFullUrlFromRequest(req);
+            response = (String) cache.get(cacheKey);
+        } catch (Exception ex) {
 
-	public ApiResponse processHeaderRequest(HttpServletRequest req) throws Exception {
-		ApiResponse responseObject = new ApiResponse();
-		responseObject.setContent(RequestFilter.getHeaderInfo(req));
-		return responseObject;
-	}
-	
-	public ApiResponse processTestRequest(HttpServletRequest req) throws Exception {
-		ApiResponse responseObject = new ApiResponse();
-		
-		String idToken = req.getParameter("googleIdToken");
-		Object result = Authenticator.validateGoogleIdToken(idToken);
-		
-		responseObject.setContent(result);
-		return responseObject;
-	}
+        }
+        return response;
+    }
+
+    public void addResponseToCache(HttpServletRequest req, String response) {
+        try {
+            String cacheKey = RequestFilter.getFullUrlFromRequest(req);
+            cache.put(cacheKey, response);
+        } catch (Exception ex) {
+
+        }
+    }
+
+    public ApiResponse processHeaderRequest(HttpServletRequest req) throws Exception {
+        ApiResponse responseObject = new ApiResponse();
+        responseObject.setContent(RequestFilter.getHeaderInfo(req));
+        return responseObject;
+    }
+
+    public ApiResponse processTestRequest(HttpServletRequest req) throws Exception {
+        ApiResponse responseObject = new ApiResponse();
+
+        String idToken = req.getParameter("googleIdToken");
+        Object result = Authenticator.validateGoogleIdToken(idToken);
+
+        responseObject.setContent(result);
+        return responseObject;
+    }
 
 }

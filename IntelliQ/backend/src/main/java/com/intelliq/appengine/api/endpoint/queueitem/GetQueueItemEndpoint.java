@@ -16,32 +16,32 @@ import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 
 public class GetQueueItemEndpoint extends Endpoint {
 
-	@Override
-	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_QUEUE_ITEM_GET;
-	}
-	
-	@Override
-	public List<String> getRequiredParameters(ApiRequest request) {
-		List<String> parameters = new ArrayList<String>();
-		parameters.add("queueItemKeyId");
-		return parameters;
-	}
+    @Override
+    public String getEndpointPath() {
+        return EndpointManager.ENDPOINT_QUEUE_ITEM_GET;
+    }
 
-	@Override
-	public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
-		ApiResponse response = new ApiResponse();
-		
-		long queueItemKeyId = request.getParameterAsLong("queueItemKeyId", -1);
-		
-		try {
-			QueueItemEntry queueItemEntry = QueueItemHelper.getEntryByKeyId(queueItemKeyId);
-			response.setContent(queueItemEntry);
-		} catch (JDOObjectNotFoundException exception) {
-			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
-			response.setException(new Exception("Unable to find requested queue item"));
-		}
-		return response;
-	}	
-	
+    @Override
+    public List<String> getRequiredParameters(ApiRequest request) {
+        List<String> parameters = new ArrayList<String>();
+        parameters.add("queueItemKeyId");
+        return parameters;
+    }
+
+    @Override
+    public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
+        ApiResponse response = new ApiResponse();
+
+        long queueItemKeyId = request.getParameterAsLong("queueItemKeyId", -1);
+
+        try {
+            QueueItemEntry queueItemEntry = QueueItemHelper.getEntryByKeyId(queueItemKeyId);
+            response.setContent(queueItemEntry);
+        } catch (JDOObjectNotFoundException exception) {
+            response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
+            response.setException(new Exception("Unable to find requested queue item"));
+        }
+        return response;
+    }
+
 }

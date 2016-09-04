@@ -23,40 +23,40 @@ import com.intelliq.appengine.datastore.entries.UserEntry;
 
 public class GetBusinessEndpoint extends Endpoint {
 
-	@Override
-	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_BUSINESS_GET;
-	}
-	
-	@Override
-	public List<String> getRequiredParameters(ApiRequest request) {
-		List<String> parameters = new ArrayList<String>();
-		parameters.add("businessKeyId");
-		return parameters;
-	}
+    @Override
+    public String getEndpointPath() {
+        return EndpointManager.ENDPOINT_BUSINESS_GET;
+    }
 
-	@Override
-	public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
-		ApiResponse response = new ApiResponse();
-		
-		long businessKeyId = request.getParameterAsLong("businessKeyId", -1);
-		boolean includeQueues = request.getParameterAsBoolean("includeQueues", true);
-		
-		try {
-			BusinessEntry businessEntry = BusinessHelper.getEntryByKeyId(businessKeyId);
-			if (includeQueues) {
-				businessEntry.setQueues(QueueHelper.getQueuesByBusiness(businessKeyId));
-				for (QueueEntry queue : businessEntry.getQueues()) {
-					queue.setWaitingPeople(QueueHelper.getNumberOfItemsInQueue(queue.getKey().getId(), QueueItemEntry.STATUS_WAITING));
-				}
-			}
-			
-			response.setContent(businessEntry);
-		} catch (NucleusObjectNotFoundException exception) {
-			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
-			response.setException(new Exception("Unable to find requested business"));
-		}
-		return response;
-	}	
-	
+    @Override
+    public List<String> getRequiredParameters(ApiRequest request) {
+        List<String> parameters = new ArrayList<String>();
+        parameters.add("businessKeyId");
+        return parameters;
+    }
+
+    @Override
+    public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
+        ApiResponse response = new ApiResponse();
+
+        long businessKeyId = request.getParameterAsLong("businessKeyId", -1);
+        boolean includeQueues = request.getParameterAsBoolean("includeQueues", true);
+
+        try {
+            BusinessEntry businessEntry = BusinessHelper.getEntryByKeyId(businessKeyId);
+            if (includeQueues) {
+                businessEntry.setQueues(QueueHelper.getQueuesByBusiness(businessKeyId));
+                for (QueueEntry queue : businessEntry.getQueues()) {
+                    queue.setWaitingPeople(QueueHelper.getNumberOfItemsInQueue(queue.getKey().getId(), QueueItemEntry.STATUS_WAITING));
+                }
+            }
+
+            response.setContent(businessEntry);
+        } catch (NucleusObjectNotFoundException exception) {
+            response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
+            response.setException(new Exception("Unable to find requested business"));
+        }
+        return response;
+    }
+
 }

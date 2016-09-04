@@ -23,47 +23,47 @@ import net.steppschuh.slackmessagebuilder.message.attachment.AttachmentField;
 
 public class SignInUserEndpoint extends Endpoint {
 
-	private static final Logger log = Logger.getLogger(SignInUserEndpoint.class.getSimpleName());
-	
-	@Override
-	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_USER_SIGNIN;
-	}
-	
-	@Override
-	public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
-		ApiResponse response = new ApiResponse();
-		
-		// get the user that initiated the request
-		UserEntry parsedUser = null;
-		try {
-			parsedUser = request.parseUserFromToken();
-		} catch (Exception ex) {
-			response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
-			response.setException(new Exception("Unable to parse user from token: " + ex.getMessage()));
-			return response;
-		}
-		
-		UserEntry existingUser = null;
-		try {
-			existingUser = request.getUserFromToken(parsedUser);
-			existingUser.getStats().setLastSignIn((new Date()).getTime());
-			UserHelper.saveEntry(existingUser);
+    private static final Logger log = Logger.getLogger(SignInUserEndpoint.class.getSimpleName());
 
-			//UserLogging.logSignIn(existingUser);
-			response.setContent(existingUser);
-			return response;
-		} catch (Exception ex) {
-			// user is not registered yet
-		}
-		
-		// add the user
-		Key userKey = UserHelper.saveEntry(parsedUser);
-		parsedUser.setKey(userKey);
+    @Override
+    public String getEndpointPath() {
+        return EndpointManager.ENDPOINT_USER_SIGNIN;
+    }
+
+    @Override
+    public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
+        ApiResponse response = new ApiResponse();
+
+        // get the user that initiated the request
+        UserEntry parsedUser = null;
+        try {
+            parsedUser = request.parseUserFromToken();
+        } catch (Exception ex) {
+            response.setStatusCode(HttpServletResponse.SC_BAD_REQUEST);
+            response.setException(new Exception("Unable to parse user from token: " + ex.getMessage()));
+            return response;
+        }
+
+        UserEntry existingUser = null;
+        try {
+            existingUser = request.getUserFromToken(parsedUser);
+            existingUser.getStats().setLastSignIn((new Date()).getTime());
+            UserHelper.saveEntry(existingUser);
+
+            //UserLogging.logSignIn(existingUser);
+            response.setContent(existingUser);
+            return response;
+        } catch (Exception ex) {
+            // user is not registered yet
+        }
+
+        // add the user
+        Key userKey = UserHelper.saveEntry(parsedUser);
+        parsedUser.setKey(userKey);
 
         UserLogging.logSignUp(parsedUser);
-		response.setContent(parsedUser);
-		return response;
-	}
+        response.setContent(parsedUser);
+        return response;
+    }
 
 }
