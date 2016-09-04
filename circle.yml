@@ -5,6 +5,7 @@
 general:
     artifacts:
         - "IntelliQ/mobile/build/reports/tests/"
+        - "IntelliQ/backend/build/reports/tests/"
 
 machine:
     environment:
@@ -20,7 +21,5 @@ test:
     override:
         - (cd IntelliQ && ./gradlew mobile:test):
             timeout: 600
-
-#    post:
-#        - mkdir $CIRCLE_ARTIFACTS/mobile
-#        - mv IntelliQ/mobile/build/reports/tests/ $CIRCLE_ARTIFACTS/mobile
+        - (cd IntelliQ && ./gradlew backend:test):
+            timeout: 600
