@@ -1,0 +1,12 @@
+<!-- Indices written at Mon, 5 Sep 2016 12:50:26 CEST -->
+
+<datastore-indexes>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="PermissionEntry" ancestor="false" source="auto">
+        <property name="subjectKind" direction="asc"/>
+        <property name="userKeyId" direction="asc"/>
+        <property name="permission" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

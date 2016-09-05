@@ -61,10 +61,30 @@ appengine {
     }
 }
 
-task backupDataStore {
-
+task backupDataStore << {
+    copy {
+        from 'build/exploded-app/WEB-INF/appengine-generated'
+        into 'datastore/'
+        include '**/*.xml'
+        include '**/*.bin'
+    }
+    println "Backed up datastore"
 }
 
-task restoreDataStore {
+task restoreDataStore << {
+    copy {
+        from 'datastore/'
+        into 'build/exploded-app/WEB-INF/appengine-generated'
+        include '**/*.xml'
+        include '**/*.bin'
+    }
+    println "Restored datastore"
+}
 
+appengineExplodeApp.doFirst {
+    backupDataStore.execute()
+}
+
+appengineExplodeApp.doLast {
+    restoreDataStore.execute()
 }
