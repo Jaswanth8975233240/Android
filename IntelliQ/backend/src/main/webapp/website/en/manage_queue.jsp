@@ -113,7 +113,7 @@
           </div>
         </div>
 
-        <!-- Misc -->
+        <!-- Miscellaneous -->
         <div class="section">
           <h5>Miscellaneous</h5>
           <div class="divider"></div>
@@ -140,7 +140,31 @@
 
           </div>
         </div>
+
       </div>
+
+      <!-- Add queue item modal -->
+        <div id="addCustomerModal" class="modal">
+          <div class="modal-content">
+            <h4>Add a customer</h4>
+            <p>Customer name</p>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="newCustomerName" type="text">
+                <label for="newCustomerName">Name</label>
+              </div>
+            </div>
+
+            <p>Display name</p>
+            <div class="switch">
+              <label>private <input id="newCustomerVisibility" type="checkbox" checked="checked"> <span class="lever"></span> public</label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a id="sbmitNewCustomerButton" class=" modal-action modal-close waves-effect waves-green btn-flat">Add</a>
+          </div>
+        </div>
+
     </main>
     <%@include file="../includes/en/common_footer.jsp"%>
     <script src="${staticUrl}js/manage_queue.js"></script>

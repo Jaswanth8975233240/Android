@@ -26,6 +26,7 @@
         "calling": "Calling [VALUE]",
         "markingAsDone": "Marking [VALUE] as done",
         "markingCalledAsDone": "Marking called as done",
+        "adding": "Adding [VALUE]",
         "cancelling": "Canceling [VALUE]",
         "deleting": "Deleting [VALUE]",
         "deletingQueueItems": "Deleting queue items",

@@ -373,17 +373,55 @@ function populateQueue() {
 }
 
 function showAddNewQueueItemModal() {
+  $("#newCustomerName").val("");
+  $("#addCustomerModal").openModal();
+  $("#newCustomerName").focus();
+}
 
+function onAddNewCustomerModalSubmitted() {
+  try {
+    var name = $("#newCustomerName").val();
+    var hideName = $("#newCustomerVisibility").prop("checked") == false;
+
+    Materialize.toast(getString("adding", name), 3000);
+    var request = intelliqApi.addQueueItem(queue.key.id)
+        .withName(name)
+        .hideName(hideName)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+    
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+    $("#addCustomerModal").closeModal();
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
 }
 
 function setupQueueManagementButtons() {
+  // Queue item lists
   $("#markAllAsDoneButton").click(markAllCalledQueueItemsAsDone);
   $("#callNextCustomerButton").click(callNextQueueItem);
   $("#addNewCustomerButton").click(showAddNewQueueItemModal);
   $("#clearProcessedCustomersButton").click(deleteAllProcessedQueueItems);
-
+  
+  // Miscellaneous
   $("#editQueueButton").attr("href", intelliqApi.getUrls().forQueue(queue).edit())
   $("#manageBusinessButton").attr("href", intelliqApi.getUrls().forBusiness({key: {id: queue.businessKeyId}}).manage())
   $("#addDummCustomersButton").click(populateQueue);
   $("#deleteAllCustomersButton").click(deleteAllQueueItems);
+  
+  // add customer modal
+  $("#sbmitNewCustomerButton").click(onAddNewCustomerModalSubmitted);
+  $('#newCustomerName').keypress(function(e) {
+    if (e.which == 13) {
+      onAddNewCustomerModalSubmitted();
+      return false;
+    }
+  });
 }
