@@ -45,8 +45,7 @@
           <div class="col s6 m4 l3">
             <h5 class="white-text">Links</h5>
             <ul>
-              <li><a class="white-text" href="https://play.google.com/store/apps/details?id=com.steppschuh.intelliq">Android App</a></li>
-              <li><a class="white-text" href="https://itunes.apple.com/pg/app/intelliq/id1019495717">iOS App</a></li>
+              <li><a class="white-text" href="${rootUrl}/apps/">Apps</a></li>
               <li><a class="white-text" href="${rootUrl}/manage/">Manage</a></li>
               <li><a class="white-text" href="${rootUrl}/press/">Press</a></li>
             </ul>
@@ -56,8 +55,7 @@
       <div class="footer-copyright">
         <div class="container">
           Developed with love by 
-          <a class="accent-color-text text-lighten-3" href="http://markus-petrykowski.de/">Markus</a> and 
-          <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Stephan</a>
+          <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a>
         </div>
       </div>
     </footer>

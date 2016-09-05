@@ -455,7 +455,7 @@ var intelliqApi = function(){
   }
 
   api.populateQueue = function(queueKeyId) {
-    var request = api.request(api.ENDPOINT_QUEUE_GET);
+    var request = api.request(api.ENDPOINT_QUEUE_POPULATE);
     request.addParameter("queueKeyId", queueKeyId);
     request.addParameter("count", 25);
 
@@ -537,17 +537,17 @@ var intelliqApi = function(){
   }
 
   api.clearAllQueueItems = function(queueKeyId) {
-    return api.clearQueueItems(queueKeyId).withStatus(STATUS_ALL).keepWaiting(false);
+    return api.clearQueueItems(queueKeyId).withStatus(api.STATUS_ALL).keepWaiting(false);
   }
 
   api.clearProcessedQueueItems = function(queueKeyId) {
-    return api.clearQueueItems(queueKeyId).withStatus(STATUS_ALL).keepWaiting(true);
+    return api.clearQueueItems(queueKeyId).withStatus(api.STATUS_ALL).keepWaiting(true);
   }
 
   api.clearQueueItems = function(queueKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_CLEAR);
     request.addParameter("queueKeyId", queueKeyId);
-    request.addParameter("status", STATUS_ALL);
+    request.addParameter("status", api.STATUS_ALL);
     request.addParameter("clearWaiting", "false");
     request.addParameter("clearCalled", "false");
 

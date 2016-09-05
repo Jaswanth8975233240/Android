@@ -19,7 +19,7 @@
             <!-- Sidebar-->
             <div class="col s12 m12 l4 push-l8 vertical-spacing">
               <div class="col s12 card-spacing">
-                <a id="markAllAsDoneButton" class="btn-large waves-effect waves-light primary-color fill-width">
+                <a id="markAllAsDoneButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
                   <i class="material-icons right">done_all</i> 
                   All Done
                 </a>
@@ -52,12 +52,12 @@
             <!-- Sidebar-->
             <div class="col s12 m12 l4 push-l8 vertical-spacing">
               <div class="col s12 card-spacing">
-                <a id="callNextCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width">
-                  <i class="material-icons right">done_all</i> 
+                <a id="callNextCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
+                  <i class="material-icons right">group</i> 
                   Call Next
                 </a>
-                <a id="addNewCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width">
-                  <i class="material-icons right">done_all</i> 
+                <a id="addNewCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
+                  <i class="material-icons right">group_add</i> 
                   Add new
                 </a>
               </div>
@@ -89,8 +89,8 @@
             <!-- Sidebar-->
             <div class="col s12 m12 l4 push-l8 vertical-spacing">
               <div class="col s12 card-spacing">
-                <a id="clearProcessedCustomersButton" class="btn-large waves-effect waves-light primary-color fill-width">
-                  <i class="material-icons right">done_all</i> 
+                <a id="clearProcessedCustomersButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
+                  <i class="material-icons right">delete</i> 
                   Clear All
                 </a>
               </div>
@@ -113,6 +113,33 @@
           </div>
         </div>
 
+        <!-- Misc -->
+        <div class="section">
+          <h5>Miscellaneous</h5>
+          <div class="divider"></div>
+          <div class="row">
+
+            <div class="col s12" style="margin-top: 20px; margin-bottom: 20px;">
+              <a id="editQueueButton" class="btn-large waves-effect waves-light primary-color">
+                <i class="material-icons right">settings</i> 
+                Edit queue
+              </a>
+              <a id="manageBusinessButton" class="btn-large waves-effect waves-light primary-color">
+                <i class="material-icons right">business</i> 
+                Manage business
+              </a>
+              <a id="addDummCustomersButton" class="btn-large waves-effect waves-light primary-color">
+                <i class="material-icons right">group_add</i>
+                Add dummy customers
+              </a>
+              <a id="deleteAllCustomersButton" class="btn-large waves-effect waves-light primary-color">
+                <i class="material-icons right">delete</i>
+                Remove all customers
+              </a>
+            </div>
+
+          </div>
+        </div>
       </div>
     </main>
     <%@include file="../includes/en/common_footer.jsp"%>

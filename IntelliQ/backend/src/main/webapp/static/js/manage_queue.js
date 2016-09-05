@@ -16,6 +16,7 @@ var onUserReady = function(user) {
 function updateQueue() {
   requestQueue().then(function(queue){
     renderQueue(queue);
+    setupQueueManagementButtons();
     updateQueueItems();
     startUpdatingQueueItems(UPDATE_INTERVAL_DEFAULT);
   }).catch(function(error){
@@ -145,6 +146,7 @@ function renderQueueItemChangesSinceLastUpdate(queueItems) {
 
 function renderQueue(queue) {
   console.log(queue);
+  $("#addNewCustomerButton").removeClass("disabled");
   //TODO: update labels & buttons
 }
 
@@ -161,6 +163,12 @@ function renderCalledQueueItems(queueItems) {
   var items = intelliqApi.filterQueueItems(queueItems)
       .byStatus(intelliqApi.STATUS_CALLED);
   renderQueueItems(items, container);
+
+  if (items.length > 0) {
+    $("#markAllAsDoneButton").removeClass("disabled");
+  } else {
+    $("#markAllAsDoneButton").addClass("disabled");
+  }
 }
 
 function renderWaitingQueueItems(queueItems) {
@@ -168,6 +176,12 @@ function renderWaitingQueueItems(queueItems) {
   var items = intelliqApi.filterQueueItems(queueItems)
       .byStatus(intelliqApi.STATUS_WAITING);
   renderQueueItems(items, container);
+
+  if (items.length > 0) {
+    $("#callNextCustomerButton").removeClass("disabled");
+  } else {
+    $("#callNextCustomerButton").addClass("disabled");
+  }
 }
 
 function renderProcessedQueueItems(queueItems) {
@@ -175,10 +189,15 @@ function renderProcessedQueueItems(queueItems) {
   var items = intelliqApi.filterQueueItems(queueItems)
       .byStatus(intelliqApi.STATUS_DONE);
   renderQueueItems(items, container);
+
+  if (items.length > 0) {
+    $("#clearProcessedCustomersButton").removeClass("disabled");
+  } else {
+    $("#clearProcessedCustomersButton").addClass("disabled");
+  }
 }
 
 function onQueueItemsModified() {
-  //renderAllQueueItems(queueItems);
   updateQueueItems();
 }
 
@@ -186,58 +205,185 @@ function onQueueItemsModified() {
   Actions
 */
 
-function callQueueItem(queueItem) {
-  Materialize.toast(getString("calling", queueItem.name), 3000);
-  var request = intelliqApi.markQueueItemAsCalled(queue.key.id, queueItem.key.id)
-      .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
-
-  request.send().then(function(data){
-    console.log(data);
-    onQueueItemsModified();
-  }).catch(function(error){
+function callNextQueueItem() {
+  try {
+    var items = intelliqApi.filterQueueItems(queueItems)
+        .byStatus(intelliqApi.STATUS_WAITING);
+    if (items.length == 0) {
+      throw getString("noQueueItems");
+    }
+    var queueItem = items[0];
+    callQueueItem(queueItem);
+  } catch(error) {
     console.log(error);
     showErrorMessage(error);
-  });
+  }
+}
+
+function callQueueItem(queueItem) {
+  try {
+    Materialize.toast(getString("calling", queueItem.name), 3000);
+    var request = intelliqApi.markQueueItemAsCalled(queue.key.id, queueItem.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
 }
 
 function cancelQueueItem(queueItem) {
-  Materialize.toast(getString("cancelling", queueItem.name), 3000);
-  var request = intelliqApi.markQueueItemAsCanceled(queue.key.id, queueItem.key.id)
-      .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+  try {
+    Materialize.toast(getString("cancelling", queueItem.name), 3000);
+    var request = intelliqApi.markQueueItemAsCanceled(queue.key.id, queueItem.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
 
-  request.send().then(function(data){
-    console.log(data);
-    onQueueItemsModified();
-  }).catch(function(error){
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
     console.log(error);
     showErrorMessage(error);
-  });
+  }
+}
+
+function markAllCalledQueueItemsAsDone() {
+  try {
+    Materialize.toast(getString("markingCalledAsDone"), 3000);
+    var request = intelliqApi.markAllQueueItemsAsDone(queue.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
 }
 
 function markQueueItemAsDone(queueItem) {
-  Materialize.toast(getString("markingAsDone", queueItem.name), 3000);
-  var request = intelliqApi.markQueueItemAsDone(queue.key.id, queueItem.key.id)
-      .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+  try {
+    Materialize.toast(getString("markingAsDone", queueItem.name), 3000);
+    var request = intelliqApi.markQueueItemAsDone(queue.key.id, queueItem.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
 
-  request.send().then(function(data){
-    console.log(data);
-    onQueueItemsModified();
-  }).catch(function(error){
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
     console.log(error);
     showErrorMessage(error);
-  });
+  }
+}
+
+function deleteAllQueueItems() {
+  try {
+    Materialize.toast(getString("deletingQueueItems"), 3000);
+    var request = intelliqApi.clearAllQueueItems(queue.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+    
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
+}
+
+function deleteAllProcessedQueueItems() {
+  try {
+    Materialize.toast(getString("deletingQueueItems"), 3000);
+    var request = intelliqApi.clearProcessedQueueItems(queue.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+    
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
 }
 
 function deleteQueueItem(queueItem) {
-  Materialize.toast(getString("deleting", queueItem.name), 3000);
-  var request = intelliqApi.deleteQueueItem(queue.key.id, queueItem.key.id)
-      .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
-  
-  request.send().then(function(data){
-    console.log(data);
-    onQueueItemsModified();
-  }).catch(function(error){
+  try {
+    Materialize.toast(getString("deleting", queueItem.name), 3000);
+    var request = intelliqApi.deleteQueueItem(queue.key.id, queueItem.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+    
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
     console.log(error);
     showErrorMessage(error);
-  });
+  }
+}
+
+function populateQueue() {
+  try {
+    Materialize.toast(getString("populatingQueue"), 3000);
+    var request = intelliqApi.populateQueue(queue.key.id).withItems(25)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+    
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
+}
+
+function showAddNewQueueItemModal() {
+
+}
+
+function setupQueueManagementButtons() {
+  $("#markAllAsDoneButton").click(markAllCalledQueueItemsAsDone);
+  $("#callNextCustomerButton").click(callNextQueueItem);
+  $("#addNewCustomerButton").click(showAddNewQueueItemModal);
+  $("#clearProcessedCustomersButton").click(deleteAllProcessedQueueItems);
+
+  $("#editQueueButton").attr("href", intelliqApi.getUrls().forQueue(queue).edit())
+  $("#manageBusinessButton").attr("href", intelliqApi.getUrls().forBusiness({key: {id: queue.businessKeyId}}).manage())
+  $("#addDummCustomersButton").click(populateQueue);
+  $("#deleteAllCustomersButton").click(deleteAllQueueItems);
 }
