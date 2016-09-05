@@ -25,12 +25,16 @@
 
         "calling": "Calling [VALUE]",
         "markingAsDone": "Marking [VALUE] as done",
+        "markingCalledAsDone": "Marking called as done",
         "cancelling": "Canceling [VALUE]",
         "deleting": "Deleting [VALUE]",
+        "deletingQueueItems": "Deleting queue items",
+        "noQueueItems": "No queue items available",
 
         "editBusiness": "Edit Business",
         "addBusiness": "Add Business",
         "editQueue": "Edit Queue",
+        "populatingQueue": "Popuating queue",
 
         "locatingDevice": "Updating device location",
         "geocodingAddress": "Getting location for address",
