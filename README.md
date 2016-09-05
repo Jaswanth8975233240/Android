@@ -1,0 +1,1 @@
+This repository maintains the source for the IntelliQ.me [Android app](https://github.com/IntelliQ/Android/tree/master/IntelliQ/mobile/src/main/java/com/steppschuh/intelliq), as well the [backend](https://github.com/IntelliQ/Android/tree/master/IntelliQ/backend/src/main/java/com/intelliq/appengine).
