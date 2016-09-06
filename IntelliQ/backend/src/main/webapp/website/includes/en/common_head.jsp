@@ -2,6 +2,14 @@
     <!-- Meta -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Icon -->
+    <link rel="icon" sizes="192x192" href="${staticUrl}images/icon.png">
+    <link rel="icon" sizes="128x128" href="${staticUrl}images/icon.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="${staticUrl}images/icon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="128x128" href="${staticUrl}images/icon.png">
 
     <!-- CSS -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
