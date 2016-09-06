@@ -11,6 +11,27 @@ function whenAvailable(name, callback) {
     }, interval);
 }
 
+function trackEvent(category, action, label, value) {
+  var fields = {
+    hitType: "event",
+    eventCategory: category,
+    eventAction: action,
+    eventLabel: label,
+    eventValue: value
+  }
+  ga("send", fields);
+  console.log("Tracked event: " + fields);
+}
+
+function trackException(description, fatal) {
+  var fields = {
+    "exDescription": description,
+    "exFatal": fatal
+  }
+  ga('send', 'exception', fields);
+  console.log("Tracked exception: " + fields);
+}
+
 function getDeviceLocation() {
   var promise = new Promise(function(resolve, reject) {
     try {

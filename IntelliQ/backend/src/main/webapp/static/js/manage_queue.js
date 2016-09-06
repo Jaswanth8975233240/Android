@@ -101,11 +101,14 @@ function startUpdatingQueueItems(interval) {
       updateQueueItems();
     }
   }, queueItemsUpdateInterval);
+
+  tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Start updating queue items", queue.name, queue.key.id);
 }
 
 function stopUpdatingQueueItems() {
   console.log("Stopping to update queue items");
   clearInterval(queueItemsUpdateIntervalObject);
+  tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Stop updating queue items", queue.name, queue.key.id);
 }
 
 function shouldUpdateQueueItems() {
@@ -243,6 +246,7 @@ function callQueueItem(queueItem) {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Call queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -262,6 +266,7 @@ function cancelQueueItem(queueItem) {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Cancel queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -281,6 +286,7 @@ function markAllCalledQueueItemsAsDone() {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Mark all called queue items as done", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -300,6 +306,7 @@ function markQueueItemAsDone(queueItem) {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Mark queue item as done", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -319,6 +326,7 @@ function deleteAllQueueItems() {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Delete all queue items", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -338,6 +346,7 @@ function deleteAllProcessedQueueItems() {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Delete processed queue items", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -357,6 +366,7 @@ function deleteQueueItem(queueItem) {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Delete queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -376,6 +386,7 @@ function reportQueueItem(queueItem) {
       console.log(error);
       showErrorMessage(error);
     });
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Report queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -395,6 +406,7 @@ function populateQueue() {
       console.log(error);
       showErrorMessage(error);
     });
+  tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Populate queue", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -405,6 +417,7 @@ function showAddNewQueueItemModal() {
   $("#newCustomerName").val("");
   $("#addCustomerModal").openModal();
   $("#newCustomerName").focus();
+  tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Show new queue item modal");
 }
 
 function onAddNewCustomerModalSubmitted() {
@@ -426,6 +439,7 @@ function onAddNewCustomerModalSubmitted() {
       showErrorMessage(error);
     });
     $("#addCustomerModal").closeModal();
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Submit new queue item modal", name, hideName ? 1 : 0);
   } catch(error) {
     console.log(error);
     showErrorMessage(error);
@@ -445,6 +459,7 @@ function showQueueItemDetailsModal(queueItem) {
   });
 
   modal.openModal();
+  tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Show queue item details", queueItem.name, queueItem.ticketNumber);
 }
 
 function setupQueueManagementButtons() {

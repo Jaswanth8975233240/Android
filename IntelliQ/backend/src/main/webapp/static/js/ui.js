@@ -1,7 +1,7 @@
 var intelliqUi = function(){
 
   function log(message) {
-    console.log("IntelliQ.me UI: " + message);
+    console.log("UI: " + message);
   }
 
   var ui = {
