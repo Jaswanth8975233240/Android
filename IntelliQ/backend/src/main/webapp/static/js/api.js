@@ -644,7 +644,7 @@ var intelliqApi = function(){
     filter.byStatus = function(status) {
       var items = [];
       if (queueItems == null) {
-        return entries;
+        return items;
       }
       for (var i = 0; i < queueItems.length; i++) {
         var item = queueItems[i];
@@ -656,6 +656,34 @@ var intelliqApi = function(){
     }
 
     return filter;
+  }
+
+  api.sortQueueItems = function(queueItems) {
+    var sort = {};
+
+    sort.byTicketNumber = function() {
+      queueItems.sort(function(a, b) {
+        if (a.ticketNumber < b.ticketNumber)
+          return -1;
+        if (a.ticketNumber > b.ticketNumber)
+          return 1;
+        return 0;
+      });
+      return queueItems;
+    }
+
+    sort.byStatusChange = function() {
+      queueItems.sort(function(a, b) {
+        if (a.lastStatusChangeTimestamp > b.lastStatusChangeTimestamp)
+          return -1;
+        if (a.lastStatusChangeTimestamp < b.lastStatusChangeTimestamp)
+          return 1;
+        return 0;
+      });
+      return queueItems;
+    }
+
+    return sort;
   }
 
   /*

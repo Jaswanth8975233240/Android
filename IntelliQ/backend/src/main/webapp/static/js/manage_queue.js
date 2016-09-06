@@ -54,6 +54,7 @@ function requestQueue() {
       }
     }).catch(function(error){
       reject("Unable to get queue: " + error);
+      console.log(error);
     });
   });
   return promise;
@@ -69,9 +70,11 @@ function requestQueueItems() {
 
     request.send().then(function(data){
       queueItems = intelliqApi.getQueueItemsFromResponse(data);
+      queueItems = intelliqApi.sortQueueItems(queueItems).byTicketNumber();
       resolve(queueItems);
     }).catch(function(error){
       reject("Unable to get queue items: " + error);
+      console.log(error);
     });
   });
   return promise;
@@ -186,8 +189,15 @@ function renderWaitingQueueItems(queueItems) {
 
 function renderProcessedQueueItems(queueItems) {
   var container = $("#processedContainer");
-  var items = intelliqApi.filterQueueItems(queueItems)
+
+  var itemsDone = intelliqApi.filterQueueItems(queueItems)
       .byStatus(intelliqApi.STATUS_DONE);
+
+  var itemsCanceled = intelliqApi.filterQueueItems(queueItems)
+      .byStatus(intelliqApi.STATUS_CANCELED);
+
+  var items = itemsDone.concat(itemsCanceled);
+  items = intelliqApi.sortQueueItems(items).byTicketNumber();
   renderQueueItems(items, container);
 
   if (items.length > 0) {
@@ -401,6 +411,10 @@ function onAddNewCustomerModalSubmitted() {
     console.log(error);
     showErrorMessage(error);
   }
+}
+
+function showQueueItemDetailsModal(queueItem) {
+  Materialize.toast(queueItem.name, 3000);
 }
 
 function setupQueueManagementButtons() {

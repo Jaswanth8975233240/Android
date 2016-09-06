@@ -21,7 +21,10 @@
         "statusCalled": "Called",
         "statusDone": "Done",
         "statusCanceled": "Canceled",
+        "statusDeleted": "Deleted",
+
         "statusUpdated": "Status updated",
+        "setStatusTo": "Set status to",
 
         "calling": "Calling [VALUE]",
         "markingAsDone": "Marking [VALUE] as done",

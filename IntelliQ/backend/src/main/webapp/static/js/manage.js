@@ -154,4 +154,8 @@ function renderEntries(entries, container, options) {
     container.show();
     container.parent().find(".emptyState").addClass("hide");
   }
+
+  // re-initialize tooltips
+  $(".material-tooltip").remove();
+  $(".tooltipped").tooltip({ delay: 250 });
 }
