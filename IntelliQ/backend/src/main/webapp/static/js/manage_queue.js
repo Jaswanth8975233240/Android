@@ -440,7 +440,7 @@ function showQueueItemDetailsModal(queueItem) {
   modal.find("#customerQueueEntry").text(queueItem.entryTimestamp);
   modal.find("#customerStatusChange").text(queueItem.lastStatusChangeTimestamp);
 
-  modal.find("#reportCustomerButton").click(function() {
+  modal.find("#reportCustomerButton").off().click(function() {
     reportQueueItem(queueItem);
   });
 
