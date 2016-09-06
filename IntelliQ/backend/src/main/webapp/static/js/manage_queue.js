@@ -197,7 +197,7 @@ function renderProcessedQueueItems(queueItems) {
       .byStatus(intelliqApi.STATUS_CANCELED);
 
   var items = itemsDone.concat(itemsCanceled);
-  items = intelliqApi.sortQueueItems(items).byTicketNumber();
+  items = intelliqApi.sortQueueItems(items).byStatusChange();
   renderQueueItems(items, container);
 
   if (items.length > 0) {
@@ -363,6 +363,25 @@ function deleteQueueItem(queueItem) {
   }
 }
 
+function reportQueueItem(queueItem) {
+  try {
+    Materialize.toast(getString("reporting", queueItem.name), 3000);
+    var request = intelliqApi.reportQueueItem(queue.key.id, queueItem.key.id)
+        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+    
+    request.send().then(function(data){
+      console.log(data);
+      onQueueItemsModified();
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  } catch(error) {
+    console.log(error);
+    showErrorMessage(error);
+  }
+}
+
 function populateQueue() {
   try {
     Materialize.toast(getString("populatingQueue"), 3000);
@@ -414,7 +433,18 @@ function onAddNewCustomerModalSubmitted() {
 }
 
 function showQueueItemDetailsModal(queueItem) {
-  Materialize.toast(queueItem.name, 3000);
+  var modal = $("#customerDetailsModal");
+  modal.find("h4").text(queueItem.name);
+
+  modal.find("#customerTicketNumber").text(queueItem.ticketNumber);
+  modal.find("#customerQueueEntry").text(queueItem.entryTimestamp);
+  modal.find("#customerStatusChange").text(queueItem.lastStatusChangeTimestamp);
+
+  modal.find("#reportCustomerButton").click(function() {
+    reportQueueItem(queueItem);
+  });
+
+  modal.openModal();
 }
 
 function setupQueueManagementButtons() {

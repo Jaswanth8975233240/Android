@@ -32,6 +32,7 @@
         "adding": "Adding [VALUE]",
         "cancelling": "Canceling [VALUE]",
         "deleting": "Deleting [VALUE]",
+        "reporting": "Reporting [VALUE]",
         "deletingQueueItems": "Deleting queue items",
         "noQueueItems": "No queue items available",
 

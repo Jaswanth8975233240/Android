@@ -64,6 +64,7 @@ var intelliqApi = function(){
   api.ENDPOINT_QUEUE_ITEM_ADD = api.ENDPOINT_QUEUE_ITEM + "add/";
   api.ENDPOINT_QUEUE_ITEM_DELETE = api.ENDPOINT_QUEUE_ITEM + "delete/";
   api.ENDPOINT_QUEUE_ITEM_STATUS = api.ENDPOINT_QUEUE_ITEM + "status/";
+  api.ENDPOINT_QUEUE_ITEM_REPORT = api.ENDPOINT_QUEUE_ITEM + "report/";
 
   // Webpages
   if (useDevelopmentServer()) {
@@ -501,6 +502,13 @@ var intelliqApi = function(){
 
   api.deleteQueueItem = function(queueKeyId, queueItemKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_ITEM_DELETE);
+    request.addParameter("queueKeyId", queueKeyId);
+    request.addParameter("queueItemKeyId", queueItemKeyId);
+    return request;
+  }
+
+  api.reportQueueItem = function(queueKeyId, queueItemKeyId) {
+    var request = api.request(api.ENDPOINT_QUEUE_ITEM_REPORT);
     request.addParameter("queueKeyId", queueKeyId);
     request.addParameter("queueItemKeyId", queueItemKeyId);
     return request;
