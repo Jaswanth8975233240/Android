@@ -21,14 +21,14 @@ var intelliqApi = function(){
   api.GOOGLE_API_TOKEN = "AIzaSyBtc8JtwfK8qT9TX8Tkln4nd7IwR0rP9dY";
 
   // Website (for displaying links)
-  api.HOST_INTELLIQ_ME = "http://intelliq.me/";
+  api.HOST_INTELLIQ_ME = "https://intelliq.me/";
 
   // Development server
   api.HOST_LOCAL = "http://localhost:8080/";
 
   // App Engine (for api requests)
   api.APP_ENGINE_VERSION = 2;
-  api.HOST_APP_ENGINE = "http://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
+  api.HOST_APP_ENGINE = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
 
   // Request endpoints
   if (useDevelopmentServer()) {

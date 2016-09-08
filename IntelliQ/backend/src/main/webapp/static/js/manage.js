@@ -5,18 +5,6 @@
 })(jQuery);
 
 /*
-  Makes sure that we have a valid token to send authorized
-  API requests. Invokes a sign-in if needed.
-*/
-function initAuthentication() {
-  whenAvailable("authenticator", function() {
-    authenticator.getInstance(function(instance) {
-      // authenticator initialized
-    }, signInStatusChanged);
-  })
-}
-
-/*
   Callback for the authentication flow
 */
 function signInStatusChanged(isSignedIn) {
@@ -38,6 +26,7 @@ function signInStatusChanged(isSignedIn) {
   } else {
     //Materialize.toast(getString("signedOut"), 5000);
     openSignInForm();
+    closeSignOutForm();
   }
 }
 

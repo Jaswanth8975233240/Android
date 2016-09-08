@@ -1,7 +1,7 @@
 var baseUrl = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "";
 
 function whenAvailable(name, callback) {
-    var interval = 50; // ms
+    var interval = 50;
     window.setTimeout(function() {
         if (window[name]) {
             callback(window[name]);
@@ -9,27 +9,6 @@ function whenAvailable(name, callback) {
             window.setTimeout(arguments.callee, interval);
         }
     }, interval);
-}
-
-function trackEvent(category, action, label, value) {
-  var fields = {
-    hitType: "event",
-    eventCategory: category,
-    eventAction: action,
-    eventLabel: label,
-    eventValue: value
-  }
-  ga("send", fields);
-  console.log("Tracked event: " + fields);
-}
-
-function trackException(description, fatal) {
-  var fields = {
-    "exDescription": description,
-    "exFatal": fatal
-  }
-  ga('send', 'exception', fields);
-  console.log("Tracked exception: " + fields);
 }
 
 function getDeviceLocation() {

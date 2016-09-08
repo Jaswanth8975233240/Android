@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 
-	<!-- Servlet for routing and filtering all requests -->
-	<filter>
+    <!-- Enforce SSL -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>everything</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+
+    <!-- Servlet for routing and filtering all requests -->
+    <filter>
         <filter-name>requestFilter</filter-name>
         <filter-class>com.intelliq.appengine.RequestFilter</filter-class>
     </filter>
@@ -41,9 +52,19 @@
         <url-pattern>/intelliq/image/*</url-pattern>
     </servlet-mapping>
    
-	
-	<!-- Landing page servlet -->
-	<servlet>
+    <!-- Website frontend servlets -->
+    <!-- Root for the website, redirects to available JSPs -->
+    <servlet>
+        <servlet-name>IntelliQ</servlet-name>
+        <servlet-class>com.intelliq.appengine.website.IntelliQServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IntelliQ</servlet-name>
+        <url-pattern>/intelliq/*</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Landing page servlet -->
+    <servlet>
         <servlet-name>de/home</servlet-name>
         <jsp-file>/website/de/home.jsp</jsp-file>
     </servlet>
@@ -61,7 +82,7 @@
     </servlet-mapping>
     
     <!-- Apps page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/apps</servlet-name>
         <jsp-file>/website/de/apps.jsp</jsp-file>
     </servlet>
@@ -79,7 +100,7 @@
     </servlet-mapping>
     
     <!-- Business page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/business</servlet-name>
         <jsp-file>/website/de/business.jsp</jsp-file>
     </servlet>
@@ -97,7 +118,7 @@
     </servlet-mapping>
     
     <!-- Sign In page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/signin</servlet-name>
         <jsp-file>/website/en/signin.jsp</jsp-file>
     </servlet>
@@ -115,7 +136,7 @@
     </servlet-mapping>
     
     <!-- Manege page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/manage_overview</servlet-name>
         <jsp-file>/website/en/manage_overview.jsp</jsp-file>
     </servlet>
@@ -133,7 +154,7 @@
     </servlet-mapping>
     
     <!-- Manege Queue page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/manage_queue</servlet-name>
         <jsp-file>/website/en/manage_queue.jsp</jsp-file>
     </servlet>
@@ -151,7 +172,7 @@
     </servlet-mapping>
     
     <!-- Edit Queue page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/edit_queue</servlet-name>
         <jsp-file>/website/en/edit_queue.jsp</jsp-file>
     </servlet>
@@ -169,7 +190,7 @@
     </servlet-mapping>
     
     <!-- Manege Business page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/manage_business</servlet-name>
         <jsp-file>/website/en/manage_business.jsp</jsp-file>
     </servlet>
@@ -187,7 +208,7 @@
     </servlet-mapping>
     
     <!-- Edit Business page servlet -->
-	<servlet>
+    <servlet>
         <servlet-name>de/edit_business</servlet-name>
         <jsp-file>/website/en/edit_business.jsp</jsp-file>
     </servlet>
@@ -203,9 +224,9 @@
         <servlet-name>en/edit_business</servlet-name>
         <url-pattern>/intelliq/en/edit/businessservlet/*</url-pattern>
     </servlet-mapping>
-	
-	<!-- Display Queue page servlet -->
-	<servlet>
+    
+    <!-- Display Queue page servlet -->
+    <servlet>
         <servlet-name>de/display_queue</servlet-name>
         <jsp-file>/website/en/display_queue.jsp</jsp-file>
     </servlet>
@@ -222,29 +243,4 @@
         <url-pattern>/intelliq/en/display/queueservlet/*</url-pattern>
     </servlet-mapping>
     
-    <!-- Root for the website, redirects to available JSPs -->
-    <servlet>
-		<servlet-name>IntelliQ</servlet-name>
-		<servlet-class>com.intelliq.appengine.website.IntelliQServlet</servlet-class>
-	</servlet>	
-	<servlet-mapping>
-		<servlet-name>IntelliQ</servlet-name>
-		<url-pattern>/intelliq/*</url-pattern>
-	</servlet-mapping>
-	
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-	
-    <!-- Enforce SSL -->
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>everything</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-
 </web-app>

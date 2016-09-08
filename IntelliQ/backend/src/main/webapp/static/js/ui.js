@@ -538,5 +538,3 @@ var intelliqUi = function(){
 
   return ui;
 }();
-
-//$.fn.cardUi = cardUi;
