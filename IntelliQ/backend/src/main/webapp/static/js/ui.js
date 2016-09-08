@@ -536,5 +536,30 @@ var intelliqUi = function(){
     return getString("unknown");
   }
 
+  ui.showSignInForm = function() {
+    $("#modal-signin").openModal();
+  }
+
+  ui.hideSignInForm = function() {
+    $("#modal-signin").closeModal();
+  }
+
+  ui.showSignOutForm = function() {
+    $("#modal-signout").openModal();
+  }
+
+  ui.hideSignOutForm = function() {
+    $("#modal-signout").openModal();
+  }
+
+  ui.showErrorMessage = function(message) {
+    $("#modal-error-message").text(message);
+    $("#modal-error").openModal();
+  }
+
+  ui.hideErrorMessage = function(message) {
+    $("#modal-error").closeModal();
+  }
+
   return ui;
 }();

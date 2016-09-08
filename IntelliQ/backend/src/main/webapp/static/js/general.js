@@ -11,6 +11,31 @@ function whenAvailable(name, callback) {
     }, interval);
 }
 
+function openSignInForm() {
+  $("#modal-signin").openModal();
+}
+
+function closeSignInForm() {
+  $("#modal-signin").closeModal();
+}
+
+function openSignOutForm() {
+  $("#modal-signout").openModal();
+}
+
+function closeSignOutForm() {
+  $("#modal-signout").closeModal();
+}
+
+function showErrorMessage(message) {
+  $("#modal-error-message").text(message);
+  $("#modal-error").openModal();
+}
+
+function hideErrorMessage() {
+  $("#modal-error").closeModal();
+}
+
 function getDeviceLocation() {
   var promise = new Promise(function(resolve, reject) {
     try {

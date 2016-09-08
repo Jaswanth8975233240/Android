@@ -5,29 +5,26 @@
 })(jQuery);
 
 /*
-  Callback for the authentication flow
+  Initializes the authentication and prompts the user to sign in
 */
-function signInStatusChanged(isSignedIn) {
-  if (isSignedIn) {
-    var googleUser = authenticator.getInstance().getCurrentGoogleUser();
-    var profile = googleUser.getBasicProfile();
-    //Materialize.toast(getString("signedInAs", profile.getName()), 5000);
-    closeSignInForm();
+function initAuthentication() {
+  authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
+    if (isSignedIn) {
+      var userIdToken = authenticator.getGoogleUserIdToken();
+      requestUserFromGoogleIdToken().then(function(user) {
+        console.log(user);
+        intelliqUi.hideSignInForm();
 
-    requestUserFromGoogleIdToken().then(function(user) {
-      console.log(user);
-      if (typeof onUserReady !== "undefined") {
-        onUserReady(user);
-      }
-    }).catch(function(error) {
-      console.log("Unable to get IntelliQ user from Google ID token: " + error);
-      showErrorMessage(error);
-    });
-  } else {
-    //Materialize.toast(getString("signedOut"), 5000);
-    openSignInForm();
-    closeSignOutForm();
-  }
+      }).catch(function(error) {
+        console.log("Unable to get IntelliQ user from Google ID token: " + error);
+        intelliqUi.showErrorMessage(error);
+      });
+    } else {
+      intelliqUi.showSignInForm();
+    }
+  }).catch(function(error) {
+    intelliqUi.showErrorMessage(error);
+  })
 }
 
 /*
@@ -37,7 +34,7 @@ function signInStatusChanged(isSignedIn) {
 function requestUserFromGoogleIdToken() {
   var promise = new Promise(function(resolve, reject) {
     try {
-      var googleIdToken = authenticator.getInstance().getUserIdToken();
+      var googleIdToken = authenticator.getGoogleUserIdToken();
       if (googleIdToken == null) {
         throw "Token is null";
       }
