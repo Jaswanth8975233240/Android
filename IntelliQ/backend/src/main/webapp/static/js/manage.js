@@ -10,11 +10,9 @@
 function initAuthentication() {
   authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
     if (isSignedIn) {
-      var userIdToken = authenticator.getGoogleUserIdToken();
-      authenticator.requestIntelliqUserFromGoogleIdToken.then(function(user) {
+      authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
         console.log(user);
         intelliqUi.hideSignInForm();
-
       }).catch(function(error) {
         console.log("Unable to get IntelliQ user from Google ID token: " + error);
         intelliqUi.showErrorMessage(error);
@@ -25,35 +23,6 @@ function initAuthentication() {
   }).catch(function(error) {
     intelliqUi.showErrorMessage(error);
   })
-}
-
-/*
-  Tries to get an (IntelliQ-) user object from the currently
-  active Google ID token
-*/
-function requestUserFromGoogleIdToken() {
-  var promise = new Promise(function(resolve, reject) {
-    try {
-      var googleIdToken = authenticator.getGoogleUserIdToken();
-      if (googleIdToken == null) {
-        throw "Token is null";
-      }
-
-      var signInRequest = intelliqApi.signInUser().setGoogleIdToken(googleIdToken);
-      signInRequest.send().then(function(data){
-        var user = intelliqApi.getUsersFromResponse(data)[0];
-        if (user == null) {
-          reject("Returned user is null");
-        }
-        resolve(user);
-      }).catch(function(error){
-        reject(error);
-      });
-    } catch (ex) {
-      reject(ex);
-    }
-  });
-  return promise;
 }
 
 function renderBusinesses(entries, container) {

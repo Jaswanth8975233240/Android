@@ -8,6 +8,7 @@ var authenticator = function(){
   };
 
   authenticator.googleAuthenticationInitialized = false;
+  authenticator.onIntelliqUserAvailableListeners = [];
 
   authenticator.CLIENT_ID_WEB = "1008259459239-t1huos5n6bhkin3is2jlqgkjv9h7mheh.apps.googleusercontent.com";
 
@@ -20,7 +21,7 @@ var authenticator = function(){
       var onAuthApiAvailable = function() {
         log("Initializing Google authentication");
         var params = {
-          client_id: CLIENT_ID_WEB,
+          client_id: authenticator.CLIENT_ID_WEB,
           fetch_basic_profile: true
         }
         gapi.auth2.init(params);
@@ -49,7 +50,7 @@ var authenticator = function(){
       } else {
         onAuthApiAvailable();
       }
-    }
+    });
     return promise;
   }
 
@@ -73,10 +74,10 @@ var authenticator = function(){
           log("Google sign in invoking failed: " + ex);
           reject(error);
         }
-      }).catch(error) {
+      }).catch(function(error) {
         reject(error);
-      }
-    };
+      });
+    });
     return promise;
   }
 
@@ -97,10 +98,10 @@ var authenticator = function(){
           log("Google sign out invoking failed: " + ex);
           reject(error);
         }
-      }).catch(error) {
+      }).catch(function(error) {
         reject(error);
-      }
-    };
+      });
+    });
     return promise;
   }
 
@@ -121,10 +122,10 @@ var authenticator = function(){
           log("Google disconnection invoking failed: " + ex);
           reject(error);
         }
-      }).catch(error) {
+      }).catch(function(error) {
         reject(error);
-      }
-    };
+      });
+    });
     return promise;
   }
 
@@ -147,7 +148,6 @@ var authenticator = function(){
     log("Google user signed in: " + profile.getName());
   }
 
-  // callback for the Google sign out
   authenticator.onGoogleUserSignedOut = function () {
     log("Google user signed out");
   }
@@ -156,14 +156,14 @@ var authenticator = function(){
     var promise = new Promise(function(resolve, reject) {
       authenticator.initializeGoogleAuthentication().then(function() {
         resolve(gapi.auth2.getAuthInstance().isSignedIn.get());
-      }).catch(error) {
+      }).catch(function(error) {
         reject(error);
-      }
-    };
+      });
+    });
     return promise;
   }
 
-  authenticator.getGoogleSignInStatus = function {
+  authenticator.getGoogleSignInStatus = function() {
     try {
       return gapi.auth2.getAuthInstance().isSignedIn.get();
     } catch (ex) {
@@ -172,19 +172,19 @@ var authenticator = function(){
     }
   }
 
-  authenticator.requestGoogleUser = function {
+  authenticator.requestGoogleUser = function() {
     var promise = new Promise(function(resolve, reject) {
       authenticator.initializeGoogleAuthentication().then(function() {
         var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
         resolve(googleUser);
-      }).catch(error) {
+      }).catch(function(error) {
         reject(error);
-      }
-    };
+      });
+    });
     return promise;
   }
 
-  authenticator.getGoogleUser = function {
+  authenticator.getGoogleUser = function() {
     try {
       return gapi.auth2.getAuthInstance().currentUser.get();
     } catch (ex) {
@@ -193,7 +193,7 @@ var authenticator = function(){
     }
   }
 
-  authenticator.getGoogleUserIdToken = function {
+  authenticator.getGoogleUserIdToken = function() {
     try {
       var googleUser = authenticator.getGoogleUser();
       return googleUser.getAuthResponse().id_token;
@@ -217,8 +217,9 @@ var authenticator = function(){
           if (user == null) {
             reject("Returned user is null");
           }
+          authenticator.notifyOnIntelliqUserAvailableListeners(user);
           resolve(user);
-        }).catch(function(error){
+        }).catch(function(error) {
           reject(error);
         });
       } catch (ex) {
@@ -226,6 +227,16 @@ var authenticator = function(){
       }
     });
     return promise;
+  }
+
+  authenticator.registerOnIntelliqUserAvailableListener = function(listener) {
+    authenticator.onIntelliqUserAvailableListeners.push(listener);
+  }
+
+  authenticator.notifyOnIntelliqUserAvailableListeners = function(user) {
+    for (var i = 0; i < authenticator.onIntelliqUserAvailableListeners.length; i++) {
+      authenticator.onIntelliqUserAvailableListeners[i](user);
+    }
   }
 
   return authenticator;

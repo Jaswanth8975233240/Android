@@ -9,9 +9,13 @@ var lastQueueItemsUpdate = -1;
 var queueItemsUpdateInterval = UPDATE_INTERVAL_DEFAULT;
 var queueItemsUpdateIntervalObject;
 
-var onUserReady = function(user) {
-  updateQueue();
-}
+(function($){
+  $(function(){
+    authenticator.registerOnIntelliqUserAvailableListener(function(user) {
+      updateQueue();
+    });
+  });
+})(jQuery);
 
 function updateQueue() {
   requestQueue().then(function(queue){
@@ -39,7 +43,7 @@ function updateQueueItems() {
 function requestQueue() {
   var promise = new Promise(function(resolve, reject) {
     var queueKeyId = getUrlParamOrCookie("queueKeyId");
-    var googleIdToken = authenticator.getInstance().getUserIdToken();
+    var googleIdToken = authenticator.getGoogleUserIdToken();
 
     var request = intelliqApi.getQueue(queueKeyId)
         .setGoogleIdToken(googleIdToken);
@@ -62,7 +66,7 @@ function requestQueue() {
 
 function requestQueueItems() {
   var promise = new Promise(function(resolve, reject) {
-    var googleIdToken = authenticator.getInstance().getUserIdToken();
+    var googleIdToken = authenticator.getGoogleUserIdToken();
 
     var request = intelliqApi.getQueueItems(queue.key.id)
         .setCount(100)
@@ -237,7 +241,7 @@ function callQueueItem(queueItem) {
   try {
     Materialize.toast(getString("calling", queueItem.name), 3000);
     var request = intelliqApi.markQueueItemAsCalled(queue.key.id, queueItem.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
 
     request.send().then(function(data){
       console.log(data);
@@ -257,7 +261,7 @@ function cancelQueueItem(queueItem) {
   try {
     Materialize.toast(getString("cancelling", queueItem.name), 3000);
     var request = intelliqApi.markQueueItemAsCanceled(queue.key.id, queueItem.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
 
     request.send().then(function(data){
       console.log(data);
@@ -277,7 +281,7 @@ function markAllCalledQueueItemsAsDone() {
   try {
     Materialize.toast(getString("markingCalledAsDone"), 3000);
     var request = intelliqApi.markAllQueueItemsAsDone(queue.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
 
     request.send().then(function(data){
       console.log(data);
@@ -297,7 +301,7 @@ function markQueueItemAsDone(queueItem) {
   try {
     Materialize.toast(getString("markingAsDone", queueItem.name), 3000);
     var request = intelliqApi.markQueueItemAsDone(queue.key.id, queueItem.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
 
     request.send().then(function(data){
       console.log(data);
@@ -317,7 +321,7 @@ function deleteAllQueueItems() {
   try {
     Materialize.toast(getString("deletingQueueItems"), 3000);
     var request = intelliqApi.clearAllQueueItems(queue.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
       console.log(data);
@@ -337,7 +341,7 @@ function deleteAllProcessedQueueItems() {
   try {
     Materialize.toast(getString("deletingQueueItems"), 3000);
     var request = intelliqApi.clearProcessedQueueItems(queue.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
       console.log(data);
@@ -357,7 +361,7 @@ function deleteQueueItem(queueItem) {
   try {
     Materialize.toast(getString("deleting", queueItem.name), 3000);
     var request = intelliqApi.deleteQueueItem(queue.key.id, queueItem.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
       console.log(data);
@@ -377,7 +381,7 @@ function reportQueueItem(queueItem) {
   try {
     Materialize.toast(getString("reporting", queueItem.name), 3000);
     var request = intelliqApi.reportQueueItem(queue.key.id, queueItem.key.id)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
       console.log(data);
@@ -397,7 +401,7 @@ function populateQueue() {
   try {
     Materialize.toast(getString("populatingQueue"), 3000);
     var request = intelliqApi.populateQueue(queue.key.id).withItems(25)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
       console.log(data);
@@ -429,7 +433,7 @@ function onAddNewCustomerModalSubmitted() {
     var request = intelliqApi.addQueueItem(queue.key.id)
         .withName(name)
         .hideName(hideName)
-        .setGoogleIdToken(authenticator.getInstance().getUserIdToken());
+        .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
       console.log(data);
