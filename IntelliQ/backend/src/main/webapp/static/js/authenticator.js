@@ -203,7 +203,7 @@ var authenticator = function(){
     }
   }
 
-  authenticator.requestUserFromGoogleIdToken = function() {
+  authenticator.requestIntelliqUserFromGoogleIdToken = function() {
     var promise = new Promise(function(resolve, reject) {
       try {
         var googleIdToken = authenticator.getGoogleUserIdToken();

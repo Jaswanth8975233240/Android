@@ -11,7 +11,7 @@ function initAuthentication() {
   authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
     if (isSignedIn) {
       var userIdToken = authenticator.getGoogleUserIdToken();
-      requestUserFromGoogleIdToken().then(function(user) {
+      authenticator.requestIntelliqUserFromGoogleIdToken.then(function(user) {
         console.log(user);
         intelliqUi.hideSignInForm();
 
