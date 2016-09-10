@@ -27,7 +27,7 @@ function initAuthentication() {
     if (isSignedIn) {
       statusChangeListener.onGoogleSignIn();
       authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
-        statusChangeListener.onUserAvailable();
+        statusChangeListener.onUserAvailable(user);
       }).catch(function(error) {
         console.log("Unable to get IntelliQ user from Google ID token: " + error);
         ui.showErrorMessage(error);
