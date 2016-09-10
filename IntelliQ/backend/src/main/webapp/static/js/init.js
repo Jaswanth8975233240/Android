@@ -8,6 +8,7 @@
     $('select').material_select();
     
     setupNavigation();
+    setupAuthenticationButtons();
   }); // end of document ready
 })(jQuery); // end of jQuery name space
 
@@ -16,54 +17,42 @@ function setupNavigation() {
   $("#nav-mobile-account-button").click(onAccountButtonClicked);
 }
 
-function initAuthentication() {
-  whenAvailable("authenticator", function() {
-    authenticator.getInstance(function(instance) {
-      // authenticator initialized
-    }, signInStatusChanged);
-  })
+function setupAuthenticationButtons() {
+  $("#signInWithGoogleButton").click(function() {
+    authenticator.signInToGoogle().then(function() {
+      ui.hideSignInForm();
+    }).catch(function(error) {
+      ui.showErrorMessage(error);
+    });
+  });
+
+  $("#signOutButton").click(function() {
+    authenticator.signOutFromGoogle().then(function() {
+      ui.hideSignOutForm();
+    }).catch(function(error) {
+      ui.showErrorMessage(error);
+    });
+  });
+
+  $("#switchAccountButton").click(function() {
+    authenticator.disconnectFromGoogle().then(function() {
+      ui.hideSignOutForm();
+    }).catch(function(error) {
+      ui.showErrorMessage(error);
+    });
+  });
 }
 
 function onAccountButtonClicked() {
-  whenAvailable("authenticator", function() {
-    authenticator.getInstance(function(instance) {
-      onSignInStatusChanged(authenticator.getInstance().isSignedIn());
-    }, onSignInStatusChanged);
-  })
-}
-
-function onSignInStatusChanged(isSignedIn) {
-  var auth = authenticator.getInstance();
-  if (auth.isSignedIn()) {
-    openSignOutForm();
-  } else {
-    openSignInForm();
-  }
-}
-
-function openSignInForm() {
-  $("#modal-signin").openModal();
-}
-
-function closeSignInForm() {
-  $("#modal-signin").closeModal();
-}
-
-function openSignOutForm() {
-  $("#modal-signout").openModal();
-}
-
-function closeSignOutForm() {
-  $("#modal-signout").closeModal();
-}
-
-function showErrorMessage(message) {
-  $("#modal-error-message").text(message);
-  $("#modal-error").openModal();
-}
-
-function hideErrorMessage() {
-  $("#modal-error").closeModal();
+  authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
+    if (isSignedIn) {
+      ui.showSignOutForm();
+    } else {
+      ui.showSignInForm();
+    }
+  }).catch(function(error) {
+    ui.showErrorMessage(error);
+  });
 }
 
 function openContactForm() {

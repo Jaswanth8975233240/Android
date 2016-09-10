@@ -8,14 +8,15 @@ var authenticator = function(){
   };
 
   authenticator.googleAuthenticationInitialized = false;
-  authenticator.onIntelliqUserAvailableListeners = [];
+  authenticator.statusChangeListeners = [];
 
   authenticator.CLIENT_ID_WEB = "1008259459239-t1huos5n6bhkin3is2jlqgkjv9h7mheh.apps.googleusercontent.com";
 
   authenticator.initializeGoogleAuthentication = function() {
     var promise = new Promise(function(resolve, reject) {
-      if (authenticator.googleAuthInitialized) {
+      if (authenticator.googleAuthenticationInitialized) {
         resolve();
+        return;
       }
 
       var onAuthApiAvailable = function() {
@@ -30,14 +31,20 @@ var authenticator = function(){
 
         var onGoogleSignInInitialized = function () {
           log("Google authentication initialized");
-          authenticator.googleAuthInitialized = true;
-          gapi.auth2.getAuthInstance().isSignedIn.listen(authenticator.onGoogleSignInStatusChanged);
+          authenticator.googleAuthenticationInitialized = true;
+          gapi.auth2.getAuthInstance().isSignedIn.listen(function(isSignedIn) {
+            if (isSignedIn) {
+              authenticator.onGoogleSignIn();
+            } else {
+              authenticator.onGoogleSignOut();
+            }
+          });
           resolve();
         }
 
         var onGoogleSignInInitializationFailed = function(error) {
           log("Google authentication initialization failed: " + error);
-          authenticator.googleAuthInitialized = false;
+          authenticator.googleAuthenticationInitialized = false;
           reject(error);
         }
 
@@ -129,29 +136,9 @@ var authenticator = function(){
     return promise;
   }
 
-  authenticator.onGoogleSignInStatusChanged = function(isSignedIn) {
-    if (isSignedIn) {
-      log("Google user status changed: signed in");
-      authenticator.onGoogleSignIn();
-    } else {
-      log("Google user status changed: signed out");
-      authenticator.onGoogleSignOut();
-    }
-
-    // TODO: notify callbacks
-  }
-
-  authenticator.onGoogleUserSignedIn = function() {
-    var googleUser = authenticator.getGoogleUser();
-    var profile = googleUser.getBasicProfile();
-    var googleIdToken = authenticator.getGoogleUserIdToken();
-    log("Google user signed in: " + profile.getName());
-  }
-
-  authenticator.onGoogleUserSignedOut = function () {
-    log("Google user signed out");
-  }
-
+  /*
+    Asynchronous and synchronous getters
+  */
   authenticator.requestGoogleSignInStatus = function() {
     var promise = new Promise(function(resolve, reject) {
       authenticator.initializeGoogleAuthentication().then(function() {
@@ -217,7 +204,7 @@ var authenticator = function(){
           if (user == null) {
             reject("Returned user is null");
           }
-          authenticator.notifyOnIntelliqUserAvailableListeners(user);
+          authenticator.onUserAvailable(user);
           resolve(user);
         }).catch(function(error) {
           reject(error);
@@ -229,13 +216,44 @@ var authenticator = function(){
     return promise;
   }
 
-  authenticator.registerOnIntelliqUserAvailableListener = function(listener) {
-    authenticator.onIntelliqUserAvailableListeners.push(listener);
+  /*
+    Status callback handling
+  */
+  authenticator.registerStatusChangeListener = function(listener) {
+    authenticator.statusChangeListeners.push(listener);
   }
 
-  authenticator.notifyOnIntelliqUserAvailableListeners = function(user) {
-    for (var i = 0; i < authenticator.onIntelliqUserAvailableListeners.length; i++) {
-      authenticator.onIntelliqUserAvailableListeners[i](user);
+  authenticator.onUserAvailable = function(user) {
+    for (var i = 0; i < authenticator.statusChangeListeners.length; i++) {
+      var callback = authenticator.statusChangeListeners[i].onUserAvailable;
+      if (typeof callback === 'function') {
+        callback(user);
+      }
+    }
+  }
+
+  authenticator.onGoogleSignIn = function() {
+    var googleUser = authenticator.getGoogleUser();
+    var profile = googleUser.getBasicProfile();
+    var googleIdToken = authenticator.getGoogleUserIdToken();
+    log("Google user signed in: " + profile.getName());
+
+    for (var i = 0; i < authenticator.statusChangeListeners.length; i++) {
+      var callback = authenticator.statusChangeListeners[i].onGoogleSignIn;
+      if (typeof callback === 'function') {
+        callback();
+      }
+    }
+  }
+
+  authenticator.onGoogleSignOut = function() {
+    log("Google user signed out");
+
+    for (var i = 0; i < authenticator.statusChangeListeners.length; i++) {
+      var callback = authenticator.statusChangeListeners[i].onGoogleSignOut;
+      if (typeof callback === 'function') {
+        callback();
+      }
     }
   }
 

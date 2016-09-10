@@ -11,9 +11,12 @@ var queueItemsUpdateIntervalObject;
 
 (function($){
   $(function(){
-    authenticator.registerOnIntelliqUserAvailableListener(function(user) {
-      updateQueue();
-    });
+    var statusChangeListener = {
+      onUserAvailable: function(user) {
+        updateQueue();
+      }
+    };
+    authenticator.registerStatusChangeListener(statusChangeListener);
   });
 })(jQuery);
 

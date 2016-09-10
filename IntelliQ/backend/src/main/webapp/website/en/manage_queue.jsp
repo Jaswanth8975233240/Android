@@ -53,7 +53,7 @@
             <div class="col s12 m12 l4 push-l8 vertical-spacing">
               <div class="col s12 card-spacing">
                 <a id="callNextCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
-                  <i class="material-icons right">group</i> 
+                  <i class="material-icons right">announcement</i> 
                   Call Next
                 </a>
                 <a id="addNewCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">

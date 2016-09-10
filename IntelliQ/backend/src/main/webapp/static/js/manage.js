@@ -5,58 +5,73 @@
 })(jQuery);
 
 /*
-  Initializes the authentication and prompts the user to sign in
+  Initializes the authentication
 */
 function initAuthentication() {
+  var statusChangeListener = {
+    onGoogleSignIn: function() {
+      ui.hideSignInForm();
+    },
+
+    onGoogleSignOut: function() {
+      ui.showSignInForm();
+    },
+    
+    onUserAvailable: function(user) {
+      console.log(user);
+    }
+  };
+  authenticator.registerStatusChangeListener(statusChangeListener);
+
   authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
     if (isSignedIn) {
+      statusChangeListener.onGoogleSignIn();
       authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
-        console.log(user);
-        intelliqUi.hideSignInForm();
+        statusChangeListener.onUserAvailable();
       }).catch(function(error) {
         console.log("Unable to get IntelliQ user from Google ID token: " + error);
-        intelliqUi.showErrorMessage(error);
+        ui.showErrorMessage(error);
       });
     } else {
-      intelliqUi.showSignInForm();
+      statusChangeListener.onGoogleSignOut();
     }
   }).catch(function(error) {
-    intelliqUi.showErrorMessage(error);
-  })
+    ui.showErrorMessage(error);
+  });
 }
 
 function renderBusinesses(entries, container) {
   var generateCardWrapper = function() {
-    var className = intelliqUi.generateColumnClassName(12, 6, 6);
-    return intelliqUi.generateCardWrapper(className);
+    var className = ui.generateColumnClassName(12, 6, 6);
+    return ui.generateCardWrapper(className);
   }
 
   var options = {};
-  options.itemGenerator = intelliqUi.generateBusinessCard;
+  options.itemGenerator = ui.generateBusinessCard;
   options.itemWrapperGenerator = generateCardWrapper;
   renderEntries(entries, container, options);
 }
 
 function renderQueues(entries, container) {
   var generateCardWrapper = function() {
-    var className = intelliqUi.generateColumnClassName(12, 6, 6);
-    return intelliqUi.generateCardWrapper(className);
+    var className = ui.generateColumnClassName(12, 6, 6);
+    return ui.generateCardWrapper(className);
   }
 
   var options = {};
-  options.itemGenerator = intelliqUi.generateQueueCard;
+  options.itemGenerator = ui.generateQueueCard;
   options.itemWrapperGenerator = generateCardWrapper;
   renderEntries(entries, container, options);
 }
 
 function renderQueueItems(entries, container) {
   var wrapperGenerator = function() {
-    var wrapper = intelliqUi.generateCollection();
+    var wrapper = ui.generateCollection();
     return wrapper;
   }
 
   var options = {};
-  options.itemGenerator = intelliqUi.generateQueueItemCollectionItem;
+  options.itemGenerator = ui.generateQueueItemCollectionItem;
   options.wrapperGenerator = wrapperGenerator;
   renderEntries(entries, container, options);
 }

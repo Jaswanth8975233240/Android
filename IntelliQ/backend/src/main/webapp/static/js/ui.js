@@ -1,4 +1,4 @@
-var intelliqUi = function(){
+var ui = function(){
 
   function log(message) {
     console.log("UI: " + message);
@@ -549,7 +549,7 @@ var intelliqUi = function(){
   }
 
   ui.hideSignOutForm = function() {
-    $("#modal-signout").openModal();
+    $("#modal-signout").closeModal();
   }
 
   ui.showErrorMessage = function(message) {
