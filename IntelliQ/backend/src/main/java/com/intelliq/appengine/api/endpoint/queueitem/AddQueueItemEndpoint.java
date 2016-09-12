@@ -53,18 +53,28 @@ public class AddQueueItemEndpoint extends Endpoint {
         QueueItemEntry queueItemEntry = new QueueItemEntry(queueKeyId);
         queueItemEntry.parseFromRequest(request);
 
+        // indicates that the item was created by the queue management
+        boolean addedByManagement = false;
+
         // assign the queue item to the current user
         UserEntry user = request.getUser();
         if (user != null) {
+            PermissionEntry editQueuePermission = new PermissionEntry();
+            editQueuePermission.setPermission(PermissionEntry.PERMISSION_EDIT);
+            editQueuePermission.setSubjectKeyId(queueKeyId);
+            addedByManagement = user.hasPermission(editQueuePermission);
+
             queueItemEntry.setUserKeyId(user.getKey().getId());
         }
 
         // make sure that user is not already in this queue
-        QueueItemEntry existingQueueItemEntry = QueueItemHelper.getQueueItemByUserKeyId(queueItemEntry.getUserKeyId(), queueItemEntry.getQueueKeyId());
-        if (existingQueueItemEntry != null) {
-            // return the existing queue item
-            response.setContent(existingQueueItemEntry);
-            return response;
+        if (queueItemEntry.getUserKeyId() > -1 && !addedByManagement) {
+            QueueItemEntry existingQueueItemEntry = QueueItemHelper.getQueueItemByUserKeyId(queueItemEntry.getUserKeyId(), queueItemEntry.getQueueKeyId());
+            if (existingQueueItemEntry != null) {
+                // return the existing queue item
+                response.setContent(existingQueueItemEntry);
+                return response;
+            }
         }
 
         // get next available ticket number
@@ -76,8 +86,10 @@ public class AddQueueItemEndpoint extends Endpoint {
 
         if (user != null) {
             // update user stats
-            user.getStats().setQueuesJoined(user.getStats().getQueuesJoined() + 1);
-            UserHelper.saveEntry(user);
+            if (!addedByManagement) {
+                user.getStats().setQueuesJoined(user.getStats().getQueuesJoined() + 1);
+                UserHelper.saveEntry(user);
+            }
 
             // add permission for queue item
             PermissionHelper.grantPermission(user, queueItemEntry, PermissionEntry.PERMISSION_OWN);

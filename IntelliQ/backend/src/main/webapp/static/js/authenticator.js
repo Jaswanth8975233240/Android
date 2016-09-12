@@ -1,218 +1,261 @@
-var authenticator = (function () {
+var authenticator = function(){
 
-	var instance;
-	
-	function createInstance() {
-		
-		function log(message) {
-			console.log("Authenticator: " + message);
-		}
+  function log(message) {
+    console.log("Authenticator: " + message);
+  }
 
-		var CLIENT_ID_WEB = "1008259459239-t1huos5n6bhkin3is2jlqgkjv9h7mheh.apps.googleusercontent.com";
-		var googleUser;
+  var authenticator = {
+  };
 
-		var instanceInitializedCallback;
-		var statusChangedCallback;
+  authenticator.googleAuthenticationInitialized = false;
+  authenticator.statusChangeListeners = [];
 
-		return {
-			
-			// initializes the instance
-			initialize: function () {
-				log("Initializing authenticator instance");
-				instance.parseSite();
-				instance.initializeGoogleSignIn();
-				instance.onInstanceInitialized();
-			},
+  authenticator.CLIENT_ID_WEB = "1008259459239-t1huos5n6bhkin3is2jlqgkjv9h7mheh.apps.googleusercontent.com";
 
-			// callback for the initialization
-			onInstanceInitialized: function () {
-				log("Authenticator initialized");
-				if (instance.instanceInitializedCallback != null) {
-					instance.instanceInitializedCallback(instance);
-				}
-			},
+  authenticator.initializeGoogleAuthentication = function() {
+    var promise = new Promise(function(resolve, reject) {
+      if (authenticator.googleAuthenticationInitialized) {
+        resolve();
+        return;
+      }
 
-			// looks for sign in buttons and registers onclick listeners
-			parseSite: function () {
-				var signInWithGoogleButton = document.getElementById("signInWithGoogleButton");
-				instance.registerSignInButton(signInWithGoogleButton);
-			},
+      var onAuthApiAvailable = function() {
+        log("Initializing Google authentication");
+        var params = {
+          client_id: authenticator.CLIENT_ID_WEB,
+          fetch_basic_profile: true
+        }
+        gapi.auth2.init(params);
 
-			// loads the Google auth API and initializes it
-			initializeGoogleSignIn: function () {
-				if (gapi.auth2 == null) {
-					log("Requesting Google auth2 API");
-					gapi.load('auth2', instance.initializeGoogleSignIn);
-					return;
-				}
+        var googleAuth = gapi.auth2.getAuthInstance();
 
-				log("Initializing Google sign in");
+        var onGoogleSignInInitialized = function () {
+          log("Google authentication initialized");
+          authenticator.googleAuthenticationInitialized = true;
+          gapi.auth2.getAuthInstance().isSignedIn.listen(function(isSignedIn) {
+            if (isSignedIn) {
+              authenticator.onGoogleSignIn();
+            } else {
+              authenticator.onGoogleSignOut();
+            }
+          });
+          resolve();
+        }
 
-				var params = {
-					client_id: CLIENT_ID_WEB,
-					fetch_basic_profile: true
-				}
-				gapi.auth2.init(params);
+        var onGoogleSignInInitializationFailed = function(error) {
+          log("Google authentication initialization failed: " + error);
+          authenticator.googleAuthenticationInitialized = false;
+          reject(error);
+        }
 
-				var googleAuth = gapi.auth2.getAuthInstance();
-				googleAuth.then(instance.onGoogleSignInInitialized, instance.onGoogleSignInInitializationFailed);
-			},
+        googleAuth.then(onGoogleSignInInitialized, onGoogleSignInInitializationFailed);
+      }
 
-			onGoogleSignInInitialized: function () {
-				log("Google sign in initialized");
-				instance.onGoogleSignInStatusChanged(instance.isSignedIn());
-				gapi.auth2.getAuthInstance().isSignedIn.listen(instance.onGoogleSignInStatusChanged);
-			},
+      if (gapi.auth2 == null) {
+        log("Requesting Google auth2 API");
+        gapi.load('auth2', onAuthApiAvailable);
+      } else {
+        onAuthApiAvailable();
+      }
+    });
+    return promise;
+  }
 
-			onGoogleSignInInitializationFailed: function (error) {
-				log("Google sign in initialization failed: " + error);
-			},
+  authenticator.signInToGoogle = function() {
+    var promise = new Promise(function(resolve, reject) {
+      authenticator.initializeGoogleAuthentication().then(function() {
+        try {
+          log("Signing in to Google");
+          var googleAuth = gapi.auth2.getAuthInstance();
+          var params =  {
+            fetch_basic_profile: true
+          }
+          googleAuth.signIn().then(function(value) {
+            log("Google sign in succeeded");
+            resolve();
+          }, function(error) {
+            log("Google sign in failed: " + error);
+            reject(error);
+          });
+        } catch (ex) {
+          log("Google sign in invoking failed: " + ex);
+          reject(error);
+        }
+      }).catch(function(error) {
+        reject(error);
+      });
+    });
+    return promise;
+  }
 
-			// invokes a Google sign in
-			signInWithGoogle: function () {
-				try {
-					log("Google sign in invoked");
-					var googleAuth = gapi.auth2.getAuthInstance();
-					var params =  {
-						fetch_basic_profile: true
-					}
+  authenticator.signOutFromGoogle = function() {
+    var promise = new Promise(function(resolve, reject) {
+      authenticator.initializeGoogleAuthentication().then(function() {
+        try {
+          log("Signing out from Google");
+          var googleAuth = gapi.auth2.getAuthInstance();
+          googleAuth.signOut().then(function(value) {
+            log("Google sign out succeeded");
+            resolve();
+          }, function(error) {
+            log("Google sign out failed: " + error);
+            reject(error);
+          });
+        } catch (ex) {
+          log("Google sign out invoking failed: " + ex);
+          reject(error);
+        }
+      }).catch(function(error) {
+        reject(error);
+      });
+    });
+    return promise;
+  }
 
-					var promise = googleAuth.signIn();
-					promise.then(function(value) {
-						log("Google sign in successfull");
-					}, function(error) {
-						log("Google sign in failed: " + error);
-					});
-				} catch (ex) {
-					log("Google sign in failed: " + ex);
-				}
-			},
+  authenticator.disconnectFromGoogle = function() {
+    var promise = new Promise(function(resolve, reject) {
+      authenticator.initializeGoogleAuthentication().then(function() {
+        try {
+          log("Disconnecting from Google");
+          var googleAuth = gapi.auth2.getAuthInstance();
+          googleAuth.disconnect().then(function(value) {
+            log("Google disconnection succeeded");
+            resolve();
+          }, function(error) {
+            log("Google disconnection failed: " + error);
+            reject(error);
+          });
+        } catch (ex) {
+          log("Google disconnection invoking failed: " + ex);
+          reject(error);
+        }
+      }).catch(function(error) {
+        reject(error);
+      });
+    });
+    return promise;
+  }
 
-			// invokes a Google sign out
-			signOutFromGoogle: function () {
-				log("Google sign out invoked");
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.signOut().then(function () {
-					log("User signed out");
-				}, function(error) {
-					log("Google sign out failed: " + error);
-				});
-			},
+  /*
+    Asynchronous and synchronous getters
+  */
+  authenticator.requestGoogleSignInStatus = function() {
+    var promise = new Promise(function(resolve, reject) {
+      authenticator.initializeGoogleAuthentication().then(function() {
+        resolve(gapi.auth2.getAuthInstance().isSignedIn.get());
+      }).catch(function(error) {
+        reject(error);
+      });
+    });
+    return promise;
+  }
 
-			// revokes all permissions
-			disconnectFromGoogle: function () {
-				log("Disconnection from Google invoked");
-				var auth2 = gapi.auth2.getAuthInstance();
-				auth2.disconnect().then(function () {
-					log("User disconnected");
-				}, function(error) {
-					log("Disconnecting from Google failed: " + error);
-				});
-			},
+  authenticator.getGoogleSignInStatus = function() {
+    try {
+      return gapi.auth2.getAuthInstance().isSignedIn.get();
+    } catch (ex) {
+      log("Unable to get Google sign in status")
+      return false;
+    }
+  }
 
-			// set the currently signed in Google user
-			setCurrentGoogleUser: function (user) {
-				try {
-					googleUser = user;
-					localStorage.setItem("googleUser", JSON.stringify(googleUser));
-				} catch (ex) {
-					log("Unable to set current Google user.")
-					return null;
-				}
-			},
+  authenticator.requestGoogleUser = function() {
+    var promise = new Promise(function(resolve, reject) {
+      authenticator.initializeGoogleAuthentication().then(function() {
+        var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+        resolve(googleUser);
+      }).catch(function(error) {
+        reject(error);
+      });
+    });
+    return promise;
+  }
 
-			// returns the currently signed in Google user, if available
-			getCurrentGoogleUser: function () {
-				try {
-					googleUser = gapi.auth2.getAuthInstance().currentUser.get();
-					if (googleUser == null) {
-						//googleUser = JSON.parse(localStorage.getItem("googleUser"));
-					}
-					return googleUser;
-				} catch (ex) {
-					log("Unable to get current Google user.")
-					return null;
-				}
-			},
+  authenticator.getGoogleUser = function() {
+    try {
+      return gapi.auth2.getAuthInstance().currentUser.get();
+    } catch (ex) {
+      log("Unable to get Google user")
+      return null;
+    }
+  }
 
-			// listener for the Google sign in status
-			onGoogleSignInStatusChanged: function (isSignedIn) {
-				if (isSignedIn) {
-					log("Google user status changed: signed in");
-					instance.onGoogleSignIn();
-				} else {
-					log("Google user status changed: signed out");
-					instance.onGoogleSignOut();
-				}
+  authenticator.getGoogleUserIdToken = function() {
+    try {
+      var googleUser = authenticator.getGoogleUser();
+      return googleUser.getAuthResponse().id_token;
+    } catch (ex) {
+      log("Unable to get Google user ID token")
+      return null;
+    }
+  }
 
-				if (instance.statusChangedCallback != null) {
-					instance.statusChangedCallback(isSignedIn);
-				} else {
-					log("Status change callback is null");
-				}
-			},
+  authenticator.requestIntelliqUserFromGoogleIdToken = function() {
+    var promise = new Promise(function(resolve, reject) {
+      try {
+        var googleIdToken = authenticator.getGoogleUserIdToken();
+        if (googleIdToken == null) {
+          throw "Token is null";
+        }
 
-			// callback for the Google sign in
-			onGoogleSignIn: function () {
-				instance.setCurrentGoogleUser(instance.getCurrentGoogleUser());
-				if (googleUser != null) {
-					var profile = googleUser.getBasicProfile();
-					log("Current user set to: " + profile.getName());
-					//log('ID: ' + profile.getId());
-					//log('Name: ' + profile.getName());
-					//log('Image URL: ' + profile.getImageUrl());
-					//log('Email: ' + profile.getEmail());
+        var signInRequest = intelliqApi.signInUser().setGoogleIdToken(googleIdToken);
+        signInRequest.send().then(function(data){
+          var user = intelliqApi.getUsersFromResponse(data)[0];
+          if (user == null) {
+            reject("Returned user is null");
+          }
+          authenticator.onUserAvailable(user);
+          resolve(user);
+        }).catch(function(error) {
+          reject(error);
+        });
+      } catch (ex) {
+        reject(ex);
+      }
+    });
+    return promise;
+  }
 
-					var googleIdToken = googleUser.getAuthResponse().id_token;
-					log("Google ID Token: " + googleIdToken);
-				}
-			},
+  /*
+    Status callback handling
+  */
+  authenticator.registerStatusChangeListener = function(listener) {
+    authenticator.statusChangeListeners.push(listener);
+  }
 
-			// callback for the Google sign out
-			onGoogleSignOut: function () {
-				googleUser = null;
-			},
+  authenticator.onUserAvailable = function(user) {
+    for (var i = 0; i < authenticator.statusChangeListeners.length; i++) {
+      var callback = authenticator.statusChangeListeners[i].onUserAvailable;
+      if (typeof callback === 'function') {
+        callback(user);
+      }
+    }
+  }
 
-			// returns the id token of the current user
-			getUserIdToken: function () {
-				try {
-					return gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token;
-				} catch (ex) {
-					log("Unable to get token")
-					return null;
-				}
-			},
+  authenticator.onGoogleSignIn = function() {
+    var googleUser = authenticator.getGoogleUser();
+    var profile = googleUser.getBasicProfile();
+    var googleIdToken = authenticator.getGoogleUserIdToken();
+    log("Google user signed in: " + profile.getName());
 
-			isSignedIn: function () {
-				return gapi.auth2.getAuthInstance().isSignedIn.get();
-			},
+    for (var i = 0; i < authenticator.statusChangeListeners.length; i++) {
+      var callback = authenticator.statusChangeListeners[i].onGoogleSignIn;
+      if (typeof callback === 'function') {
+        callback();
+      }
+    }
+  }
 
-			// adds onclick event listener to a passed DOM element
-			registerSignInButton: function (div) {
-				if (div != null) {
-					log("Registering sign in button: " + div.id);
-					div.onclick = instance.signInWithGoogle;
-				}
-			}
+  authenticator.onGoogleSignOut = function() {
+    log("Google user signed out");
 
-		};
-	};
+    for (var i = 0; i < authenticator.statusChangeListeners.length; i++) {
+      var callback = authenticator.statusChangeListeners[i].onGoogleSignOut;
+      if (typeof callback === 'function') {
+        callback();
+      }
+    }
+  }
 
-	return {
-		// Get the Singleton instance if one exists
-		// or create one if it doesn't
-		getInstance: function (newInstanceInitializedCallback, newStatusChangedCallback) {
-			if (!instance) {
-				instance = createInstance();
-				instance.instanceInitializedCallback = newInstanceInitializedCallback;
-				instance.statusChangedCallback = newStatusChangedCallback;
-				instance.initialize();
-			}
-			return instance;
-		}
-	};
-
-})();
-
-// Usage:
-// var auth = authenticator.getInstance();
+  return authenticator;
+}();

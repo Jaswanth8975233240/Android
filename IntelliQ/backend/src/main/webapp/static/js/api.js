@@ -21,14 +21,14 @@ var intelliqApi = function(){
   api.GOOGLE_API_TOKEN = "AIzaSyBtc8JtwfK8qT9TX8Tkln4nd7IwR0rP9dY";
 
   // Website (for displaying links)
-  api.HOST_INTELLIQ_ME = "http://intelliq.me/";
+  api.HOST_INTELLIQ_ME = "https://intelliq.me/";
 
   // Development server
   api.HOST_LOCAL = "http://localhost:8080/";
 
   // App Engine (for api requests)
   api.APP_ENGINE_VERSION = 2;
-  api.HOST_APP_ENGINE = "http://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
+  api.HOST_APP_ENGINE = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
 
   // Request endpoints
   if (useDevelopmentServer()) {
@@ -64,6 +64,7 @@ var intelliqApi = function(){
   api.ENDPOINT_QUEUE_ITEM_ADD = api.ENDPOINT_QUEUE_ITEM + "add/";
   api.ENDPOINT_QUEUE_ITEM_DELETE = api.ENDPOINT_QUEUE_ITEM + "delete/";
   api.ENDPOINT_QUEUE_ITEM_STATUS = api.ENDPOINT_QUEUE_ITEM + "status/";
+  api.ENDPOINT_QUEUE_ITEM_REPORT = api.ENDPOINT_QUEUE_ITEM + "report/";
 
   // Webpages
   if (useDevelopmentServer()) {
@@ -506,6 +507,13 @@ var intelliqApi = function(){
     return request;
   }
 
+  api.reportQueueItem = function(queueKeyId, queueItemKeyId) {
+    var request = api.request(api.ENDPOINT_QUEUE_ITEM_REPORT);
+    request.addParameter("queueKeyId", queueKeyId);
+    request.addParameter("queueItemKeyId", queueItemKeyId);
+    return request;
+  }
+
   api.setQueueItemStatus = function(queueKeyId, queueItemKeyId, status) {
     var request = api.request(api.ENDPOINT_QUEUE_ITEM_STATUS);
     request.addParameter("queueKeyId", queueKeyId);
@@ -644,7 +652,7 @@ var intelliqApi = function(){
     filter.byStatus = function(status) {
       var items = [];
       if (queueItems == null) {
-        return entries;
+        return items;
       }
       for (var i = 0; i < queueItems.length; i++) {
         var item = queueItems[i];
@@ -656,6 +664,34 @@ var intelliqApi = function(){
     }
 
     return filter;
+  }
+
+  api.sortQueueItems = function(queueItems) {
+    var sort = {};
+
+    sort.byTicketNumber = function() {
+      queueItems.sort(function(a, b) {
+        if (a.ticketNumber < b.ticketNumber)
+          return -1;
+        if (a.ticketNumber > b.ticketNumber)
+          return 1;
+        return 0;
+      });
+      return queueItems;
+    }
+
+    sort.byStatusChange = function() {
+      queueItems.sort(function(a, b) {
+        if (a.lastStatusChangeTimestamp > b.lastStatusChangeTimestamp)
+          return -1;
+        if (a.lastStatusChangeTimestamp < b.lastStatusChangeTimestamp)
+          return 1;
+        return 0;
+      });
+      return queueItems;
+    }
+
+    return sort;
   }
 
   /*

@@ -53,7 +53,7 @@
             <div class="col s12 m12 l4 push-l8 vertical-spacing">
               <div class="col s12 card-spacing">
                 <a id="callNextCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
-                  <i class="material-icons right">group</i> 
+                  <i class="material-icons right">announcement</i> 
                   Call Next
                 </a>
                 <a id="addNewCustomerButton" class="btn-large waves-effect waves-light primary-color fill-width disabled">
@@ -113,7 +113,7 @@
           </div>
         </div>
 
-        <!-- Misc -->
+        <!-- Miscellaneous -->
         <div class="section">
           <h5>Miscellaneous</h5>
           <div class="divider"></div>
@@ -140,7 +140,62 @@
 
           </div>
         </div>
+
       </div>
+
+      <!-- Add queue item modal -->
+      <div id="addCustomerModal" class="modal">
+        <div class="modal-content">
+          <h4>Add a customer</h4>
+          <p>Customer name</p>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="newCustomerName" type="text">
+              <label for="newCustomerName">Name</label>
+            </div>
+          </div>
+
+          <p>Display name</p>
+          <div class="switch">
+            <label>private <input id="newCustomerVisibility" type="checkbox" checked="checked"> <span class="lever"></span> public</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a id="sbmitNewCustomerButton" class="modal-action modal-close waves-effect waves-green btn-flat">Add</a>
+        </div>
+      </div>
+
+      <!-- Show queue item details modal -->
+      <div id="customerDetailsModal" class="modal">
+        <div class="modal-content">
+          <h4>Customer Details</h4>
+          
+          <table class="striped">
+            <tbody>
+              <tr>
+                <td>Ticket number</td>
+                <td id="customerTicketNumber">Unknown</td>
+              </tr>
+              <tr>
+                <td>Joined queue</td>
+                <td id="customerQueueEntry">Unknown</td>
+              </tr>
+              <tr>
+                <td>Last status change</td>
+                <td id="customerStatusChange">Unknown</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <br/>
+          <p>If this customer doesn't show up or tries to abuse the waiting queue system, please <a id="reportCustomerButton">send us a report</a>. We will take appropriate measures if this happens multiple times.</p>
+
+        </div>
+        <div class="modal-footer">
+          <a id="closeCustomerDetailsButton" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+      </div>
+
     </main>
     <%@include file="../includes/en/common_footer.jsp"%>
     <script src="${staticUrl}js/manage_queue.js"></script>

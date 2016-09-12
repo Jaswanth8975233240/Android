@@ -1,7 +1,7 @@
 var baseUrl = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "";
 
 function whenAvailable(name, callback) {
-    var interval = 50; // ms
+    var interval = 50;
     window.setTimeout(function() {
         if (window[name]) {
             callback(window[name]);

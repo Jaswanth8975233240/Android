@@ -211,6 +211,7 @@ public class QueueHelper {
         query.setOrdering("entryTimestamp descending");
         query.declareParameters("long value");
         query.setRange(startIndex, count);
+        query.setOrdering("ticketNumber ascending");
 
         List<QueueItemEntry> results = new ArrayList<QueueItemEntry>();
         try {

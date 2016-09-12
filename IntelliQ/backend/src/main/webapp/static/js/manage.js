@@ -5,103 +5,73 @@
 })(jQuery);
 
 /*
-  Makes sure that we have a valid token to send authorized
-  API requests. Invokes a sign-in if needed.
+  Initializes the authentication
 */
 function initAuthentication() {
-  whenAvailable("authenticator", function() {
-    authenticator.getInstance(function(instance) {
-      // authenticator initialized
-    }, signInStatusChanged);
-  })
-}
+  var statusChangeListener = {
+    onGoogleSignIn: function() {
+      ui.hideSignInForm();
+    },
 
-/*
-  Callback for the authentication flow
-*/
-function signInStatusChanged(isSignedIn) {
-  if (isSignedIn) {
-    var googleUser = authenticator.getInstance().getCurrentGoogleUser();
-    var profile = googleUser.getBasicProfile();
-    //Materialize.toast(getString("signedInAs", profile.getName()), 5000);
-    closeSignInForm();
-
-    requestUserFromGoogleIdToken().then(function(user) {
+    onGoogleSignOut: function() {
+      ui.showSignInForm();
+    },
+    
+    onUserAvailable: function(user) {
       console.log(user);
-      if (typeof onUserReady !== "undefined") {
-        onUserReady(user);
-      }
-    }).catch(function(error) {
-      console.log("Unable to get IntelliQ user from Google ID token: " + error);
-      showErrorMessage(error);
-    });
-  } else {
-    //Materialize.toast(getString("signedOut"), 5000);
-    openSignInForm();
-  }
-}
-
-/*
-  Tries to get an (IntelliQ-) user object from the currently
-  active Google ID token
-*/
-function requestUserFromGoogleIdToken() {
-  var promise = new Promise(function(resolve, reject) {
-    try {
-      var googleIdToken = authenticator.getInstance().getUserIdToken();
-      if (googleIdToken == null) {
-        throw "Token is null";
-      }
-
-      var signInRequest = intelliqApi.signInUser().setGoogleIdToken(googleIdToken);
-      signInRequest.send().then(function(data){
-        var user = intelliqApi.getUsersFromResponse(data)[0];
-        if (user == null) {
-          reject("Returned user is null");
-        }
-        resolve(user);
-      }).catch(function(error){
-        reject(error);
-      });
-    } catch (ex) {
-      reject(ex);
     }
+  };
+  authenticator.registerStatusChangeListener(statusChangeListener);
+
+  authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
+    if (isSignedIn) {
+      statusChangeListener.onGoogleSignIn();
+      authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
+        statusChangeListener.onUserAvailable(user);
+      }).catch(function(error) {
+        console.log("Unable to get IntelliQ user from Google ID token: " + error);
+        ui.showErrorMessage(error);
+      });
+    } else {
+      statusChangeListener.onGoogleSignOut();
+    }
+  }).catch(function(error) {
+    ui.showErrorMessage(error);
   });
-  return promise;
 }
 
 function renderBusinesses(entries, container) {
   var generateCardWrapper = function() {
-    var className = intelliqUi.generateColumnClassName(12, 6, 6);
-    return intelliqUi.generateCardWrapper(className);
+    var className = ui.generateColumnClassName(12, 6, 6);
+    return ui.generateCardWrapper(className);
   }
 
   var options = {};
-  options.itemGenerator = intelliqUi.generateBusinessCard;
+  options.itemGenerator = ui.generateBusinessCard;
   options.itemWrapperGenerator = generateCardWrapper;
   renderEntries(entries, container, options);
 }
 
 function renderQueues(entries, container) {
   var generateCardWrapper = function() {
-    var className = intelliqUi.generateColumnClassName(12, 6, 6);
-    return intelliqUi.generateCardWrapper(className);
+    var className = ui.generateColumnClassName(12, 6, 6);
+    return ui.generateCardWrapper(className);
   }
 
   var options = {};
-  options.itemGenerator = intelliqUi.generateQueueCard;
+  options.itemGenerator = ui.generateQueueCard;
   options.itemWrapperGenerator = generateCardWrapper;
   renderEntries(entries, container, options);
 }
 
 function renderQueueItems(entries, container) {
   var wrapperGenerator = function() {
-    var wrapper = intelliqUi.generateCollection();
+    var wrapper = ui.generateCollection();
     return wrapper;
   }
 
   var options = {};
-  options.itemGenerator = intelliqUi.generateQueueItemCollectionItem;
+  options.itemGenerator = ui.generateQueueItemCollectionItem;
   options.wrapperGenerator = wrapperGenerator;
   renderEntries(entries, container, options);
 }
@@ -154,4 +124,8 @@ function renderEntries(entries, container, options) {
     container.show();
     container.parent().find(".emptyState").addClass("hide");
   }
+
+  // re-initialize tooltips
+  $(".material-tooltip").remove();
+  $(".tooltipped").tooltip({ delay: 250 });
 }

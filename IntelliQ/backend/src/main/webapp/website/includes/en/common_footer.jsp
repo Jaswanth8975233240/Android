@@ -2,11 +2,27 @@
     <!-- Sign in modal -->
     <div id="modal-signin" class="modal">
       <div class="modal-content">
-        <h4>Connect your account</h4>
-        <p>Please sign in with your Google account to use this feature. In order to prevent misuse and spam, certain actions you perform will be tracked and coupled with your account.</p>
+        <h4>Sign In</h4>
+        <p>Please sign in with your Google account. If you don't have an account, you can create one <a href="https://accounts.google.com/SignUp" target="_blank">here</a>. In order to prevent misuse and spam, certain actions you perform will be tracked and coupled with your account.</p>
         <a id="signInWithGoogleButton" class="btn-large waves-effect waves-light primary-color">
           <i class="material-icons right">account_circle</i>
-          Connect Google Account
+          Google Sign In
+        </a>
+      </div>
+    </div>
+
+    <!-- Sign out modal -->
+    <div id="modal-signout" class="modal">
+      <div class="modal-content">
+        <h4>Sign Out</h4>
+        <p>You can sign out or switch your account using the buttons below.</p>
+        <a id="signOutButton" class="btn-large waves-effect waves-light primary-color">
+          <i class="material-icons right">account_circle</i>
+          Sign Out
+        </a>
+        <a id="switchAccountButton" class="btn-large waves-effect waves-light primary-color">
+          <i class="material-icons right">supervisor_account</i>
+          Switch Account
         </a>
       </div>
     </div>
@@ -64,6 +80,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="${staticUrl}js/materialize.js"></script>
     <script src="${staticUrl}js/init.js"></script>
+    <script src="${staticUrl}js/tracking.js"></script>
     <script src="${staticUrl}js/general.js"></script>
     <script src="${staticUrl}js/authenticator.js" defer></script>
     <script src="${staticUrl}js/api.js" defer></script>
