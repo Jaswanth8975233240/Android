@@ -22,7 +22,7 @@
 								</h2>
 								<h5 class="light center white-text">For Users</h5>
 	
-								<p class="light white-text center">Use your waiting time more effectively and download the free IntelliQ app</p>
+								<p class="light white-text center">Use your waiting time more effectively and download the free IntelliQ.me app</p>
 	
 								<div class="row center">
 									<a href="${rootUrl}/apps/" class="btn-large waves-effect waves-light accent-color">Get the App</a>
@@ -37,7 +37,7 @@
 								</h2>
 								<h5 class="light center white-text">For Business</h5>
 	
-								<p class="light white-text center">Learn how to get more satisfied customers and save costs by using IntelliQ</p>
+								<p class="light white-text center">Learn how to get more satisfied customers and save costs by using IntelliQ.me</p>
 	
 								<div class="row center">
 									<a href="${rootUrl}/business/" class="btn-large waves-effect waves-light accent-color">Learn More</a>

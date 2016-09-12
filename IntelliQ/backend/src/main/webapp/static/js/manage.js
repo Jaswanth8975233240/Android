@@ -11,6 +11,12 @@ function initAuthentication() {
   var statusChangeListener = {
     onGoogleSignIn: function() {
       ui.hideSignInForm();
+      authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
+        
+      }).catch(function(error) {
+        console.log("Unable to get IntelliQ user from Google ID token: " + error);
+        ui.showErrorMessage(error);
+      });
     },
 
     onGoogleSignOut: function() {
@@ -26,12 +32,6 @@ function initAuthentication() {
   authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
     if (isSignedIn) {
       statusChangeListener.onGoogleSignIn();
-      authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
-        statusChangeListener.onUserAvailable(user);
-      }).catch(function(error) {
-        console.log("Unable to get IntelliQ user from Google ID token: " + error);
-        ui.showErrorMessage(error);
-      });
     } else {
       statusChangeListener.onGoogleSignOut();
     }
