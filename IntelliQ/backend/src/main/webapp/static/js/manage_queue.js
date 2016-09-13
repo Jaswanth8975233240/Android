@@ -466,7 +466,39 @@ function showQueueItemDetailsModal(queueItem) {
   });
 
   modal.openModal();
+
+  // request more user details
+  requestUser(queueItem.userKeyId).then(function(user) {
+    console.log(user);
+  }).catch(function(error) {
+    console.log(error);
+  });
+  
   tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Show queue item details", queueItem.name, queueItem.ticketNumber);
+}
+
+function requestUser(userKeyId) {
+  var promise = new Promise(function(resolve, reject) {
+    if (userKeyId > -1) {
+      var googleIdToken = authenticator.getGoogleUserIdToken();
+      var request = intelliqApi.getUser(userKeyId)
+          .setGoogleIdToken(googleIdToken);
+
+      request.send().then(function(data){
+        var users = intelliqApi.getUsersFromResponse(data);
+        if (users.length > 0) {
+          resolve(users[0]);
+        } else {
+          reject("User not found");
+        }
+      }).catch(function(error){
+        reject(error);
+      });
+    } else {
+      reject("Invalid user key ID");
+    }
+  });
+  return promise;
 }
 
 function setupQueueManagementButtons() {

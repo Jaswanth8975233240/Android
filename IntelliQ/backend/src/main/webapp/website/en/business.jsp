@@ -48,7 +48,7 @@
 							</h2>
 							<h5 class="center">Less waiting time</h5>
 	
-							<p class="light">IntelliQ will let your customers know how many people are in front of them and provides an estimation about the remaining waiting time. 
+							<p class="light">IntelliQ.me will let your customers know how many people are in front of them and provides an estimation about the remaining waiting time. 
 							This way customers can use their time outside of your waiting room.
 							Our app will let them know when it's time to get back to your business if they left your waiting room.</p>
 						</div>
@@ -62,7 +62,7 @@
 							<h5 class="center">Lower costs</h5>
 	
 							<p class="light">Existing ticketing solutions need maintenance and supplies of new printable paper. 
-							IntelliQ causes no costs and doesn't need an proprietary hardware - it's an inexpensive and environmentally friendly solution even for large businesses.
+							IntelliQ.me causes no costs and doesn't need an proprietary hardware - it's an inexpensive and environmentally friendly solution even for large businesses.
 							Initial costs for ticket dispensers and equipment can also be saved.</p>
 						</div>
 					</div>
@@ -75,7 +75,7 @@
 							<h5 class="center">More satisfied customers</h5>
 	
 							<p class="light">Time spent in a waiting room will be perceived as unpleasant, no matter how well you furnish it.
-							With IntelliQ your customers can spend their waiting time however they like and don't connect unpleasant feelings while waiting with your business.
+							With IntelliQ.me your customers can spend their waiting time however they like and don't connect unpleasant feelings while waiting with your business.
 							Being able to offer an estimation about remaining waiting time is a competitive advantage for your business.</p>
 						</div>
 					</div>
