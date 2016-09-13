@@ -536,6 +536,59 @@ var ui = function(){
     return getString("unknown");
   }
 
+  /*
+    Location
+  */
+  ui.getDistance = function() {
+    var distance = {};
+
+    var isValidLocation = function(lat, lon) {
+      if (lat != 0 && lat != -1 && lon != 0 && lon != -1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    var calculateDistance = function(lat1, lon1, lat2, lon2) {
+      var p = 0.017453292519943295; // Math.PI / 180
+      var c = Math.cos;
+      var a = 0.5 - c((lat2 - lat1) * p)/2 + 
+              c(lat1 * p) * c(lat2 * p) * 
+              (1 - c((lon2 - lon1) * p))/2;
+      return 12742 * Math.asin(Math.sqrt(a)) * 1000; // 2 * R; R = 6371 km
+    }
+
+    distance.from = function(lat, lon) {
+      distance.fromLat = lat;
+      distance.fromLon = lon;
+      return distance;
+    }
+
+    distance.to = function(lat, lon) {
+      distance.toLat = lat;
+      distance.toLon = lon;
+
+      var validFrom = isValidLocation(distance.fromLat, distance.fromLon);
+      var validTo = isValidLocation(distance.toLat, distance.toLon);
+      if (!validFrom || !validTo) {
+        distance.value = -1;
+      } else {
+        distance.value = calculateDistance(distance.fromLat, distance.fromLon, distance.toLat, distance.toLon);
+      }
+      return distance;
+    }
+
+    distance.inMeters = function() {
+      return distance.value;
+    }
+
+    return distance;
+  }
+
+  /*
+    Modals
+  */
   ui.showSignInForm = function() {
     $("#modal-signin").openModal();
   }

@@ -184,6 +184,14 @@
                 <td>Last status change</td>
                 <td id="customerStatusChange">Unknown</td>
               </tr>
+              <tr>
+                <td>Distance</td>
+                <td id="customerDistance">Unknown</td>
+              </tr>
+              <tr>
+                <td>Language</td>
+                <td id="customerLanguage">Unknown</td>
+              </tr>
             </tbody>
           </table>
 
