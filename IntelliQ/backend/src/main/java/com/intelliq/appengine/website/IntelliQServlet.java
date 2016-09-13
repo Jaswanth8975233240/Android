@@ -52,7 +52,11 @@ public class IntelliQServlet extends HttpServlet {
                 //forwardUrl += "manage/overviewservlet/";
             }
         } else if (requestUrl.contains("/apps/")) {
-            forwardUrl += "appsservlet/";
+            if (requestUrl.contains("/web/")) {
+                forwardUrl += "webappservlet/";
+            } else {
+                forwardUrl += "appsservlet/";
+            }
         } else if (requestUrl.contains("/unternehmen/") || requestUrl.contains("/business/")) {
             forwardUrl += "businessservlet/";
         } else if (requestUrl.contains("/signin/")) {

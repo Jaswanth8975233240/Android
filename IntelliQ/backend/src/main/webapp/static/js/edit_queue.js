@@ -333,7 +333,7 @@ function updateQueueLocationMarker(latitude, longitude) {
 // and reverse-geocodes the address
 function updateFormWithDeviceLocation() {
   Materialize.toast(getString("locatingDevice"), 3000);
-  getDeviceLocation().then(function(location){
+  requestDeviceLocation().then(function(location){
     deviceLocation = location;
 
     var latitude = location.coords.latitude;

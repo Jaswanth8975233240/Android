@@ -1,6 +1,9 @@
+var deviceLocation;
+
 (function($){
   $(function(){
     initAuthentication();
+    requestNearbyQueues();
   });
 })(jQuery);
 
@@ -20,11 +23,12 @@ function initAuthentication() {
     },
 
     onGoogleSignOut: function() {
-      ui.showSignInForm();
+      ui.hideSignOutForm();
+      //ui.showSignInForm();
     },
     
     onUserAvailable: function(user) {
-      console.log(user);
+      
     }
   };
   authenticator.registerStatusChangeListener(statusChangeListener);
@@ -40,16 +44,28 @@ function initAuthentication() {
   });
 }
 
-function renderBusinesses(entries, container) {
-  var generateCardWrapper = function() {
-    var className = ui.generateColumnClassName(12, 6, 6);
-    return ui.generateCardWrapper(className);
-  }
+function requestNearbyQueues() {
+  // request device location
+  requestDeviceLocation().then(function(location){
+    deviceLocation = location;
 
-  var options = {};
-  options.itemGenerator = ui.generateBusinessCard;
-  options.itemWrapperGenerator = generateCardWrapper;
-  ui.renderEntries(entries, container, options);
+    var latitude = location.coords.latitude;
+    var longitude = location.coords.longitude;
+
+    // request queues at location
+    var request = intelliqApi.getNearbyQueues(latitude, longitude);
+    request.send().then(function(data){
+      var queues = intelliqApi.getQueuesFromBusinessResponse(data);
+      console.log(queues);
+      renderQueues(queues, $("#queuesContainer"));
+    }).catch(function(error){
+      console.log(error);
+      showErrorMessage(error);
+    });
+  }).catch(function(error){
+    console.log(error);
+    showErrorMessage(getString("locationUnavailable") + ": " + error);
+  });
 }
 
 function renderQueues(entries, container) {
@@ -61,17 +77,5 @@ function renderQueues(entries, container) {
   var options = {};
   options.itemGenerator = ui.generateQueueCard;
   options.itemWrapperGenerator = generateCardWrapper;
-  ui.renderEntries(entries, container, options);
-}
-
-function renderQueueItems(entries, container) {
-  var wrapperGenerator = function() {
-    var wrapper = ui.generateCollection();
-    return wrapper;
-  }
-
-  var options = {};
-  options.itemGenerator = ui.generateQueueItemCollectionItem;
-  options.wrapperGenerator = wrapperGenerator;
   ui.renderEntries(entries, container, options);
 }

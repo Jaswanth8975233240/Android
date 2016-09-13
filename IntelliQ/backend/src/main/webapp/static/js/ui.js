@@ -536,6 +536,60 @@ var ui = function(){
     return getString("unknown");
   }
 
+  ui.renderEntries = function(entries, container, options) {
+    if (container == null || container.length < 1) {
+      return;
+    }
+    container.empty();
+    var wrapper = container;
+
+    if (options.wrapperGenerator != null) {
+      wrapper = options.wrapperGenerator();
+    }
+
+    for (var i = 0; i < entries.length; i++) {
+      try {
+        // create a item
+        var item = options.itemGenerator(entries[i]);
+
+        if (options.itemWrapperGenerator != null) {
+          // create a div that wraps the item
+          var itemWrapper = options.itemWrapperGenerator();
+
+          // render the item in the item wrapper
+          item.renderIn(itemWrapper);
+
+          // add the item wrapper to the wrapper
+          wrapper.append(itemWrapper);
+        } else {
+          // add the item to the wrapper
+          wrapper.append(item);
+        }
+      } catch (ex) {
+        console.log("Unable to render entry:");
+        console.log(ex);
+      }
+    }
+
+    if (options.wrapperGenerator != null) {
+      container.append(wrapper);
+    } else {
+      container = wrapper;
+    }
+
+    if (entries.length < 1) {
+      container.hide();
+      container.parent().find(".emptyState").removeClass("hide");
+    } else {
+      container.show();
+      container.parent().find(".emptyState").addClass("hide");
+    }
+
+    // re-initialize tooltips
+    $(".material-tooltip").remove();
+    $(".tooltipped").tooltip({ delay: 250 });
+  }
+
   /*
     Location
   */

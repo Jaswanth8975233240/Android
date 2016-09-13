@@ -243,4 +243,22 @@
         <url-pattern>/intelliq/en/display/queueservlet/*</url-pattern>
     </servlet-mapping>
     
+    <!-- Web-App servlet -->
+    <servlet>
+        <servlet-name>de/apps/web</servlet-name>
+        <jsp-file>/website/en/webapp.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>de/apps/web</servlet-name>
+        <url-pattern>/intelliq/de/webappservlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>en/apps/web</servlet-name>
+        <jsp-file>/website/en/webapp.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>en/apps/web</servlet-name>
+        <url-pattern>/intelliq/en/webappservlet/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>

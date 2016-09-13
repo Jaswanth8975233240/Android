@@ -49,6 +49,7 @@
         "editQueue": "Edit Queue",
         "populatingQueue": "Popuating queue",
 
+        "locationUnavailable": "Location unavailable",
         "locatingDevice": "Updating device location",
         "geocodingAddress": "Getting location for address",
         "geocodingLocation": "Getting address for location",

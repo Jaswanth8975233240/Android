@@ -52,6 +52,7 @@ var intelliqApi = function(){
 
   api.ENDPOINT_QUEUE = api.ENDPOINT_API + "queue/";
   api.ENDPOINT_QUEUE_GET = api.ENDPOINT_QUEUE + "get/";
+  api.ENDPOINT_QUEUE_NEARBY = api.ENDPOINT_QUEUE + "nearby/";
   api.ENDPOINT_QUEUE_ADD = api.ENDPOINT_QUEUE + "add/";
   api.ENDPOINT_QUEUE_EDIT = api.ENDPOINT_QUEUE + "edit/";
   api.ENDPOINT_QUEUE_POPULATE = api.ENDPOINT_QUEUE + "populate/";
@@ -346,6 +347,18 @@ var intelliqApi = function(){
   api.getQueue = function(queueKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_GET);
     request.addParameter("queueKeyId", queueKeyId);
+    return request;
+  }
+
+  api.getNearbyQueues = function(latitude, longitude) {
+    var request = api.request(api.ENDPOINT_QUEUE_NEARBY);
+    request.addParameter("latitude", latitude);
+    request.addParameter("longitude", longitude);
+
+    request.inRange = function(distance) {
+      request.addParameter("distance", distance);
+    }
+
     return request;
   }
 
