@@ -5,23 +5,29 @@ var googleMap; // the Google Maps API object
 var deviceLocationMarker; // map marker for the current location
 var queueLocationMarker; // map marker for the new queue location
 
-window.onload = function(event) {
-  $("#saveQueueButton").click(saveNewQueue);
-  updateFormWithUrlParameterData();
-};
+(function($){
+  $(function(){
 
-var onUserReady = function(user) {
-  var queueKeyId = getUrlParam("queueKeyId");
-  requestExistingQueueData(queueKeyId);
+    $("#saveQueueButton").click(saveNewQueue);
+    updateFormWithUrlParameterData();
 
-  // update the UI
-  if (queueKeyId == null) {
-    showAddQueueUi();
-    updateFormWithDeviceLocation();
-  } else {
-    showEditQueueUi();
-  }
-}
+    var statusChangeListener = {
+      onUserAvailable: function(user) {
+        var queueKeyId = getUrlParam("queueKeyId");
+        requestExistingQueueData(queueKeyId);
+
+        // update the UI
+        if (queueKeyId == null) {
+          showAddQueueUi();
+          updateFormWithDeviceLocation();
+        } else {
+          showEditQueueUi();
+        }
+      }
+    };
+    authenticator.registerStatusChangeListener(statusChangeListener);
+  });
+})(jQuery);
 
 // fetches an existing queue from the API, if the required
 // url param is set. Then updates the form with the queue data
@@ -173,7 +179,7 @@ function saveNewQueue() {
 }
 
 function updateExistingQueue(queue) {
-  var googleIdToken = authenticator.getInstance().getUserIdToken()
+  var googleIdToken = authenticator.getGoogleUserIdToken();
   return intelliqApi
       .editQueue(queue)
       .setGoogleIdToken(googleIdToken)
@@ -181,7 +187,7 @@ function updateExistingQueue(queue) {
 }
 
 function addNewQueue(queue) {
-  var googleIdToken = authenticator.getInstance().getUserIdToken()
+  var googleIdToken = authenticator.getGoogleUserIdToken();
   return intelliqApi
       .addQueue(queue)
       .setGoogleIdToken(googleIdToken)

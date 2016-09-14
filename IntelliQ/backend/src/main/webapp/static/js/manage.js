@@ -47,7 +47,7 @@ function renderBusinesses(entries, container) {
   }
 
   var options = {};
-  options.itemGenerator = ui.generateBusinessCard;
+  options.itemGenerator = ui.generateManageBusinessCard;
   options.itemWrapperGenerator = generateCardWrapper;
   ui.renderEntries(entries, container, options);
 }
@@ -59,7 +59,7 @@ function renderQueues(entries, container) {
   }
 
   var options = {};
-  options.itemGenerator = ui.generateQueueCard;
+  options.itemGenerator = ui.generateManageQueueCard;
   options.itemWrapperGenerator = generateCardWrapper;
   ui.renderEntries(entries, container, options);
 }

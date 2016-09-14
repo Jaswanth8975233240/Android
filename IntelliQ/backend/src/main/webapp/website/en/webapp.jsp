@@ -37,7 +37,7 @@
                   <i class="material-icons right">group_add</i> 
                   Create a Queue
                 </a>
-                <blockquote>You can create a new queue at any time. It's free, no payment information required.</blockquote>
+                <blockquote>You can create a new queue at any time. It's free!</blockquote>
               </div>
             </div>
 

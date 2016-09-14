@@ -52,7 +52,7 @@ function requestNearbyQueues() {
     var longitude = location.coords.longitude;
 
     // request queues at location
-    var request = intelliqApi.getNearbyQueues(latitude, longitude);
+    var request = intelliqApi.getNearbyQueues(latitude, longitude).includeBusinesses(true);
     request.send().then(function(data){
       var queues = intelliqApi.getQueuesFromBusinessResponse(data);
       console.log(queues);

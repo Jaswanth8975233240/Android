@@ -357,6 +357,16 @@ var intelliqApi = function(){
 
     request.inRange = function(distance) {
       request.addParameter("distance", distance);
+      return request;
+    }
+
+    request.includeBusinesses = function(value) {
+      if (value) {
+        request.addParameter("includeBusinesses", "true");
+      } else {
+        request.addParameter("includeBusinesses", "false");
+      }
+      return request;
     }
 
     return request;

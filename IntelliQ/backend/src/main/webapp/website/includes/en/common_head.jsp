@@ -44,6 +44,8 @@
         "deletingQueueItems": "Deleting queue items",
         "noQueueItems": "No queue items available",
 
+        "edit": "Edit",
+        "manage": "Manage",
         "editBusiness": "Edit Business",
         "addBusiness": "Add Business",
         "editQueue": "Edit Queue",

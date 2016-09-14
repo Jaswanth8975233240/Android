@@ -414,16 +414,45 @@ var ui = function(){
     card.withRevealableContent(revealableContent).withTitle(business.name);
 
     var manageUrl = intelliqApi.getUrls().forBusiness(business).manage();
-    var manageAction = ui.generateAction("Manage", manageUrl);
+    var manageAction = ui.generateAction(getString("manage"), manageUrl);
 
     var editUrl = intelliqApi.getUrls().forBusiness(business).edit();
-    var editAction = ui.generateAction("Edit", editUrl);
+    var editAction = ui.generateAction(getString("edit"), editUrl);
     card.withActions([manageAction, editAction]);
 
     return card;
   }
 
-  ui.generateQueueCard = function(queue) {
+  ui.generateManageBusinessCard = function(business) {
+    var card = ui.generateCard()
+
+    var imageWidth = Math.min(500, $(window).width() / 2);
+    var imageSrc = intelliqApi.getUrls().forImage(business.logoImageKeyId).resizedTo(imageWidth);
+    var image = $("<img>", {
+      "src": imageSrc,
+      "class": "animated activator",
+      "alt": business.name + " Cover"
+    });
+
+    card.withImage(image);
+    card.withImageRatio(3/2);
+
+    card.withContent().withTitle(business.name, false);
+
+    var revealableContent = $("<p>").text(business.mail);
+    card.withRevealableContent(revealableContent).withTitle(business.name);
+
+    var manageUrl = intelliqApi.getUrls().forBusiness(business).manage();
+    var manageAction = ui.generateAction(getString("manage"), manageUrl);
+
+    var editUrl = intelliqApi.getUrls().forBusiness(business).edit();
+    var editAction = ui.generateAction(getString("edit"), editUrl);
+    card.withActions([manageAction, editAction]);
+
+    return card;
+  }
+
+  ui.generateManageQueueCard = function(queue) {
     var card = ui.generateCard()
 
     var imageWidth = Math.min(500, $(window).width() / 2);
@@ -443,10 +472,10 @@ var ui = function(){
     card.withRevealableContent(revealableContent).withTitle(queue.name);
 
     var manageUrl = intelliqApi.getUrls().forQueue(queue).manage();
-    var manageAction = ui.generateAction("Manage", manageUrl);
+    var manageAction = ui.generateAction(getString("manage"), manageUrl);
 
     var editUrl = intelliqApi.getUrls().forQueue(queue).edit();
-    var editAction = ui.generateAction("Edit", editUrl);
+    var editAction = ui.generateAction(getString("edit"), editUrl);
     card.withActions([manageAction, editAction]);
 
     return card;
