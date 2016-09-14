@@ -3,7 +3,6 @@ var deviceLocation;
 (function($){
   $(function(){
     initAuthentication();
-    requestNearbyQueues();
   });
 })(jQuery);
 

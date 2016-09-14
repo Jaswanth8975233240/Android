@@ -9,10 +9,10 @@
 
           <ul id="nav-mobile" class="side-nav">
             <li><a href="${rootUrl}/apps/">Get the app</a></li>
-            <li><a href="${rootUrl}/business/">Learn more</a></li>
             <div class="divider"></div>
-            <li><a href="${rootUrl}/manage/">Manage Business</a></li>
-            <li><a href="${rootUrl}/manage/">Manage Queue</a></li>
+            <li><a href="${appUrl}/nearby/">Nearby Queues</a></li>
+            <li><a href="${appUrl}/search/">Search for Queues</a></li>
+            <li><a href="${rootUrl}/manage/">Create a Queue</a></li>
             <div class="divider"></div>
             <li><a id="nav-mobile-account-button">Account</a></li>
           </ul>

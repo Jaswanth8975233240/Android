@@ -19,7 +19,7 @@
             <!-- List -->
             <div class="col s12 m12 l8 vertical-spacing">
               <div class="col s12 emptyState hide">
-                <p>We couldn't find any queues nearby.</p>
+                <p>Looks like there aren't any queues nearby.</p>
               </div>
               <div id="queuesContainer">
                 <div class="col s12 card-spacing loadingState">
@@ -48,5 +48,10 @@
     </main>
     <%@include file="../includes/en/webapp_footer.jsp"%>
     <script src="${staticUrl}js/webapp.js" defer></script>
+    <script type="text/javascript">
+      $(function(){
+        requestNearbyQueues();
+      });
+    </script>
   </body>
 </html>
