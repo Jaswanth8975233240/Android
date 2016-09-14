@@ -21,7 +21,7 @@
               <div class="col s12 emptyState hide">
                 <p>Looks like there aren't any queues nearby.</p>
               </div>
-              <div id="queuesContainer">
+              <div id="businessesContainer">
                 <div class="col s12 card-spacing loadingState">
                   <div class="progress">
                     <div class="indeterminate"></div>

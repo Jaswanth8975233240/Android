@@ -101,10 +101,6 @@ var ui = function(){
     var card = $("<div>", { "class": "card hoverable" });
 
     card.withImage = function(image) {
-      if (card.find(".card-image").length > 0) {
-        return card;
-      }
-
       var imageContainer = $("<div>", { "class": "card-image invisible" })
       imageContainer.append(image);
       imageContainer.prependTo(card);
@@ -122,6 +118,7 @@ var ui = function(){
           }
 
           card.fillImage();
+          return card;
         }
 
         card.fillImage = function() {
@@ -163,6 +160,7 @@ var ui = function(){
             });
             imageElement.attr("originalWidth", currentImageWidth);
             imageElement.attr("originalHeight", currentImageHeight);
+            return card;
           }
 
           var imageContainer = card.find(".card-image");
@@ -183,6 +181,23 @@ var ui = function(){
         }
 
         $(window).resize(card.resizeImageContainer);
+        return card;
+      }
+
+      card.withImageOverlay = function(overlay) {
+        // get the first image that hasn't any overlay
+        var image = card.find(".card-image").last();
+        card.find(".card-image").each(function(index) {
+          if ($(this).find(".overlay-content").length == 0) {
+            image = $(this);
+            return false;
+          }
+        });
+
+        var overlayContainer = $("<div>", { "class": "overlay-content" })
+        overlayContainer.append(overlay);
+        overlayContainer.appendTo(image);
+        return card;
       }
 
       return card;
@@ -197,9 +212,9 @@ var ui = function(){
       contentContainer.append(content);
 
       if (card.find(".card-image").length > 0) {
-        contentContainer.insertAfter(card.find(".card-image"));
+        contentContainer.insertAfter(card.find(".card-image").last());
       } else if (card.find(".card-action").length > 0) {
-        contentContainer.insertBefore(card.find(".card-action"));
+        contentContainer.insertBefore(card.find(".card-action").first());
       } else {
         contentContainer.appendTo(card);
       }
@@ -255,8 +270,8 @@ var ui = function(){
       }
 
       var defaultOptions = {
-        minimumTilesPerRow: 2,
-        maximumTilesPerRow: 4
+        minimumTilesPerRow: 1,
+        maximumTilesPerRow: 2
       };
 
       if (options == null) {
@@ -309,7 +324,7 @@ var ui = function(){
       tilesContainer.append(tileWrappers);
 
       if (card.find(".card-action").length > 0) {
-        tilesContainer.insertBefore(card.find(".card-action"));
+        tilesContainer.insertBefore(card.find(".card-action").first());
       } else {
         tilesContainer.appendTo(card);
       }
@@ -394,32 +409,54 @@ var ui = function(){
     return collectionItem;
   }
 
-  ui.generateBusinessCard = function(business) {
+  ui.generateBusinessWithQueuesCard = function(business) {
     var card = ui.generateCard()
 
     var imageWidth = Math.min(500, $(window).width() / 2);
-    var imageSrc = intelliqApi.getUrls().forImage(business.logoImageKeyId).resizedTo(imageWidth);
-    var image = $("<img>", {
-      "src": imageSrc,
-      "class": "animated activator",
-      "alt": business.name + " Cover"
-    });
+    for (var queueIndex = 0; queueIndex < business.queues.length; queueIndex++) {
+      var queue = business.queues[queueIndex];
 
-    card.withImage(image);
-    card.withImageRatio(3/2);
+      var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
+      var image = $("<img>", {
+        "src": imageSrc,
+        "class": "animated medium-blur",
+        "alt": business.name + " Cover"
+      });
 
+      card.withImage(image);
+
+      var overlay = $("<p>", {
+        "class": "truncate"
+      }).text(queue.name);
+      card.withImageOverlay(overlay);
+    }
+
+    card.withImageRatio(3/1);
+    
     card.withContent().withTitle(business.name, false);
+    return card;
+  }
 
-    var revealableContent = $("<p>").text(business.mail);
-    card.withRevealableContent(revealableContent).withTitle(business.name);
+  ui.generateBusinessWithQueuesCardOld = function(business) {
+    var card = ui.generateCard()
 
-    var manageUrl = intelliqApi.getUrls().forBusiness(business).manage();
-    var manageAction = ui.generateAction(getString("manage"), manageUrl);
+    var imageWidth = Math.min(500, $(window).width() / 2);
+    for (var queueIndex = 0; queueIndex < business.queues.length; queueIndex++) {
+      var queue = business.queues[queueIndex];
 
-    var editUrl = intelliqApi.getUrls().forBusiness(business).edit();
-    var editAction = ui.generateAction(getString("edit"), editUrl);
-    card.withActions([manageAction, editAction]);
+      var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
+      var image = $("<img>", {
+        "src": imageSrc,
+        "class": "animated activator",
+        "alt": business.name + " Cover"
+      });
 
+      card.withImage(image);
+    }
+
+    card.withImageRatio(3/1);
+    
+    card.withContent().withTitle(business.name, false);
     return card;
   }
 

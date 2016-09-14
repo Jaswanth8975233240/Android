@@ -1,11 +1,4 @@
-<!-- Indices written at Wed, 14 Sep 2016 15:16:08 CEST -->
+<!-- Indices written at Wed, 14 Sep 2016 16:54:21 CEST -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="QueueItemEntry" ancestor="false" source="auto">
-        <property name="queueKeyId" direction="asc"/>
-        <property name="ticketNumber" direction="asc"/>
-    </datastore-index>
-
-</datastore-indexes>

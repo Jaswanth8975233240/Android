@@ -54,9 +54,9 @@ function requestNearbyQueues() {
     // request queues at location
     var request = intelliqApi.getNearbyQueues(latitude, longitude).includeBusinesses(true);
     request.send().then(function(data){
-      var queues = intelliqApi.getQueuesFromBusinessResponse(data);
-      console.log(queues);
-      renderQueues(queues, $("#queuesContainer"));
+      var businesses = intelliqApi.getBusinessesFromResponse(data);
+      console.log(businesses);
+      renderBusinesses(businesses, $("#businessesContainer"));
     }).catch(function(error){
       console.log(error);
       showErrorMessage(error);
@@ -67,14 +67,14 @@ function requestNearbyQueues() {
   });
 }
 
-function renderQueues(entries, container) {
+function renderBusinesses(entries, container) {
   var generateCardWrapper = function() {
     var className = ui.generateColumnClassName(12, 6, 6);
     return ui.generateCardWrapper(className);
   }
 
   var options = {};
-  options.itemGenerator = ui.generateQueueCard;
+  options.itemGenerator = ui.generateBusinessWithQueuesCard;
   options.itemWrapperGenerator = generateCardWrapper;
   ui.renderEntries(entries, container, options);
 }
