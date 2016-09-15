@@ -58,7 +58,13 @@ function requestQueueDetails() {
 
 function requestQueueItem() {
   var queueItemKeyId = getUrlParamOrCookie("queueItemKeyId");
-  if (queueItemKeyId.length < 1) {
+  if (queueItemKeyId == null || queueItemKeyId.length < 1) {
+    return;
+  }
+  var queueKeyId = getUrlParam("queueKeyId");
+  var queueItem = JSON.parse(getUrlParamOrCookie("queueItem"));
+  if (queueItem.queueKeyId != queueKeyId) {
+    // queueItem belongs to a different queue
     return;
   }
 
@@ -130,7 +136,16 @@ function leaveQueue(queue) {
     request.send().then(function(data){
       try {
         console.log(data);
+
+        // delete cookies
+        deleteCookie("queueKeyId");
+        deleteCookie("queueItemKeyId");
+        deleteCookie("queueItem");
+
         onQueueLeft();
+
+        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue ticket canceled", queue.name, queue.key.id);
+        location.reload();
       } catch(error) {
         console.log(error);
         ui.showErrorMessage(error);
@@ -162,7 +177,6 @@ function leaveQueue(queue) {
     cancelQueuetem();
   }
 
-  tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Canceling queue ticket", queue.name, queue.key.id);
 }
 
 function showJoinQueueModal() {
@@ -208,6 +222,13 @@ function onJoinQueueModalSubmitted() {
         setCookie("queueItem", JSON.stringify(queueItem));
 
         onQueueJoined(queueItem);
+
+        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue ticket created", queue.name, queue.key.id);
+
+        // update url
+        var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();
+        url = intelliqApi.getUrls().replaceParameter("queueItemKeyId", queueItem.key.id, url);
+        window.history.pushState(null, "Ticket", url);
       } catch(error) {
         console.log(error);
         ui.showErrorMessage(error);

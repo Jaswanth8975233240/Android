@@ -107,6 +107,10 @@ function getCookie(cname) {
   return "";
 }
 
+function deleteCookie(cname) {
+  setCookie(cname, "", -1);
+}
+
 function requestDeviceLocation() {
   var promise = new Promise(function(resolve, reject) {
     try {
