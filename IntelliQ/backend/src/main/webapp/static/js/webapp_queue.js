@@ -79,11 +79,11 @@ function requestQueueItem() {
       onQueueJoined(queueItem);
     } catch(error) {
       console.log(error);
-      ui.showErrorMessage(error);
+      //ui.showErrorMessage(error);
     }
   }).catch(function(error){
     console.log(error);
-    ui.showErrorMessage(error);
+    //ui.showErrorMessage(error);
   });
 }
 
@@ -144,7 +144,7 @@ function leaveQueue(queue) {
 
         onQueueLeft();
 
-        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue ticket canceled", queue.name, queue.key.id);
+        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue item canceled", queue.name, queue.key.id);
         location.reload();
       } catch(error) {
         console.log(error);
@@ -223,7 +223,7 @@ function onJoinQueueModalSubmitted() {
 
         onQueueJoined(queueItem);
 
-        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue ticket created", queue.name, queue.key.id);
+        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue item created", queue.name, queue.key.id);
 
         // update url
         var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();
