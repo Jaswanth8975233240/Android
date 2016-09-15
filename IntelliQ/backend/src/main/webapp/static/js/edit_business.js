@@ -42,7 +42,7 @@ function requestExistingBusinessData(businessKeyId) {
   }).catch(function(error){
     console.log(error);
     $(".loadingState").hide();
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -102,7 +102,7 @@ function saveNewBusiness() {
     console.log(data);
     window.location.href = intelliqApi.PAGE_LINK_MANAGE;
   }, function(error) {
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 

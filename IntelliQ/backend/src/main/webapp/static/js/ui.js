@@ -184,7 +184,7 @@ var ui = function(){
         return card;
       }
 
-      card.withImageOverlay = function(overlay) {
+      card.withImageOverlay = function(overlay, clickHandler) {
         // get the first image that hasn't any overlay
         var image = card.find(".card-image").last();
         card.find(".card-image").each(function(index) {
@@ -195,6 +195,8 @@ var ui = function(){
         });
 
         var overlayContainer = $("<div>", { "class": "overlay-content" })
+        overlay.click(clickHandler);
+
         overlayContainer.append(overlay);
         overlayContainer.appendTo(image);
         return card;
@@ -425,33 +427,17 @@ var ui = function(){
 
       card.withImage(image);
 
-      var overlay = $("<p>", {
+
+      var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();
+      var clickHandler = function() {
+        navigateTo(url);
+      }
+
+      var overlay = $("<a>", {
+        "href": url,
         "class": "truncate"
       }).text(queue.name);
-      card.withImageOverlay(overlay);
-    }
-
-    card.withImageRatio(3/1);
-    
-    card.withContent().withTitle(business.name, false);
-    return card;
-  }
-
-  ui.generateBusinessWithQueuesCardOld = function(business) {
-    var card = ui.generateCard()
-
-    var imageWidth = Math.min(500, $(window).width() / 2);
-    for (var queueIndex = 0; queueIndex < business.queues.length; queueIndex++) {
-      var queue = business.queues[queueIndex];
-
-      var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
-      var image = $("<img>", {
-        "src": imageSrc,
-        "class": "animated activator",
-        "alt": business.name + " Cover"
-      });
-
-      card.withImage(image);
+      card.withImageOverlay(overlay, clickHandler);
     }
 
     card.withImageRatio(3/1);
@@ -515,6 +501,48 @@ var ui = function(){
     var editAction = ui.generateAction(getString("edit"), editUrl);
     card.withActions([manageAction, editAction]);
 
+    return card;
+  }
+
+  ui.generateQueueCard = function(queue) {
+    var card = ui.generateCard()
+
+    var imageWidth = Math.min(500, $(window).width() / 2);
+    var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
+    var image = $("<img>", {
+      "src": imageSrc,
+      "class": "animated activator",
+      "alt": queue.name + " Cover"
+    });
+
+    card.withImage(image);
+    card.withImageRatio(3/2);
+
+    card.withContent().withTitle(queue.name, false);
+
+    var revealableContent = $("<p>").text(queue.description);
+    card.withRevealableContent(revealableContent).withTitle(queue.name);
+
+    return card;
+  }
+
+  ui.generateQueueDescriptionCard = function(queue) {
+    var card = ui.generateCard()
+
+    var title = getString("description");
+    var content = $("<p>").text(queue.description);
+
+    card.withContent(content).withTitle(title, false);
+    return card;
+  }
+
+  ui.generateQueueItemCard = function(queueItem) {
+    var card = ui.generateCard()
+
+    var title = getString("ticket");
+    var content = $("<p>").text(queueItem.ticketNumber);
+
+    card.withContent(content).withTitle(title, false);
     return card;
   }
 

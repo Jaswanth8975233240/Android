@@ -78,6 +78,10 @@ var intelliqApi = function(){
   api.PAGE_LINK_CREATE = api.PAGE_LINK + "create/";
   api.PAGE_LINK_DISPLAY = api.PAGE_LINK + "display/";
 
+  api.PAGE_LINK_WEB_APP = api.PAGE_LINK + "apps/web/";
+  api.PAGE_LINK_WEB_APP_NEARBY = api.PAGE_LINK_WEB_APP + "nearby/";
+  api.PAGE_LINK_WEB_APP_QUEUE = api.PAGE_LINK_WEB_APP + "queue/";
+  
   api.PATH_BUSINESS = "business/";
   api.PATH_QUEUE = "queue/";
 
@@ -347,6 +351,16 @@ var intelliqApi = function(){
   api.getQueue = function(queueKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_GET);
     request.addParameter("queueKeyId", queueKeyId);
+
+    request.includeBusiness = function(value) {
+      if (value) {
+        request.addParameter("includeBusiness", "true");
+      } else {
+        request.addParameter("includeBusiness", "false");
+      }
+      return request;
+    }
+
     return request;
   }
 
@@ -500,6 +514,12 @@ var intelliqApi = function(){
     return request;
   }
 
+  api.getQueueItem = function(queueItemKeyId) {
+    var request = api.request(api.ENDPOINT_QUEUE_ITEM_GET);
+    request.addParameter("queueItemKeyId", queueItemKeyId);
+    return request;
+  }
+
   api.addQueueItem = function(queueKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_ITEM_ADD);
     request.addParameter("queueKeyId", queueKeyId);
@@ -516,6 +536,15 @@ var intelliqApi = function(){
         request.addParameter("showName", "false");
       } else {
         request.addParameter("showName", "true");
+      }
+      return request;
+    }
+
+    request.usingApp = function(value) {
+      if (value) {
+        request.addParameter("usingApp", "true");
+      } else {
+        request.addParameter("usingApp", "false");
       }
       return request;
     }
@@ -757,7 +786,7 @@ var intelliqApi = function(){
 
       urls.resizedTo = function(size) {
         if (top.location.origin == "file://") {
-          return "http://localhost:8888/image/" + imageKeyId + "/" + size + ".jpg";
+          return api.HOST_LOCAL + "image/" + imageKeyId + "/" + size + ".jpg";
         } else {
           return api.PAGE_LINK + "image/" + imageKeyId + "/" + size + ".jpg";
         }
@@ -793,6 +822,11 @@ var intelliqApi = function(){
 
       urls.manage = function() {
         var url = api.PAGE_LINK_MANAGE + api.PATH_QUEUE;
+        return urls.replaceParameter("queueKeyId", queue.key.id, url);
+      }
+
+      urls.openInWebApp = function() {
+        var url = api.PAGE_LINK_WEB_APP_QUEUE;
         return urls.replaceParameter("queueKeyId", queue.key.id, url);
       }
 

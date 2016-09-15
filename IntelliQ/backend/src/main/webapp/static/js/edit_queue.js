@@ -47,7 +47,7 @@ function requestExistingQueueData(queueKeyId) {
   }).catch(function(error){
     console.log(error);
     $(".loadingState").hide();
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -174,7 +174,7 @@ function saveNewQueue() {
     var business = { "key": { "id": newQueue.businessKeyId } };
     window.location.href = intelliqApi.getUrls().forBusiness(business).manage();
   }, function(error) {
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -242,7 +242,7 @@ function initializeMap() {
       updateQueueLocationMarker(location.latitude, location.longitude);
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   });
 
@@ -254,7 +254,7 @@ function initializeMap() {
       updateFormWithGoogleAddressData(results);
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   });
 
@@ -360,11 +360,11 @@ function updateFormWithDeviceLocation() {
       updateFormWithGoogleAddressData(results);
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   }).catch(function(error){
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 

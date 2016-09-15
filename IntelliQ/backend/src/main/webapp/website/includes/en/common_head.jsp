@@ -50,6 +50,8 @@
         "addBusiness": "Add Business",
         "editQueue": "Edit Queue",
         "populatingQueue": "Popuating queue",
+        "joiningQueue": "Joining queue",
+        "leavingQueue": "Leaving queue",
 
         "locationUnavailable": "Location unavailable",
         "locatingDevice": "Updating device location",
@@ -58,6 +60,8 @@
         "updatedQueueLocation": "Updated queue location",
         "updateAddressForLocation": "Update address for location",
 
+        "ticket": "Ticket",
+        "description": "Description",
         "waitingCustomers": "[VALUE] waiting customers",
         
         "unknown": "Unknown",

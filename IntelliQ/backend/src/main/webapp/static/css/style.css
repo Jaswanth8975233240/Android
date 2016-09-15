@@ -138,11 +138,12 @@ a {
   vertical-align: middle;
 }
 
-.card-image .overlay-content p {
+.card-image .overlay-content a {
   color: #fff;
-  bottom: 0;
-  left: 0;
-  padding: 20px;
+  padding-top: 30px;
+  padding-right: 20px;
+  padding-bottom: 30px;
+  padding-left: 10px;
   width: 100%;
   font-size: 20px;
   font-weight: 300;
@@ -306,6 +307,13 @@ a {
   h5 {
     font-size: 1.5rem;
   }
+
+  .card .card-content .card-title {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
+  }
+
 }
 
 .background-image-container {
@@ -471,4 +479,8 @@ footer.page-footer {
 
 .accent-color-text {
   color: #fd4482 !important;
+}
+
+.warning-color {
+  background-color: #d50000 !important;
 }

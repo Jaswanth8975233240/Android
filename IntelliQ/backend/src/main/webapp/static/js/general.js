@@ -85,6 +85,9 @@ function removeClassName(div, newClass) {
 }
 
 function setCookie(cname, cvalue, exdays) {
+  if (typeof exdays === 'undefined') {
+    exdays = 7;
+  }
   var d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
   var expires = "expires=" + d.toUTCString();
@@ -120,4 +123,8 @@ function requestDeviceLocation() {
     }
   });
   return promise;
+}
+
+function navigateTo(url) {
+  window.location.href = url;
 }

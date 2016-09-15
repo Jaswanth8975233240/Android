@@ -59,22 +59,29 @@ function requestNearbyQueues() {
       renderBusinesses(businesses, $("#businessesContainer"));
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   }).catch(function(error){
     console.log(error);
-    showErrorMessage(getString("locationUnavailable") + ": " + error);
+    ui.showErrorMessage(getString("locationUnavailable") + ": " + error);
   });
 }
 
 function renderBusinesses(entries, container) {
-  var generateCardWrapper = function() {
-    var className = ui.generateColumnClassName(12, 6, 6);
-    return ui.generateCardWrapper(className);
-  }
-
   var options = {};
   options.itemGenerator = ui.generateBusinessWithQueuesCard;
   options.itemWrapperGenerator = generateCardWrapper;
   ui.renderEntries(entries, container, options);
+}
+
+function renderQueues(entries, container) {
+  var options = {};
+  options.itemGenerator = ui.generateQueueCard;
+  options.itemWrapperGenerator = generateCardWrapper;
+  ui.renderEntries(entries, container, options);
+}
+
+function generateCardWrapper() {
+  var className = ui.generateColumnClassName(12, 6, 6);
+  return ui.generateCardWrapper(className);
 }

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <html lang="en">
   <head>
-    <title>IntelliQ.me - Web App</title>
+    <title>IntelliQ.me - Nearby</title>
     <%@include file="../includes/en/common_head.jsp"%>
   </head>
 
@@ -37,7 +37,7 @@
                   <i class="material-icons right">group_add</i> 
                   Create a Queue
                 </a>
-                <blockquote>You can create a new queue at any time. It's free!</blockquote>
+                <blockquote>You can create a new queue at any time. It's free, no payment info required!</blockquote>
               </div>
             </div>
 

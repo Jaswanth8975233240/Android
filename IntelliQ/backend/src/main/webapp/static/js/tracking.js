@@ -12,6 +12,7 @@ var tracking = function(){
   tracking.CATEGORY_QUEUE_EDIT = "Edit Queue";
   tracking.CATEGORY_BUSINESS_MANAGE = "Manage Business";
   tracking.CATEGORY_BUSINESS_EDIT = "Edit Business";
+  tracking.CATEGORY_WEBAPP = "Web App";
   
   // for opt-out
   tracking.enabled = true;

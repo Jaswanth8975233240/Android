@@ -28,7 +28,7 @@ function updateQueue() {
     startUpdatingQueueItems(UPDATE_INTERVAL_DEFAULT);
   }).catch(function(error){
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -39,7 +39,7 @@ function updateQueueItems() {
     lastQueueItemsUpdate = (new Date()).getTime();
   }).catch(function(error){
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -236,7 +236,7 @@ function callNextQueueItem() {
     callQueueItem(queueItem);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -251,12 +251,12 @@ function callQueueItem(queueItem) {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Call queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -271,12 +271,12 @@ function cancelQueueItem(queueItem) {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Cancel queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -291,12 +291,12 @@ function markAllCalledQueueItemsAsDone() {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Mark all called queue items as done", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -311,12 +311,12 @@ function markQueueItemAsDone(queueItem) {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Mark queue item as done", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -331,12 +331,12 @@ function deleteAllQueueItems() {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Delete all queue items", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -351,12 +351,12 @@ function deleteAllProcessedQueueItems() {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Delete processed queue items", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -371,12 +371,12 @@ function deleteQueueItem(queueItem) {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Delete queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -391,12 +391,12 @@ function reportQueueItem(queueItem) {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Report queue item", queueItem.name, queueItem.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -411,12 +411,12 @@ function populateQueue() {
       onQueueItemsModified();
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Populate queue", queue.name, queue.key.id);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
@@ -449,7 +449,7 @@ function onAddNewCustomerModalSubmitted() {
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Submit new queue item modal", name, hideName ? 1 : 0);
   } catch(error) {
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   }
 }
 
