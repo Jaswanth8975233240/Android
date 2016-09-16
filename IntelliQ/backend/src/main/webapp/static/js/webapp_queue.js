@@ -63,7 +63,7 @@ function requestQueueItem() {
   }
   var queueKeyId = getUrlParam("queueKeyId");
   var queueItem = JSON.parse(getUrlParamOrCookie("queueItem"));
-  if (queueItem.queueKeyId != queueKeyId) {
+  if (queueItem != null && queueItem.queueKeyId != queueKeyId) {
     // queueItem belongs to a different queue
     return;
   }

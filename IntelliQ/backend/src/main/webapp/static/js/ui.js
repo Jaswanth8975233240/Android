@@ -540,7 +540,10 @@ var ui = function(){
     var card = ui.generateCard()
 
     var title = getString("ticket");
-    var content = $("<p>").text(queueItem.ticketNumber);
+
+    var status = ui.getStatusNameByQueueItemStatus(queueItem.status);
+
+    var content = $("<p>").text("Number: " + queueItem.ticketNumber + ", Status: " + status);
 
     card.withContent(content).withTitle(title, false);
     return card;
