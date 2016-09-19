@@ -9,7 +9,9 @@
     <%@include file="../includes/en/webapp_navigation.jsp"%>
     <main>
       <div class="container">
-
+        
+        <%@include file="../includes/en/webapp_tickets.jsp"%>
+        
         <!-- Queue -->
         <div class="section">
           <h5>Queue</h5>

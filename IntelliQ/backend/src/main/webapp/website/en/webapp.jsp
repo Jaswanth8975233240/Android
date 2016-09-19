@@ -10,6 +10,8 @@
     <main>
       <div class="container">
 
+        <%@include file="../includes/en/webapp_tickets.jsp"%>
+
         <!-- Nearby queues -->
         <div class="section">
           <h5>Nearby Queues</h5>

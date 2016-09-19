@@ -94,13 +94,6 @@ function renderQueueDescription(queue, container) {
   wrapper.appendTo(container);
 }
 
-function renderQueueItem(queueItem, container) {
-  var wrapper = generateCardWrapper();
-  var queueItemCard = ui.generateQueueItemCard(queueItem);
-  queueItemCard.renderIn(wrapper);
-  wrapper.appendTo(container);
-}
-
 function joinQueue(queue) {
   // check if queue requires signin
   if (queue.requiresSignIn) {
@@ -246,8 +239,9 @@ function onJoinQueueModalSubmitted() {
 }
 
 function onQueueJoined(queueItem) {
-  renderQueueItem(queueItem, $("#queueContainer"));
-  // TODO: scroll to rendered card
+  $("html, body").animate({
+    scrollTop: 0
+  }, "slow");
 
   $("#joinQueueContainer").addClass("hide");
   $("#joinQueueButton").addClass("disabled");

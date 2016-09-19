@@ -37,18 +37,26 @@ function initAuthentication() {
     } else {
       statusChangeListener.onGoogleSignOut();
     }
-    renderActiveTickets();
+    renderActiveQueueItems();
   }).catch(function(error) {
     ui.showErrorMessage(error);
   });
 }
 
-function renderActiveTickets() {
-  console.log("Requesting active tickets");
+function renderActiveQueueItems() {
+  console.log("Requesting active queue items");
   requestRecentQueueItems().then(function(queueItems) {
     var calledQueueItems = intelliqApi.filterQueueItems(queueItems).byStatus(intelliqApi.STATUS_CALLED);
     var waitingQueueItems = intelliqApi.filterQueueItems(queueItems).byStatus(intelliqApi.STATUS_WAITING);
     console.log("Called queue items: " + calledQueueItems.length + ", waiting queue items: " + waitingQueueItems.length);
+
+    var visibleQueueItems = calledQueueItems.concat(waitingQueueItems);
+    renderQueueItems(visibleQueueItems, $("#queueItemsContainer"));
+    if (visibleQueueItems.length > 0) {
+      $("#activeQueueItemsSection").removeClass("hide");
+    } else {
+      $("#activeQueueItemsSection").addClass("hide");
+    }
   }).catch(function(error) {
     console.log(error);
   })
@@ -179,6 +187,13 @@ function renderBusinesses(entries, container) {
 function renderQueues(entries, container) {
   var options = {};
   options.itemGenerator = ui.generateQueueCard;
+  options.itemWrapperGenerator = generateCardWrapper;
+  ui.renderEntries(entries, container, options);
+}
+
+function renderQueueItems(entries, container) {
+  var options = {};
+  options.itemGenerator = ui.generateQueueItemCard;
   options.itemWrapperGenerator = generateCardWrapper;
   ui.renderEntries(entries, container, options);
 }

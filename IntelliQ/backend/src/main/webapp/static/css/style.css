@@ -314,6 +314,23 @@ a {
     line-height: 1;
   }
 
+  .section {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .vertical-spacing {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .row {
+    margin-bottom: 5px;
+  }
+
+  .row .col {
+    padding: 0 0.4rem;
+  }
 }
 
 .background-image-container {
