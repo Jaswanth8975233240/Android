@@ -540,19 +540,42 @@ var ui = function(){
     var card = ui.generateCard()
 
     var title = getString("ticket") + " #" + queueItem.ticketNumber;
-
     var status = ui.getStatusNameByQueueItemStatus(queueItem.status);
 
-    var content = $("<p>").text("Number: " + queueItem.ticketNumber + ", Status: " + status);
+    var table = $("<table>");
+    var tableBody = $("<tbody>");
 
-    card.withContent(content).withTitle(title, false);
+    var tr;
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("number")));
+    tr.append($("<td>").text(queueItem.ticketNumber));
+    tr.appendTo(tableBody);
 
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("status")));
+    tr.append($("<td>").text(status));
+    tr.appendTo(tableBody);
     
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("name")));
+    tr.append($("<td>").text(queueItem.name));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("joined")));
+    tr.append($("<td>").text(queueItem.entryTimestamp));
+    tr.appendTo(tableBody);
+
+    tableBody.appendTo(table);
+
+    card.withContent(table)
+    //card.withTitle(title, false);
+
     var openUrl = intelliqApi.getUrls().forQueueItem(queueItem).openInWebApp();
     card.click(function() {
       navigateTo(openUrl);
     })
-    
+
     /*
     var openAction = ui.generateAction(getString("show"), openUrl);
     card.withActions([openAction]);

@@ -25,6 +25,7 @@
         "applyChanges": "Apply Changes",
         "save": "Save",
 
+        "status": "Status",
         "statusWaiting": "Waiting",
         "statusCalled": "Called",
         "statusDone": "Done",
@@ -44,7 +45,6 @@
         "deletingQueueItems": "Deleting queue items",
         "noQueueItems": "No queue items available",
 
-        
         "show": "Show",
         "edit": "Edit",
         "manage": "Manage",
@@ -63,6 +63,9 @@
         "updateAddressForLocation": "Update address for location",
 
         "ticket": "Ticket",
+        "name": "Name",
+        "number": "Number",
+        "joined": "Joined",
         "description": "Description",
         "waitingCustomers": "{0} waiting customers",
         
