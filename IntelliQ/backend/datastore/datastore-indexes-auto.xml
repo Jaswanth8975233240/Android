@@ -1,8 +1,8 @@
-<!-- Indices written at Mon, 19 Sep 2016 17:35:40 CEST -->
+<!-- Indices written at Mon, 19 Sep 2016 17:43:20 CEST -->
 
-<datastore-indexes autoGenerate="true">
+<datastore-indexes>
 
-	<!-- Used 16 times in query history -->
+    <!-- Used 16 times in query history -->
     <datastore-index kind="QueueItemEntry" ancestor="false" source="auto">
         <property name="queueKeyId" direction="asc"/>
         <property name="ticketNumber" direction="asc"/>

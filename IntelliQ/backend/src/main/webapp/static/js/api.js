@@ -27,8 +27,9 @@ var intelliqApi = function(){
   api.HOST_LOCAL = "http://localhost:8080/";
 
   // App Engine (for api requests)
-  api.APP_ENGINE_VERSION = 2;
-  api.HOST_APP_ENGINE = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
+  api.APP_ENGINE_VERSION = 3;
+  api.HOST_APP_ENGINE = "https://intelliq-me.appspot.com/";
+  api.HOST_APP_ENGINE_VERSIONED = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
 
   // Request endpoints
   if (useDevelopmentServer()) {
