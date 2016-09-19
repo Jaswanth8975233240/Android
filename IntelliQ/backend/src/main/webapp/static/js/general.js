@@ -54,12 +54,17 @@ function getHostNameFromUrl(url) {
   return l.hostname;
 }
 
-function getString(key, value) {
+function getString(key) {
   var string  = res[key];
   if (string == null) {
     string = "Resource Error";
   }
-  string = string.replace("[VALUE]", value);
+  
+  if (arguments.length > 0) {
+    var values = Array.prototype.slice.call(arguments, 1);
+    string = String.format(string, values);
+  }
+  
   return string;
 }
 

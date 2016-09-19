@@ -18,7 +18,7 @@
 
     <script type="text/javascript">
       var res =  {
-        "signedInAs": "Signed in as [VALUE]",
+        "signedInAs": "Signed in as {0}",
         "signedIn": "Signed in",
         "signedOut": "Signed out",
 
@@ -34,16 +34,18 @@
         "statusUpdated": "Status updated",
         "setStatusTo": "Set status to",
 
-        "calling": "Calling [VALUE]",
-        "markingAsDone": "Marking [VALUE] as done",
+        "calling": "Calling {0}",
+        "markingAsDone": "Marking {0} as done",
         "markingCalledAsDone": "Marking called as done",
-        "adding": "Adding [VALUE]",
-        "cancelling": "Canceling [VALUE]",
-        "deleting": "Deleting [VALUE]",
-        "reporting": "Reporting [VALUE]",
+        "adding": "Adding {0}",
+        "cancelling": "Canceling {0}",
+        "deleting": "Deleting {0}",
+        "reporting": "Reporting {0}",
         "deletingQueueItems": "Deleting queue items",
         "noQueueItems": "No queue items available",
 
+        
+        "show": "Show",
         "edit": "Edit",
         "manage": "Manage",
         "editBusiness": "Edit Business",
@@ -62,11 +64,11 @@
 
         "ticket": "Ticket",
         "description": "Description",
-        "waitingCustomers": "[VALUE] waiting customers",
+        "waitingCustomers": "{0} waiting customers",
         
         "unknown": "Unknown",
         "somethingWentWrong": "Something went wrong",
-        "somethingWentWrongMessage": "Something went wrong: [VALUE]",
+        "somethingWentWrongMessage": "Something went wrong: {0}",
 
         "unitMinutes": "minutes",
         "unitHours": "hours"

@@ -539,13 +539,24 @@ var ui = function(){
   ui.generateQueueItemCard = function(queueItem) {
     var card = ui.generateCard()
 
-    var title = getString("ticket");
+    var title = getString("ticket") + " #" + queueItem.ticketNumber;
 
     var status = ui.getStatusNameByQueueItemStatus(queueItem.status);
 
     var content = $("<p>").text("Number: " + queueItem.ticketNumber + ", Status: " + status);
 
     card.withContent(content).withTitle(title, false);
+
+    
+    var openUrl = intelliqApi.getUrls().forQueueItem(queueItem).openInWebApp();
+    card.click(function() {
+      navigateTo(openUrl);
+    })
+    
+    /*
+    var openAction = ui.generateAction(getString("show"), openUrl);
+    card.withActions([openAction]);
+    */
     return card;
   }
 
