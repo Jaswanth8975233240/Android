@@ -1,7 +1,10 @@
 (function($){
   $(function(){
-
-    $('.button-collapse').sideNav();
+    $('.button-collapse').sideNav({
+      menuWidth: 240,
+      edge: 'left',
+      closeOnClick: true
+    });
     $('.parallax').parallax();
     $('.tooltipped').tooltip({delay: 50});
     $('.modal-trigger').leanModal();
