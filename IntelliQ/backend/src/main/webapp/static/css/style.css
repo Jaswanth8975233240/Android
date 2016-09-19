@@ -3,6 +3,10 @@ nav .brand-logo {
   color: #FFFFFF;
 }
 
+.side-nav {
+  width: 250px;
+}
+
 .nav-wrapper ul li a i {
   cursor: pointer;
 }

@@ -71,24 +71,27 @@ function requestQueueItem() {
   var request = intelliqApi.getQueueItem(queueItemKeyId);
   request.send().then(function(data){
     try {
-      var queueItems = intelliqApi.getQueueItemsFromResponse(data);
-      if (queueItems.length < 1) {
-        throw "Queue item not found";
+      queueItem = intelliqApi.getQueueItemsFromResponse(data)[0];
+
+      var ticketActive = true;
+      if (queueItem.status == intelliqApi.STATUS_CANCELED) {
+        ticketActive = false;
+        Materialize.toast(getString("statusCanceled"), 3000);
+      } else if (queueItem.status == intelliqApi.STATUS_DONE) {
+        ticketActive = false;
+        Materialize.toast(getString("statusDone"), 3000);
       }
-      queueItem = queueItems[0];
-      if (queueItem.status != intelliqApi.STATUS_CANCELED) {
+
+      if (ticketActive) {
         onQueueJoined(queueItem);
       } else {
-        Materialize.toast(getString("statusCanceled"), 3000);
         $("#joinQueueButton").addClass("disabled");
       }
     } catch(error) {
       console.log(error);
-      //ui.showErrorMessage(error);
     }
   }).catch(function(error){
     console.log(error);
-    //ui.showErrorMessage(error);
   });
 }
 
