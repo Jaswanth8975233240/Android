@@ -62,6 +62,7 @@ var intelliqApi = function(){
 
   api.ENDPOINT_QUEUE_ITEM = api.ENDPOINT_API + "item/";
   api.ENDPOINT_QUEUE_ITEM_GET = api.ENDPOINT_QUEUE_ITEM + "get/";
+  api.ENDPOINT_QUEUE_ITEM_FROM = api.ENDPOINT_QUEUE_ITEM + "from/";
   api.ENDPOINT_QUEUE_ITEM_ADD = api.ENDPOINT_QUEUE_ITEM + "add/";
   api.ENDPOINT_QUEUE_ITEM_DELETE = api.ENDPOINT_QUEUE_ITEM + "delete/";
   api.ENDPOINT_QUEUE_ITEM_STATUS = api.ENDPOINT_QUEUE_ITEM + "status/";
@@ -517,6 +518,12 @@ var intelliqApi = function(){
   api.getQueueItem = function(queueItemKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_ITEM_GET);
     request.addParameter("queueItemKeyId", queueItemKeyId);
+    return request;
+  }
+
+  api.getQueueItemsFrom = function(userKeyId) {
+    var request = api.request(api.ENDPOINT_QUEUE_ITEM_FROM);
+    request.addParameter("userKeyId", userKeyId);
     return request;
   }
 

@@ -14,7 +14,7 @@ function initAuthentication() {
     onGoogleSignIn: function() {
       ui.hideSignInForm();
       authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
-        
+
       }).catch(function(error) {
         console.log("Unable to get IntelliQ user from Google ID token: " + error);
         ui.showErrorMessage(error);
@@ -23,11 +23,10 @@ function initAuthentication() {
 
     onGoogleSignOut: function() {
       ui.hideSignOutForm();
-      //ui.showSignInForm();
     },
     
     onUserAvailable: function(user) {
-      
+
     }
   };
   authenticator.registerStatusChangeListener(statusChangeListener);
@@ -38,9 +37,110 @@ function initAuthentication() {
     } else {
       statusChangeListener.onGoogleSignOut();
     }
+    renderActiveTickets();
   }).catch(function(error) {
     ui.showErrorMessage(error);
   });
+}
+
+function renderActiveTickets() {
+  console.log("Requesting active tickets");
+  requestRecentQueueItems().then(function(queueItems) {
+    var calledQueueItems = intelliqApi.filterQueueItems(queueItems).byStatus(intelliqApi.STATUS_CALLED);
+    var waitingQueueItems = intelliqApi.filterQueueItems(queueItems).byStatus(intelliqApi.STATUS_WAITING);
+    console.log("Called queue items: " + calledQueueItems.length + ", waiting queue items: " + waitingQueueItems.length);
+  }).catch(function(error) {
+    console.log(error);
+  })
+}
+
+function requestRecentQueueItems() {
+  var promise = new Promise(function(resolve, reject) {
+    requestRecentQueueItemKeyIds().then(function(recentQueueItemKeyIds) {
+      var queueItems = [];
+      var receivedResponses = 0;
+      var expectedResponses = 0;
+
+      var addRecentQueueItem = function(queueItem) {
+        queueItems.push(queueItem);
+      };
+
+      var onResponseReceived = function() {
+        receivedResponses++;
+        if (receivedResponses == expectedResponses) {
+          resolve(queueItems);
+        }
+      }
+
+      // get queue items that have been assigned to the current user
+      expectedResponses += 1;
+      authenticator.requestGoogleSignInStatus().then(function(isSignedIn) {
+        if (isSignedIn) {
+          authenticator.requestIntelliqUserFromGoogleIdToken().then(function(user) {
+            var request = intelliqApi.getQueueItemsFrom(user.key.id);
+            request.send().then(function(data){
+              var existingQueueItems = intelliqApi.getQueueItemsFromResponse(data);
+              for (var existingIndex = 0; existingIndex < existingQueueItems.length; existingIndex++) {
+                addRecentQueueItem(existingQueueItems[existingIndex]);
+              }
+              onResponseReceived();
+            }).catch(function(error){
+              console.log(error);
+              onResponseReceived();
+            });
+          }).catch(function(error) {
+            console.log(error);
+            onResponseReceived();
+          });
+        } else {
+          onResponseReceived();
+        }
+      }).catch(function(error) {
+        console.log(error);
+        onResponseReceived();
+      });
+
+      // get queue items from recent queue item key IDs
+      expectedResponses += recentQueueItemKeyIds.length;
+      for (var queueItemIndex = 0; queueItemIndex < recentQueueItemKeyIds.length; queueItemIndex++) {
+        var request = intelliqApi.getQueueItem(recentQueueItemKeyIds[queueItemIndex]);
+        request.send().then(function(data){
+          var queueItem = intelliqApi.getQueueItemsFromResponse(data)[0];
+          addRecentQueueItem(queueItem);
+          onResponseReceived();
+        }).catch(function(error){
+          console.log(error);
+          onResponseReceived();
+        });
+      }
+
+    }).catch(function(error) {
+      reject(error);
+    });
+  });
+  return promise;
+}
+
+function requestRecentQueueItemKeyIds() {
+  var promise = new Promise(function(resolve, reject) {
+    var queueItemKeyIds = [];
+
+    var addQueueItemKeyId = function(queueItemKeyId) {
+      if (queueItemKeyId == null && queueItemKeyId < 0) {
+        return;
+      }
+      if (queueItemKeyIds.indexOf(queueItemKeyId) > -1) {
+        return;
+      }
+      queueItemKeyIds.push(queueItemKeyId);
+    };
+
+    // add id from URL paramter or cookie
+    addQueueItemKeyId(getUrlParamOrCookie("queueItemKeyId"));
+
+    resolve(queueItemKeyIds);
+  });
+  return promise;
 }
 
 function requestNearbyQueues() {
