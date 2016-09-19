@@ -43,6 +43,13 @@ function initAuthentication() {
   });
 }
 
+function onQueueItemsChanged() {
+  renderActiveQueueItems();
+  $("html, body").animate({
+    scrollTop: 0
+  }, "slow");
+}
+
 function renderActiveQueueItems() {
   console.log("Requesting active queue items");
   requestRecentQueueItems().then(function(queueItems) {

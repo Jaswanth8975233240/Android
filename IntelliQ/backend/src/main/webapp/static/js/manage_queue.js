@@ -458,8 +458,8 @@ function showQueueItemDetailsModal(queueItem) {
   modal.find("h4").text(queueItem.name);
 
   modal.find("#customerTicketNumber").text(queueItem.ticketNumber);
-  modal.find("#customerQueueEntry").text(queueItem.entryTimestamp);
-  modal.find("#customerStatusChange").text(queueItem.lastStatusChangeTimestamp);
+  modal.find("#customerQueueEntry").text(ui.time().at(new Date(queueItem.entryTimestamp)));
+  modal.find("#customerStatusChange").text(ui.time().at(new Date(queueItem.lastStatusChangeTimestamp)));
 
   modal.find("#reportCustomerButton").off().click(function() {
     reportQueueItem(queueItem);

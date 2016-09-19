@@ -76,7 +76,12 @@ function requestQueueItem() {
         throw "Queue item not found";
       }
       queueItem = queueItems[0];
-      onQueueJoined(queueItem);
+      if (queueItem.status != intelliqApi.STATUS_CANCELED) {
+        onQueueJoined(queueItem);
+      } else {
+        Materialize.toast(getString("statusCanceled"), 3000);
+        $("#joinQueueButton").addClass("disabled");
+      }
     } catch(error) {
       console.log(error);
       //ui.showErrorMessage(error);
@@ -239,10 +244,7 @@ function onJoinQueueModalSubmitted() {
 }
 
 function onQueueJoined(queueItem) {
-  $("html, body").animate({
-    scrollTop: 0
-  }, "slow");
-
+  onQueueItemsChanged();
   $("#joinQueueContainer").addClass("hide");
   $("#joinQueueButton").addClass("disabled");
   $("#leaveQueueContainer").removeClass("hide");
@@ -250,6 +252,7 @@ function onQueueJoined(queueItem) {
 }
 
 function onQueueLeft() {
+  onQueueItemsChanged();
   $("#joinQueueContainer").removeClass("hide");
   $("#joinQueueButton").removeClass("disabled");
   $("#leaveQueueContainer").addClass("hide");

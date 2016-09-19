@@ -563,23 +563,17 @@ var ui = function(){
 
     tr = $("<tr>");
     tr.append($("<td>").text(getString("joined")));
-    tr.append($("<td>").text(queueItem.entryTimestamp));
+    tr.append($("<td>").text(ui.time().at(new Date(queueItem.entryTimestamp))));
     tr.appendTo(tableBody);
 
     tableBody.appendTo(table);
-
     card.withContent(table)
-    //card.withTitle(title, false);
 
-    var openUrl = intelliqApi.getUrls().forQueueItem(queueItem).openInWebApp();
+    var openTicketUrl = intelliqApi.getUrls().forQueueItem(queueItem).openInWebApp();
+    var openQueueUrl = intelliqApi.getUrls().forQueue({ key: { id: queueItem.queueKeyId } }).openInWebApp();
     card.click(function() {
-      navigateTo(openUrl);
+      navigateTo(openQueueUrl);
     })
-
-    /*
-    var openAction = ui.generateAction(getString("show"), openUrl);
-    card.withActions([openAction]);
-    */
     return card;
   }
 
@@ -719,6 +713,51 @@ var ui = function(){
     // re-initialize tooltips
     $(".material-tooltip").remove();
     $(".tooltipped").tooltip({ delay: 250 });
+  }
+
+  /*
+    Time
+  */
+  ui.time = function() {
+    var time = {};
+
+    time.fillDigits = function(value) {
+      return value < 10 ? "0" + value : value;
+    }
+
+    time.at = function(date) {
+      var hours = time.fillDigits(date.getHours());
+      var minutes = time.fillDigits(date.getMinutes());
+      var seconds = time.fillDigits(date.getSeconds());
+      return hours + ":" + minutes;
+    }
+
+    time.since = function(date) {
+      var seconds = Math.floor((new Date() - date) / 1000);
+      var interval = Math.floor(seconds / 31536000);
+      if (interval > 1) {
+        return interval + " " + getString(unitYears);
+      }
+      interval = Math.floor(seconds / 2592000);
+      if (interval > 1) {
+        return interval + " " + getString(unitMonths);
+      }
+      interval = Math.floor(seconds / 86400);
+      if (interval > 1) {
+        return interval + " " + getString(unitDays);
+      }
+      interval = Math.floor(seconds / 3600);
+      if (interval > 1) {
+        return interval + " " + getString(unitHours);
+      }
+      interval = Math.floor(seconds / 60);
+      if (interval > 1) {
+        return interval + " " + getString(unitMinutes);
+      }
+      return Math.floor(seconds) + " " + getString(unitSeconds);
+    }
+
+    return time;
   }
 
   /*
