@@ -112,6 +112,10 @@ a {
 	line-height: 1.5;
 }
 
+.card .card-content .card-title {
+  font-size: 22px;
+}
+
 .card .card-action a {
 	color: #663fb4;
 }

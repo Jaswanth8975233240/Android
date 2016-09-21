@@ -8,6 +8,7 @@ var authenticator = function(){
   };
 
   authenticator.googleAuthenticationInitialized = false;
+  authenticator.googleAuthenticationInitializing = false;
   authenticator.statusChangeListeners = [];
 
   authenticator.CLIENT_ID_WEB = "1008259459239-t1huos5n6bhkin3is2jlqgkjv9h7mheh.apps.googleusercontent.com";
@@ -17,6 +18,28 @@ var authenticator = function(){
       if (authenticator.googleAuthenticationInitialized) {
         resolve();
         return;
+      }
+
+      if (authenticator.googleAuthenticationInitializing) {
+        var sleep = function(timeout) {
+          return new Promise(function(resolve, reject) {
+            setTimeout(resolve, timeout);
+          });
+        }
+
+        var tries = 0;
+        var checkAvailablitity = function() {
+          if (authenticator.googleAuthenticationInitializing && tries < 10) {
+            tries++;
+            sleep(500).then(checkAvailablitity);
+          } else {
+            if (authenticator.googleAuthenticationInitialized) {
+              resolve();
+            } else {
+              reject("Initialization failed");
+            }
+          }
+        }
       }
 
       var onAuthApiAvailable = function() {
@@ -31,6 +54,7 @@ var authenticator = function(){
 
         var onGoogleSignInInitialized = function () {
           log("Google authentication initialized");
+          authenticator.googleAuthenticationInitializing = false;
           authenticator.googleAuthenticationInitialized = true;
           gapi.auth2.getAuthInstance().isSignedIn.listen(function(isSignedIn) {
             if (isSignedIn) {
@@ -44,6 +68,7 @@ var authenticator = function(){
 
         var onGoogleSignInInitializationFailed = function(error) {
           log("Google authentication initialization failed: " + error);
+          authenticator.googleAuthenticationInitializing = false;
           authenticator.googleAuthenticationInitialized = false;
           reject(error);
         }
@@ -53,6 +78,7 @@ var authenticator = function(){
 
       if (gapi.auth2 == null) {
         log("Requesting Google auth2 API");
+        authenticator.googleAuthenticationInitializing = true;
         gapi.load('auth2', onAuthApiAvailable);
       } else {
         onAuthApiAvailable();

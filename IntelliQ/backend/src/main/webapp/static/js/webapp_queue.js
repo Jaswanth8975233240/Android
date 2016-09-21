@@ -224,7 +224,7 @@ function onJoinQueueModalSubmitted() {
 
         onQueueJoined(queueItem);
 
-        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue item created", queue.name, queue.key.id);
+        tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue joined", queue.name, queue.key.id);
 
         // update url
         var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();

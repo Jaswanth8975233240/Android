@@ -196,8 +196,10 @@ var ui = function(){
 
         var overlayContainer = $("<div>", { "class": "overlay-content" })
         overlay.click(clickHandler);
-
-        overlayContainer.append(overlay);
+        var overlayWrapper = $("<div>", { "class": "valign-wrapper" })
+        overlay.addClass("valign");
+        overlayWrapper.append(overlay);
+        overlayContainer.append(overlayWrapper);
         overlayContainer.appendTo(image);
         return card;
       }
@@ -541,6 +543,8 @@ var ui = function(){
 
     var title = getString("ticket") + " #" + queueItem.ticketNumber;
     var status = ui.getStatusNameByQueueItemStatus(queueItem.status);
+    var joined = ui.time().since(new Date(queueItem.entryTimestamp));
+    joined = getString("timeAgo", joined);
 
     var table = $("<table>");
     var tableBody = $("<tbody>");
@@ -563,7 +567,7 @@ var ui = function(){
 
     tr = $("<tr>");
     tr.append($("<td>").text(getString("joined")));
-    tr.append($("<td>").text(ui.time().at(new Date(queueItem.entryTimestamp))));
+    tr.append($("<td>").text(joined));
     tr.appendTo(tableBody);
 
     tableBody.appendTo(table);
@@ -736,25 +740,25 @@ var ui = function(){
       var seconds = Math.floor((new Date() - date) / 1000);
       var interval = Math.floor(seconds / 31536000);
       if (interval > 1) {
-        return interval + " " + getString(unitYears);
+        return interval + " " + getString("unitYears");
       }
       interval = Math.floor(seconds / 2592000);
       if (interval > 1) {
-        return interval + " " + getString(unitMonths);
+        return interval + " " + getString("unitMonths");
       }
       interval = Math.floor(seconds / 86400);
       if (interval > 1) {
-        return interval + " " + getString(unitDays);
+        return interval + " " + getString("unitDays");
       }
       interval = Math.floor(seconds / 3600);
       if (interval > 1) {
-        return interval + " " + getString(unitHours);
+        return interval + " " + getString("unitHours");
       }
       interval = Math.floor(seconds / 60);
       if (interval > 1) {
-        return interval + " " + getString(unitMinutes);
+        return interval + " " + getString("unitMinutes");
       }
-      return Math.floor(seconds) + " " + getString(unitSeconds);
+      return Math.floor(seconds) + " " + getString("unitSeconds");
     }
 
     return time;

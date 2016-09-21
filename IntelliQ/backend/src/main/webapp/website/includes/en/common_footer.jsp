@@ -47,7 +47,7 @@
           <div class="col s12 m12 l6">
             <h5 class="white-text">About IntelliQ.me</h5>
             <p class="grey-text text-lighten-4">We think no one should waste lifetime while waiting. It doesn't matter where you are - you should be able to use the time until it's your turn effectively.
-            IntelliQ is a smart system to manage waiting queues and offers estimations about remaining waiting time.</p>
+            IntelliQ.me is a smart system to manage waiting queues and offers estimations about remaining waiting time.</p>
           </div>
           <div class="col s6 m4 l3">
             <h5 class="white-text">Connect</h5>

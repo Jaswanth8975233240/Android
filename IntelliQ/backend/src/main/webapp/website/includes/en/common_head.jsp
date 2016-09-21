@@ -73,12 +73,14 @@
         "somethingWentWrong": "Something went wrong",
         "somethingWentWrongMessage": "Something went wrong: {0}",
 
-        "unitSeconds": "minutes",
+        "timeAgo": "{0} ago",
+        "sinceTime": "Since {0}",
+        "unitSeconds": "seconds",
         "unitMinutes": "minutes",
         "unitHours": "hours",
-        "unitDays": "minutes",
-        "unitWeeks": "minutes",
-        "unitMonths": "minutes",
+        "unitDays": "days",
+        "unitWeeks": "weeks",
+        "unitMonths": "months",
         "unitYears": "years"
       }
     </script>

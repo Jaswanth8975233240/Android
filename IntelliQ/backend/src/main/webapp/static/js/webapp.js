@@ -169,7 +169,7 @@ function requestNearbyQueues() {
     // request queues at location
     var request = intelliqApi.getNearbyQueues(latitude, longitude)
         .includeBusinesses(true)
-        .inRange(50000); // TODO: set this to something meaningful
+        .inRange(5000); // TODO: set this to something meaningful
     request.send().then(function(data){
       var businesses = intelliqApi.getBusinessesFromResponse(data);
       console.log(businesses);
