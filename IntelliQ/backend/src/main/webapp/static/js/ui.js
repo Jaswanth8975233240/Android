@@ -758,7 +758,7 @@ var ui = function(){
       if (interval > 1) {
         return interval + " " + getString("unitMinutes");
       }
-      return Math.floor(seconds) + " " + getString("unitSeconds");
+      return Math.max(Math.floor(seconds), 0) + " " + getString("unitSeconds");
     }
 
     return time;
