@@ -509,7 +509,7 @@ var ui = function(){
   ui.generateQueueCard = function(queue) {
     var card = ui.generateCard()
 
-    var imageWidth = Math.min(500, $(window).width() / 2);
+    var imageWidth = Math.min(500, $(window).width());
     var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
     var image = $("<img>", {
       "src": imageSrc,
@@ -585,9 +585,7 @@ var ui = function(){
     } else {
       status = getString("queueStatusEmpty");
     }
-    var content = $("<p>").text(status);
-
-    card.withContent(content)
+    card.withContent(status)
     card.withTitle(getString("status"), false);
     return card;
   }

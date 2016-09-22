@@ -41,7 +41,6 @@ function initAuthentication() {
     } else {
       statusChangeListener.onGoogleSignOut();
     }
-    //renderActiveQueueItems();
     startUpdatingQueueItems();
   }).catch(function(error) {
     ui.showErrorMessage(error);
@@ -61,6 +60,7 @@ function startUpdatingQueueItems() {
   }
   console.log("Starting to update queue items");
   queueItemsUpdateIntervalHandle = setInterval(renderActiveQueueItems, queueItemsUpdateInterval);
+  renderActiveQueueItems();
 }
 
 function stopUpdatingQueueItems() {

@@ -88,7 +88,7 @@
         "waitingTime": "Waiting time",
         "waitingPeople": "Waiting people",
         "requiresSignIn": "Requires signin",
-        "queueStatus": "There are currently {0} waiting people. If you join now, it would be your turn in about {1}.",
+        "queueStatus": "There are currently {0} people waiting. If you join now, it would be your turn in about {1}.",
         "queueStatusEmpty": "There's currently no one in this queue, join now to be the first one.",
         
         "timeAgo": "{0} ago",

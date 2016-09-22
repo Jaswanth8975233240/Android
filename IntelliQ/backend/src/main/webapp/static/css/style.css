@@ -316,10 +316,10 @@ a {
     font-size: 1.5rem;
   }
 
-  .card .card-content .card-title {
+  .card .card-content .card-title, .card-title .material-icons {
     font-size: 20px;
     font-weight: 300;
-    line-height: 1;
+    line-height: 1.5;
   }
 
   .section {
@@ -341,7 +341,7 @@ a {
   }
 
   td, th {
-    padding: 10px 5px;
+    padding: 7px 5px;
   }
 }
 
