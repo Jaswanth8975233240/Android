@@ -520,9 +520,40 @@ var ui = function(){
     card.withImage(image);
     card.withImageRatio(3/2);
 
-    card.withContent().withTitle(queue.name, false);
+    card.withContent(queue.description);
+    card.withTitle(queue.name, true);
 
-    var revealableContent = $("<p>").text(queue.description);
+    var table = $("<table>");
+    var tableBody = $("<tbody>");
+
+    var tr;
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("location")));
+    var mapsUrl = "http://maps.google.com/maps?q=" + queue.latitude + "," + queue.longitude;
+    tr.append($("<td>").append($("<a>").attr("target","_blank").attr("href", mapsUrl).text(getString("locationMap"))));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("visibility")));
+    var visibility = getString("public");
+    if (queue.visibility == intelliqApi.VISIBILITY_PRIVATE) {
+      visibility = getString("private");
+    }
+    tr.append($("<td>").text(visibility));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("requiresSignIn")));
+    var requiresSignIn = getString("no");
+    if (queue.requiresSignIn) {
+      requiresSignIn = getString("yes");
+    }
+    tr.append($("<td>").text(requiresSignIn));
+    tr.appendTo(tableBody);
+
+    tableBody.appendTo(table);
+
+    var revealableContent = table;
     card.withRevealableContent(revealableContent).withTitle(queue.name);
 
     return card;
@@ -535,6 +566,29 @@ var ui = function(){
     var content = $("<p>").text(queue.description);
 
     card.withContent(content).withTitle(title, false);
+    return card;
+  }
+
+  ui.generateQueueStatusCard = function(queue) {
+    var card = ui.generateCard()
+
+    var getReadableWaitingTime = function() {
+      var waitinTime = queue.averageWaitingTime * queue.waitingPeople;
+      var timestamp = new Date() - waitinTime;
+      var since = ui.time().since(new Date(timestamp));
+      return since;
+    }
+
+    var status;
+    if (queue.waitingPeople > 0) {
+      status = getString("queueStatus", queue.waitingPeople, getReadableWaitingTime());
+    } else {
+      status = getString("queueStatusEmpty");
+    }
+    var content = $("<p>").text(status);
+
+    card.withContent(content)
+    card.withTitle(getString("status"), false);
     return card;
   }
 
@@ -557,7 +611,12 @@ var ui = function(){
 
     tr = $("<tr>");
     tr.append($("<td>").text(getString("status")));
-    tr.append($("<td>").text(status));
+    var statusData = $("<td>").text(status);
+    if (queueItem.status == intelliqApi.STATUS_CALLED) {
+      statusData.addClass("red-text");
+      card.addClass("deep-purple lighten-5");
+    }
+    tr.append(statusData);
     tr.appendTo(tableBody);
     
     tr = $("<tr>");

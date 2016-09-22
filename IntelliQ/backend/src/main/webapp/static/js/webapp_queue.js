@@ -42,7 +42,7 @@ function requestQueueDetails() {
         leaveQueue(queue);
       });
 
-      //renderQueueDescription(queue, container);
+      renderQueueStatus(queue, container);
       $("#joinQueueButton").removeClass("disabled");
 
       requestQueueItem();
@@ -95,10 +95,10 @@ function requestQueueItem() {
   });
 }
 
-function renderQueueDescription(queue, container) {
+function renderQueueStatus(queue, container) {
   var wrapper = generateCardWrapper();
-  var descriptionCard = ui.generateQueueDescriptionCard(queue);
-  descriptionCard.renderIn(wrapper);
+  var statusCard = ui.generateQueueStatusCard(queue);
+  statusCard.renderIn(wrapper);
   wrapper.appendTo(container);
 }
 

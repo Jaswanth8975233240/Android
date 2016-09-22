@@ -1,17 +1,14 @@
-var UPDATE_INTERVAL_CASUAL = 1000 * 30;
-var UPDATE_INTERVAL_DEFAULT = 1000 * 15;
-var UPDATE_INTERVAL_FAST = 1000 * 10;
-var UPDATE_INTERVAL_DEMO = 1000 * 5;
-
 var queue;
 var queueItems;
 
 var lastQueueItemsUpdate = -1;
-var queueItemsUpdateInterval = UPDATE_INTERVAL_FAST;
+var queueItemsUpdateInterval;
 var queueItemsUpdateIntervalObject;
 
 (function($){
   $(function(){
+    queueItemsUpdateInterval = intelliqApi.UPDATE_INTERVAL_FAST;
+
     var statusChangeListener = {
       onUserAvailable: function(user) {
         updateQueue();
@@ -26,7 +23,7 @@ function updateQueue() {
     renderQueue(queue);
     setupQueueManagementButtons();
     updateQueueItems();
-    startUpdatingQueueItems(UPDATE_INTERVAL_DEFAULT);
+    startUpdatingQueueItems(intelliqApi.UPDATE_INTERVAL_DEFAULT);
   }).catch(function(error){
     console.log(error);
     ui.showErrorMessage(error);
@@ -95,7 +92,7 @@ function startUpdatingQueueItems(interval) {
   // set the interval
   queueItemsUpdateInterval = interval;
   if (queueItemsUpdateInterval == null) {
-    queueItemsUpdateInterval = UPDATE_INTERVAL_DEFAULT;
+    queueItemsUpdateInterval = intelliqApi.UPDATE_INTERVAL_DEFAULT;
   }
 
   // clear existing interval

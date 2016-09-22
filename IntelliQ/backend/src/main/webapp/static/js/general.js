@@ -62,7 +62,7 @@ function getString(key) {
   
   if (arguments.length > 0) {
     var values = Array.prototype.slice.call(arguments, 1);
-    string = String.format(string, values);
+    string = String.prototype.format.apply(string, values);
   }
   
   return string;

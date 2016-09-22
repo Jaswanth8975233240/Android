@@ -1,7 +1,11 @@
 var deviceLocation;
 
+var queueItemsUpdateInterval;
+var queueItemsUpdateIntervalHandle;
+
 (function($){
   $(function(){
+    queueItemsUpdateInterval = intelliqApi.UPDATE_INTERVAL_DEFAULT;
     initAuthentication();
   });
 })(jQuery);
@@ -37,7 +41,8 @@ function initAuthentication() {
     } else {
       statusChangeListener.onGoogleSignOut();
     }
-    renderActiveQueueItems();
+    //renderActiveQueueItems();
+    startUpdatingQueueItems();
   }).catch(function(error) {
     ui.showErrorMessage(error);
   });
@@ -48,6 +53,23 @@ function onQueueItemsChanged() {
   $("html, body").animate({
     scrollTop: 0
   }, "slow");
+}
+
+function startUpdatingQueueItems() {
+  if (queueItemsUpdateIntervalHandle != null) {
+    return;
+  }
+  console.log("Starting to update queue items");
+  queueItemsUpdateIntervalHandle = setInterval(renderActiveQueueItems, queueItemsUpdateInterval);
+}
+
+function stopUpdatingQueueItems() {
+  if (queueItemsUpdateIntervalHandle == null) {
+    return;
+  }
+  console.log("Stopping to update queue items");
+  clearInterval(queueItemsUpdateIntervalHandle);
+  queueItemsUpdateIntervalHandle = null;
 }
 
 function renderActiveQueueItems() {

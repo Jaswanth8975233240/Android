@@ -95,14 +95,22 @@ var intelliqApi = function(){
   api.STATUS_CALLED = 2;
   api.STATUS_DONE = 3;
 
+  // Queue visibility
   api.VISIBILITY_PRIVATE = 0;
   api.VISIBILITY_PUBLIC = 1;
 
+  // Entry types
   api.ENTRY_TYPE_BUSINESS = "BusinessEntry";
   api.ENTRY_TYPE_QUEUE = "QueueEntry";
   api.ENTRY_TYPE_QUEUE_ITEM = "QueueItemEntry";
   api.ENTRY_TYPE_USER = "UserEntry";
   api.ENTRY_TYPE_PERMISSION = "PermissionEntry";
+
+  // Update intervals
+  api.UPDATE_INTERVAL_CASUAL = 1000 * 30;
+  api.UPDATE_INTERVAL_DEFAULT = 1000 * 15;
+  api.UPDATE_INTERVAL_FAST = 1000 * 10;
+  api.UPDATE_INTERVAL_DEMO = 1000 * 5;
 
   /*
     Requests
