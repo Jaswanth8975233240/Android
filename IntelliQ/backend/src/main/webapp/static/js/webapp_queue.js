@@ -13,6 +13,8 @@ $(function(){
       return false;
     }
   });
+
+  $("#activeQueueItemsSection").find("h5").text(getString("ticket"));
 });
 
 function requestQueueDetails() {

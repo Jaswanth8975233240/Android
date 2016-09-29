@@ -80,6 +80,22 @@ function renderActiveQueueItems() {
     console.log("Called queue items: " + calledQueueItems.length + ", waiting queue items: " + waitingQueueItems.length);
 
     var visibleQueueItems = calledQueueItems.concat(waitingQueueItems);
+
+    // show only the relevant queue item if a specific queue is requested
+    var requestedQueueKeyId = getUrlParamOrCookie("queueKeyId");
+    if (requestedQueueKeyId != null) {
+      var requestedQueueItem;
+      for (var queueItemIndex = 0; queueItemIndex < visibleQueueItems.length; queueItemIndex++) {
+        if (visibleQueueItems[queueItemIndex].queueKeyId == requestedQueueKeyId) {
+          requestedQueueItem = visibleQueueItems[queueItemIndex];
+        }
+      }
+      visibleQueueItems = [];
+      if (requestedQueueItem != null) {
+        visibleQueueItems.push(requestedQueueItem);
+      }
+    }
+
     renderQueueItems(visibleQueueItems, $("#queueItemsContainer"));
     if (visibleQueueItems.length > 0) {
       $("#activeQueueItemsSection").removeClass("hide");
@@ -99,6 +115,12 @@ function requestRecentQueueItems() {
       var expectedResponses = 0;
 
       var addRecentQueueItem = function(queueItem) {
+        // don't add if the item already exists
+        for (var queueItemIndex = 0; queueItemIndex < queueItems.length; queueItemIndex++) {
+          if (queueItems[queueItemIndex].key.id == queueItem.key.id) {
+            return;
+          }
+        }
         queueItems.push(queueItem);
       };
 
