@@ -101,10 +101,6 @@ var ui = function(){
     var card = $("<div>", { "class": "card hoverable" });
 
     card.withImage = function(image) {
-      if (card.find(".card-image").length > 0) {
-        return card;
-      }
-
       var imageContainer = $("<div>", { "class": "card-image invisible" })
       imageContainer.append(image);
       imageContainer.prependTo(card);
@@ -122,6 +118,7 @@ var ui = function(){
           }
 
           card.fillImage();
+          return card;
         }
 
         card.fillImage = function() {
@@ -163,6 +160,7 @@ var ui = function(){
             });
             imageElement.attr("originalWidth", currentImageWidth);
             imageElement.attr("originalHeight", currentImageHeight);
+            return card;
           }
 
           var imageContainer = card.find(".card-image");
@@ -183,6 +181,27 @@ var ui = function(){
         }
 
         $(window).resize(card.resizeImageContainer);
+        return card;
+      }
+
+      card.withImageOverlay = function(overlay, clickHandler) {
+        // get the first image that hasn't any overlay
+        var image = card.find(".card-image").last();
+        card.find(".card-image").each(function(index) {
+          if ($(this).find(".overlay-content").length == 0) {
+            image = $(this);
+            return false;
+          }
+        });
+
+        var overlayContainer = $("<div>", { "class": "overlay-content" })
+        overlay.click(clickHandler);
+        var overlayWrapper = $("<div>", { "class": "valign-wrapper" })
+        overlay.addClass("valign");
+        overlayWrapper.append(overlay);
+        overlayContainer.append(overlayWrapper);
+        overlayContainer.appendTo(image);
+        return card;
       }
 
       return card;
@@ -197,9 +216,9 @@ var ui = function(){
       contentContainer.append(content);
 
       if (card.find(".card-image").length > 0) {
-        contentContainer.insertAfter(card.find(".card-image"));
+        contentContainer.insertAfter(card.find(".card-image").last());
       } else if (card.find(".card-action").length > 0) {
-        contentContainer.insertBefore(card.find(".card-action"));
+        contentContainer.insertBefore(card.find(".card-action").first());
       } else {
         contentContainer.appendTo(card);
       }
@@ -255,8 +274,8 @@ var ui = function(){
       }
 
       var defaultOptions = {
-        minimumTilesPerRow: 2,
-        maximumTilesPerRow: 4
+        minimumTilesPerRow: 1,
+        maximumTilesPerRow: 2
       };
 
       if (options == null) {
@@ -309,7 +328,7 @@ var ui = function(){
       tilesContainer.append(tileWrappers);
 
       if (card.find(".card-action").length > 0) {
-        tilesContainer.insertBefore(card.find(".card-action"));
+        tilesContainer.insertBefore(card.find(".card-action").first());
       } else {
         tilesContainer.appendTo(card);
       }
@@ -394,7 +413,42 @@ var ui = function(){
     return collectionItem;
   }
 
-  ui.generateBusinessCard = function(business) {
+  ui.generateBusinessWithQueuesCard = function(business) {
+    var card = ui.generateCard()
+
+    var imageWidth = Math.min(500, $(window).width() / 2);
+    for (var queueIndex = 0; queueIndex < business.queues.length; queueIndex++) {
+      var queue = business.queues[queueIndex];
+
+      var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
+      var image = $("<img>", {
+        "src": imageSrc,
+        "class": "animated medium-blur",
+        "alt": business.name + " Cover"
+      });
+
+      card.withImage(image);
+
+
+      var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();
+      var clickHandler = function() {
+        navigateTo(url);
+      }
+
+      var overlay = $("<a>", {
+        "href": url,
+        "class": "truncate"
+      }).text(queue.name);
+      card.withImageOverlay(overlay, clickHandler);
+    }
+
+    card.withImageRatio(3/1);
+    
+    card.withContent().withTitle(business.name, false);
+    return card;
+  }
+
+  ui.generateManageBusinessCard = function(business) {
     var card = ui.generateCard()
 
     var imageWidth = Math.min(500, $(window).width() / 2);
@@ -414,16 +468,16 @@ var ui = function(){
     card.withRevealableContent(revealableContent).withTitle(business.name);
 
     var manageUrl = intelliqApi.getUrls().forBusiness(business).manage();
-    var manageAction = ui.generateAction("Manage", manageUrl);
+    var manageAction = ui.generateAction(getString("manage"), manageUrl);
 
     var editUrl = intelliqApi.getUrls().forBusiness(business).edit();
-    var editAction = ui.generateAction("Edit", editUrl);
+    var editAction = ui.generateAction(getString("edit"), editUrl);
     card.withActions([manageAction, editAction]);
 
     return card;
   }
 
-  ui.generateQueueCard = function(queue) {
+  ui.generateManageQueueCard = function(queue) {
     var card = ui.generateCard()
 
     var imageWidth = Math.min(500, $(window).width() / 2);
@@ -443,12 +497,144 @@ var ui = function(){
     card.withRevealableContent(revealableContent).withTitle(queue.name);
 
     var manageUrl = intelliqApi.getUrls().forQueue(queue).manage();
-    var manageAction = ui.generateAction("Manage", manageUrl);
+    var manageAction = ui.generateAction(getString("manage"), manageUrl);
 
     var editUrl = intelliqApi.getUrls().forQueue(queue).edit();
-    var editAction = ui.generateAction("Edit", editUrl);
+    var editAction = ui.generateAction(getString("edit"), editUrl);
     card.withActions([manageAction, editAction]);
 
+    return card;
+  }
+
+  ui.generateQueueCard = function(queue) {
+    var card = ui.generateCard()
+
+    var imageWidth = Math.min(500, $(window).width());
+    var imageSrc = intelliqApi.getUrls().forImage(queue.photoImageKeyId).resizedTo(imageWidth);
+    var image = $("<img>", {
+      "src": imageSrc,
+      "class": "animated activator",
+      "alt": queue.name + " Cover"
+    });
+
+    card.withImage(image);
+    card.withImageRatio(3/2);
+
+    card.withContent(queue.description);
+    card.withTitle(queue.name, true);
+
+    var table = $("<table>");
+    var tableBody = $("<tbody>");
+
+    var tr;
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("location")));
+    var mapsUrl = "http://maps.google.com/maps?q=" + queue.latitude + "," + queue.longitude;
+    tr.append($("<td>").append($("<a>").attr("target","_blank").attr("href", mapsUrl).text(getString("locationMap"))));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("visibility")));
+    var visibility = getString("public");
+    if (queue.visibility == intelliqApi.VISIBILITY_PRIVATE) {
+      visibility = getString("private");
+    }
+    tr.append($("<td>").text(visibility));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("requiresSignIn")));
+    var requiresSignIn = getString("no");
+    if (queue.requiresSignIn) {
+      requiresSignIn = getString("yes");
+    }
+    tr.append($("<td>").text(requiresSignIn));
+    tr.appendTo(tableBody);
+
+    tableBody.appendTo(table);
+
+    var revealableContent = table;
+    card.withRevealableContent(revealableContent).withTitle(queue.name);
+
+    return card;
+  }
+
+  ui.generateQueueDescriptionCard = function(queue) {
+    var card = ui.generateCard()
+
+    var title = getString("description");
+    var content = $("<p>").text(queue.description);
+
+    card.withContent(content).withTitle(title, false);
+    return card;
+  }
+
+  ui.generateQueueStatusCard = function(queue) {
+    var card = ui.generateCard()
+
+    var getReadableWaitingTime = function() {
+      var waitinTime = queue.averageWaitingTime * queue.waitingPeople;
+      var timestamp = new Date() - waitinTime;
+      var since = ui.time().since(new Date(timestamp));
+      return since;
+    }
+
+    var status;
+    if (queue.waitingPeople > 0) {
+      status = getString("queueStatus", queue.waitingPeople, getReadableWaitingTime());
+    } else {
+      status = getString("queueStatusEmpty");
+    }
+    card.withContent(status)
+    card.withTitle(getString("status"), false);
+    return card;
+  }
+
+  ui.generateQueueItemCard = function(queueItem) {
+    var card = ui.generateCard()
+
+    var title = getString("ticket") + " #" + queueItem.ticketNumber;
+    var status = ui.getStatusNameByQueueItemStatus(queueItem.status);
+    var joined = ui.time().since(new Date(queueItem.entryTimestamp));
+    joined = getString("timeAgo", joined);
+
+    var table = $("<table>");
+    var tableBody = $("<tbody>");
+
+    var tr;
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("number")));
+    tr.append($("<td>").text(queueItem.ticketNumber));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("status")));
+    var statusData = $("<td>").text(status);
+    if (queueItem.status == intelliqApi.STATUS_CALLED) {
+      statusData.addClass("red-text");
+      card.addClass("deep-purple lighten-5");
+    }
+    tr.append(statusData);
+    tr.appendTo(tableBody);
+    
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("name")));
+    tr.append($("<td>").text(queueItem.name));
+    tr.appendTo(tableBody);
+
+    tr = $("<tr>");
+    tr.append($("<td>").text(getString("joined")));
+    tr.append($("<td>").text(joined));
+    tr.appendTo(tableBody);
+
+    tableBody.appendTo(table);
+    card.withContent(table)
+
+    var openTicketUrl = intelliqApi.getUrls().forQueueItem(queueItem).openInWebApp();
+    var openQueueUrl = intelliqApi.getUrls().forQueue({ key: { id: queueItem.queueKeyId } }).openInWebApp();
+    card.click(function() {
+      navigateTo(openQueueUrl);
+    })
     return card;
   }
 
@@ -534,6 +720,105 @@ var ui = function(){
       return getString("statusDone");
     }
     return getString("unknown");
+  }
+
+  ui.renderEntries = function(entries, container, options) {
+    if (container == null || container.length < 1) {
+      return;
+    }
+    container.empty();
+    var wrapper = container;
+
+    if (options.wrapperGenerator != null) {
+      wrapper = options.wrapperGenerator();
+    }
+
+    for (var i = 0; i < entries.length; i++) {
+      try {
+        // create a item
+        var item = options.itemGenerator(entries[i]);
+
+        if (options.itemWrapperGenerator != null) {
+          // create a div that wraps the item
+          var itemWrapper = options.itemWrapperGenerator();
+
+          // render the item in the item wrapper
+          item.renderIn(itemWrapper);
+
+          // add the item wrapper to the wrapper
+          wrapper.append(itemWrapper);
+        } else {
+          // add the item to the wrapper
+          wrapper.append(item);
+        }
+      } catch (ex) {
+        console.log("Unable to render entry:");
+        console.log(ex);
+      }
+    }
+
+    if (options.wrapperGenerator != null) {
+      container.append(wrapper);
+    } else {
+      container = wrapper;
+    }
+
+    if (entries.length < 1) {
+      container.hide();
+      container.parent().find(".emptyState").removeClass("hide");
+    } else {
+      container.show();
+      container.parent().find(".emptyState").addClass("hide");
+    }
+
+    // re-initialize tooltips
+    $(".material-tooltip").remove();
+    $(".tooltipped").tooltip({ delay: 250 });
+  }
+
+  /*
+    Time
+  */
+  ui.time = function() {
+    var time = {};
+
+    time.fillDigits = function(value) {
+      return value < 10 ? "0" + value : value;
+    }
+
+    time.at = function(date) {
+      var hours = time.fillDigits(date.getHours());
+      var minutes = time.fillDigits(date.getMinutes());
+      var seconds = time.fillDigits(date.getSeconds());
+      return hours + ":" + minutes;
+    }
+
+    time.since = function(date) {
+      var seconds = Math.floor((new Date() - date) / 1000);
+      var interval = Math.floor(seconds / 31536000);
+      if (interval > 1) {
+        return interval + " " + getString("unitYears");
+      }
+      interval = Math.floor(seconds / 2592000);
+      if (interval > 1) {
+        return interval + " " + getString("unitMonths");
+      }
+      interval = Math.floor(seconds / 86400);
+      if (interval > 1) {
+        return interval + " " + getString("unitDays");
+      }
+      interval = Math.floor(seconds / 3600);
+      if (interval > 1) {
+        return interval + " " + getString("unitHours");
+      }
+      interval = Math.floor(seconds / 60);
+      if (interval > 1) {
+        return interval + " " + getString("unitMinutes");
+      }
+      return Math.max(Math.floor(seconds), 0) + " " + getString("unitSeconds");
+    }
+
+    return time;
   }
 
   /*

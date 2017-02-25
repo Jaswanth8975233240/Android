@@ -66,7 +66,6 @@ public class DeleteQueueItemEndpoint extends Endpoint {
 
         long queueItemKeyId = request.getParameterAsLong("queueItemKeyId", -1);
 
-
         try {
             QueueItemHelper.deleteEntryByKeyId(queueItemKeyId);
         } catch (JDOObjectNotFoundException exception) {

@@ -3,7 +3,7 @@
     <div id="modal-signin" class="modal">
       <div class="modal-content">
         <h4>Sign In</h4>
-        <p>Please sign in with your Google account. If you don't have an account, you can create one <a href="https://accounts.google.com/SignUp" target="_blank">here</a>. In order to prevent misuse and spam, certain actions you perform will be tracked and coupled with your account.</p>
+        <p>Please sign in with your Google account. In order to prevent misuse and spam, certain actions you perform will be tracked and coupled with your account.</p>
         <a id="signInWithGoogleButton" class="btn-large waves-effect waves-light primary-color">
           <i class="material-icons right">account_circle</i>
           Google Sign In
@@ -39,42 +39,6 @@
         </a>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="page-footer primary-color">
-      <div class="container">
-        <div class="row">
-          <div class="col s12 m12 l6">
-            <h5 class="white-text">About IntelliQ.me</h5>
-            <p class="grey-text text-lighten-4">We think no one should waste lifetime while waiting. It doesn't matter where you are - you should be able to use the time until it's your turn effectively.
-            IntelliQ.me is a smart system to manage waiting queues and offers estimations about remaining waiting time.</p>
-          </div>
-          <div class="col s6 m4 l3">
-            <h5 class="white-text">Connect</h5>
-            <ul>
-              <li><a class="white-text" href="https://www.facebook.com/Intelliq.me">Facebook</a></li>
-              <li><a class="white-text" href="https://twitter.com/IntelliQMe">Twitter</a></li>
-              <li><a class="white-text" href="https://www.google.com/+IntelliqMe">Google+</a></li>
-              <li><a class="white-text" href="mailto:mail@intelliq.me">E-Mail</a></li>
-            </ul>
-          </div>
-          <div class="col s6 m4 l3">
-            <h5 class="white-text">Links</h5>
-            <ul>
-              <li><a class="white-text" href="${rootUrl}/apps/">Apps</a></li>
-              <li><a class="white-text" href="${rootUrl}/manage/">Manage</a></li>
-              <li><a class="white-text" href="${rootUrl}/press/">Press</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="footer-copyright">
-        <div class="container">
-          Developed with love by 
-          <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a>
-        </div>
-      </div>
-    </footer>
     
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

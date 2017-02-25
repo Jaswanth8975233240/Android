@@ -11,7 +11,7 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
-
+    
     <!-- Servlet for routing and filtering all requests -->
     <filter>
         <filter-name>requestFilter</filter-name>
@@ -66,7 +66,7 @@
     <!-- Landing page servlet -->
     <servlet>
         <servlet-name>de/home</servlet-name>
-        <jsp-file>/website/de/home.jsp</jsp-file>
+        <jsp-file>/website/en/home.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>de/home</servlet-name>
@@ -84,7 +84,7 @@
     <!-- Apps page servlet -->
     <servlet>
         <servlet-name>de/apps</servlet-name>
-        <jsp-file>/website/de/apps.jsp</jsp-file>
+        <jsp-file>/website/en/apps.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>de/apps</servlet-name>
@@ -102,7 +102,7 @@
     <!-- Business page servlet -->
     <servlet>
         <servlet-name>de/business</servlet-name>
-        <jsp-file>/website/de/business.jsp</jsp-file>
+        <jsp-file>/website/en/business.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>de/business</servlet-name>
@@ -243,4 +243,40 @@
         <url-pattern>/intelliq/en/display/queueservlet/*</url-pattern>
     </servlet-mapping>
     
+    <!-- Web-App servlet -->
+    <servlet>
+        <servlet-name>de/apps/web</servlet-name>
+        <jsp-file>/website/en/webapp.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>de/apps/web</servlet-name>
+        <url-pattern>/intelliq/de/webappservlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>en/apps/web</servlet-name>
+        <jsp-file>/website/en/webapp.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>en/apps/web</servlet-name>
+        <url-pattern>/intelliq/en/webappservlet/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Web-App Queue servlet -->
+    <servlet>
+        <servlet-name>de/apps/web/queue</servlet-name>
+        <jsp-file>/website/en/webapp_queue.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>de/apps/web/queue</servlet-name>
+        <url-pattern>/intelliq/de/webapp/queueservlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>en/apps/web/queue</servlet-name>
+        <jsp-file>/website/en/webapp_queue.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>en/apps/web/queue</servlet-name>
+        <url-pattern>/intelliq/en/webapp/queueservlet/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>

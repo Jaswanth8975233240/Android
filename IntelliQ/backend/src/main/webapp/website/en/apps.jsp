@@ -15,15 +15,13 @@
 				<div class="container">
 					<br>
 					<br>
-					<h1 class="header center white-text light">IntelliQ.me</h1>
+					<h1 class="header center white-text light">Join a Queue</h1>
 					<div class="row center">
-						<h5 class="header col s12 light">Get our free app for Android or iOS</h5>
-	
+						<h5 class="header col s12 light">And stop wasting your lifetime while waiting in line</h5>
 					</div>
 					<div class="row center">
-						<a href="#" class="btn-large waves-effect waves-light accent-color">Smarter Waiting</a>
+						<a href="${appUrl}" class="btn-large waves-effect waves-light accent-color">Join a Queue</a>
 					</div>
-					<br>
 					<br>
 	
 				</div>
@@ -45,10 +43,10 @@
 							</h2>
 							<h5 class="center">Android</h5>
 	
-							<p class="light center">Get IntelliQ for your Android smartphone or Wear device from the Play Store</p>
+							<p class="light center">Get IntelliQ.me for your Android smartphone and Wear device from the Play Store.</p>
 	
 							<div class="row center">
-								<a href="https://play.google.com/store/apps/details?id=com.steppschuh.intelliq" class="btn-large waves-effect waves-light primary-color">Google Play</a>
+								<a href="https://play.google.com/store/apps/details?id=com.steppschuh.intelliq" class="btn-large waves-effect waves-light primary-color disabled">Google Play</a>
 							</div>
 						</div>
 					</div>
@@ -60,10 +58,10 @@
 							</h2>
 							<h5 class="center">iOS</h5>
 	
-							<p class="light center">Visit the Apple App Store to get IntelliQ for your iPhone or Apple Watch.</p>
+							<p class="light center">Visit the Apple App Store to get IntelliQ.me for your iPhone and Apple Watch.</p>
 	
 							<div class="row center">
-								<a href="https://itunes.apple.com/pg/app/intelliq/id1019495717" class="btn-large waves-effect waves-light primary-color">iTunes</a>
+								<a href="#" class="btn-large waves-effect waves-light primary-color disabled">iTunes</a>
 							</div>
 						</div>
 					</div>
@@ -75,10 +73,10 @@
 							</h2>
 							<h5 class="center">Web</h5>
 	
-							<p class="light center">If you own a Google Chromebook you can get the IntelliQ Chrome extension.</p>
+							<p class="light center">If you don't want to download the native IntelliQ.me app right now, simply use your browser.</p>
 	
 							<div class="row center">
-								<a href="https://chrome.google.com/webstore/detail/intelliq/mbflidackmmffjigimaecbfkndgaaahd?hl=en" class="btn-large waves-effect waves-light primary-color">Chrome Store</a>
+								<a href="${appUrl}" class="btn-large waves-effect waves-light primary-color">Open</a>
 							</div>
 						</div>
 					</div>

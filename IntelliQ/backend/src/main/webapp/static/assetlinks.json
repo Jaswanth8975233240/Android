@@ -1,0 +1,11 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.steppschuh.intelliq",
+    "sha256_cert_fingerprints": [
+    	"69:36:21:B8:B9:5D:F2:C6:0F:5A:B9:AE:36:35:89:CD:0C:36:51:FE",
+    	"65:D6:85:5D:3B:55:33:25:2B:32:97:A7:02:F6:BA:A7:76:F3:6C:4B"
+    ]
+  }
+}]

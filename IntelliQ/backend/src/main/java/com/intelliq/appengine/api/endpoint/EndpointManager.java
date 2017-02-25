@@ -44,6 +44,7 @@ public final class EndpointManager {
     public static final String ENDPOINT_QUEUE_ITEM = ENDPOINT_API + "item/";
     public static final String ENDPOINT_QUEUE_ITEM_GET = ENDPOINT_QUEUE_ITEM + "get/";
     public static final String ENDPOINT_QUEUE_ITEM_ADD = ENDPOINT_QUEUE_ITEM + "add/";
+    public static final String ENDPOINT_QUEUE_ITEM_FROM = ENDPOINT_QUEUE_ITEM + "from/";
     public static final String ENDPOINT_QUEUE_ITEM_STATUS = ENDPOINT_QUEUE_ITEM + "status/";
     public static final String ENDPOINT_QUEUE_ITEM_DELETE = ENDPOINT_QUEUE_ITEM + "delete/";
     public static final String ENDPOINT_QUEUE_ITEM_LAST = ENDPOINT_QUEUE_ITEM + "last/";

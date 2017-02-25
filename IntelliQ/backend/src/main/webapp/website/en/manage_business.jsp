@@ -34,7 +34,7 @@
             <div class="col s12 m12 l4 vertical-spacing">
               <div class="col s12 card-spacing">
                 <a id="addQueueButton" href="${rootUrl}/edit/queue/" class="btn-large waves-effect waves-light primary-color fill-width">
-                  <i class="material-icons right">business</i> 
+                  <i class="material-icons right">group_add</i> 
                   Add Queue
                 </a>
                 <blockquote>Queues can keep track of your customers. You can add multiple queues to one business. Make sure that you don't confuse your customers and choose unique names.</blockquote>

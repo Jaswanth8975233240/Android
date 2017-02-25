@@ -1,0 +1,27 @@
+{
+  "short_name": "IntelliQ.me",
+  "name": "IntelliQ.me",
+  "icons": [
+    {
+      "src": "https://intelliq.me/static/images/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFFFFF",
+  "theme_color": "#663fb4",
+  "description": "Smarter Waiting",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "web"
+    }/*,
+    {
+      "platform": "play",
+      "id": "com.steppschuh.intelliq",
+      "url": "https://play.google.com/store/apps/details?id=com.steppschuh.intelliq"
+    }*/
+  ]
+}

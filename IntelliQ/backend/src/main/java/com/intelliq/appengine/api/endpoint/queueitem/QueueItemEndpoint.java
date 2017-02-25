@@ -32,6 +32,7 @@ public class QueueItemEndpoint extends Endpoint {
         List<Endpoint> endpoints = new ArrayList<Endpoint>();
         endpoints.add(new GetQueueItemEndpoint());
         endpoints.add(new AddQueueItemEndpoint());
+        endpoints.add(new GetQueueItemsFromUserEndpoint());
         endpoints.add(new GetLastItemInQueueEndpoint());
         endpoints.add(new SetQueueItemStatusEndpoint());
         endpoints.add(new DeleteQueueItemEndpoint());

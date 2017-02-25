@@ -5,23 +5,29 @@ var googleMap; // the Google Maps API object
 var deviceLocationMarker; // map marker for the current location
 var queueLocationMarker; // map marker for the new queue location
 
-window.onload = function(event) {
-  $("#saveQueueButton").click(saveNewQueue);
-  updateFormWithUrlParameterData();
-};
+(function($){
+  $(function(){
 
-var onUserReady = function(user) {
-  var queueKeyId = getUrlParam("queueKeyId");
-  requestExistingQueueData(queueKeyId);
+    $("#saveQueueButton").click(saveNewQueue);
+    updateFormWithUrlParameterData();
 
-  // update the UI
-  if (queueKeyId == null) {
-    showAddQueueUi();
-    updateFormWithDeviceLocation();
-  } else {
-    showEditQueueUi();
-  }
-}
+    var statusChangeListener = {
+      onUserAvailable: function(user) {
+        var queueKeyId = getUrlParam("queueKeyId");
+        requestExistingQueueData(queueKeyId);
+
+        // update the UI
+        if (queueKeyId == null) {
+          showAddQueueUi();
+          updateFormWithDeviceLocation();
+        } else {
+          showEditQueueUi();
+        }
+      }
+    };
+    authenticator.registerStatusChangeListener(statusChangeListener);
+  });
+})(jQuery);
 
 // fetches an existing queue from the API, if the required
 // url param is set. Then updates the form with the queue data
@@ -41,7 +47,7 @@ function requestExistingQueueData(queueKeyId) {
   }).catch(function(error){
     console.log(error);
     $(".loadingState").hide();
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -168,12 +174,12 @@ function saveNewQueue() {
     var business = { "key": { "id": newQueue.businessKeyId } };
     window.location.href = intelliqApi.getUrls().forBusiness(business).manage();
   }, function(error) {
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
 function updateExistingQueue(queue) {
-  var googleIdToken = authenticator.getInstance().getUserIdToken()
+  var googleIdToken = authenticator.getGoogleUserIdToken();
   return intelliqApi
       .editQueue(queue)
       .setGoogleIdToken(googleIdToken)
@@ -181,7 +187,7 @@ function updateExistingQueue(queue) {
 }
 
 function addNewQueue(queue) {
-  var googleIdToken = authenticator.getInstance().getUserIdToken()
+  var googleIdToken = authenticator.getGoogleUserIdToken();
   return intelliqApi
       .addQueue(queue)
       .setGoogleIdToken(googleIdToken)
@@ -236,7 +242,7 @@ function initializeMap() {
       updateQueueLocationMarker(location.latitude, location.longitude);
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   });
 
@@ -248,7 +254,7 @@ function initializeMap() {
       updateFormWithGoogleAddressData(results);
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   });
 
@@ -333,7 +339,7 @@ function updateQueueLocationMarker(latitude, longitude) {
 // and reverse-geocodes the address
 function updateFormWithDeviceLocation() {
   Materialize.toast(getString("locatingDevice"), 3000);
-  getDeviceLocation().then(function(location){
+  requestDeviceLocation().then(function(location){
     deviceLocation = location;
 
     var latitude = location.coords.latitude;
@@ -354,11 +360,11 @@ function updateFormWithDeviceLocation() {
       updateFormWithGoogleAddressData(results);
     }).catch(function(error){
       console.log(error);
-      showErrorMessage(error);
+      ui.showErrorMessage(error);
     });
   }).catch(function(error){
     console.log(error);
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 

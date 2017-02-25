@@ -1,7 +1,10 @@
 (function($){
   $(function(){
-
-    $('.button-collapse').sideNav();
+    $('.button-collapse').sideNav({
+      menuWidth: 240,
+      edge: 'left',
+      closeOnClick: true
+    });
     $('.parallax').parallax();
     $('.tooltipped').tooltip({delay: 50});
     $('.modal-trigger').leanModal();
@@ -100,3 +103,12 @@ function submitContactForm() {
   }
   return false;
 }
+
+String.prototype.format = function () {
+  var args = arguments;
+  return this.replace(/\{\{|\}\}|\{(\d+)\}/g, function (m, n) {
+    if (m == "{{") { return "{"; }
+    if (m == "}}") { return "}"; }
+    return args[n];
+  });
+};

@@ -27,8 +27,9 @@ var intelliqApi = function(){
   api.HOST_LOCAL = "http://localhost:8080/";
 
   // App Engine (for api requests)
-  api.APP_ENGINE_VERSION = 2;
-  api.HOST_APP_ENGINE = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
+  api.APP_ENGINE_VERSION = 3;
+  api.HOST_APP_ENGINE = "https://intelliq-me.appspot.com/";
+  api.HOST_APP_ENGINE_VERSIONED = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
 
   // Request endpoints
   if (useDevelopmentServer()) {
@@ -52,6 +53,7 @@ var intelliqApi = function(){
 
   api.ENDPOINT_QUEUE = api.ENDPOINT_API + "queue/";
   api.ENDPOINT_QUEUE_GET = api.ENDPOINT_QUEUE + "get/";
+  api.ENDPOINT_QUEUE_NEARBY = api.ENDPOINT_QUEUE + "nearby/";
   api.ENDPOINT_QUEUE_ADD = api.ENDPOINT_QUEUE + "add/";
   api.ENDPOINT_QUEUE_EDIT = api.ENDPOINT_QUEUE + "edit/";
   api.ENDPOINT_QUEUE_POPULATE = api.ENDPOINT_QUEUE + "populate/";
@@ -61,6 +63,7 @@ var intelliqApi = function(){
 
   api.ENDPOINT_QUEUE_ITEM = api.ENDPOINT_API + "item/";
   api.ENDPOINT_QUEUE_ITEM_GET = api.ENDPOINT_QUEUE_ITEM + "get/";
+  api.ENDPOINT_QUEUE_ITEM_FROM = api.ENDPOINT_QUEUE_ITEM + "from/";
   api.ENDPOINT_QUEUE_ITEM_ADD = api.ENDPOINT_QUEUE_ITEM + "add/";
   api.ENDPOINT_QUEUE_ITEM_DELETE = api.ENDPOINT_QUEUE_ITEM + "delete/";
   api.ENDPOINT_QUEUE_ITEM_STATUS = api.ENDPOINT_QUEUE_ITEM + "status/";
@@ -77,6 +80,11 @@ var intelliqApi = function(){
   api.PAGE_LINK_CREATE = api.PAGE_LINK + "create/";
   api.PAGE_LINK_DISPLAY = api.PAGE_LINK + "display/";
 
+  api.PAGE_LINK_WEB_APP = api.PAGE_LINK + "apps/web/";
+  api.PAGE_LINK_WEB_APP_NEARBY = api.PAGE_LINK_WEB_APP + "nearby/";
+  api.PAGE_LINK_WEB_APP_QUEUE = api.PAGE_LINK_WEB_APP + "queue/";
+  api.PAGE_LINK_WEB_APP_TICKETS = api.PAGE_LINK_WEB_APP + "tickets/";
+  
   api.PATH_BUSINESS = "business/";
   api.PATH_QUEUE = "queue/";
 
@@ -87,14 +95,22 @@ var intelliqApi = function(){
   api.STATUS_CALLED = 2;
   api.STATUS_DONE = 3;
 
+  // Queue visibility
   api.VISIBILITY_PRIVATE = 0;
   api.VISIBILITY_PUBLIC = 1;
 
+  // Entry types
   api.ENTRY_TYPE_BUSINESS = "BusinessEntry";
   api.ENTRY_TYPE_QUEUE = "QueueEntry";
   api.ENTRY_TYPE_QUEUE_ITEM = "QueueItemEntry";
   api.ENTRY_TYPE_USER = "UserEntry";
   api.ENTRY_TYPE_PERMISSION = "PermissionEntry";
+
+  // Update intervals
+  api.UPDATE_INTERVAL_CASUAL = 1000 * 30;
+  api.UPDATE_INTERVAL_DEFAULT = 1000 * 15;
+  api.UPDATE_INTERVAL_FAST = 1000 * 10;
+  api.UPDATE_INTERVAL_DEMO = 1000 * 5;
 
   /*
     Requests
@@ -346,6 +362,38 @@ var intelliqApi = function(){
   api.getQueue = function(queueKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_GET);
     request.addParameter("queueKeyId", queueKeyId);
+
+    request.includeBusiness = function(value) {
+      if (value) {
+        request.addParameter("includeBusiness", "true");
+      } else {
+        request.addParameter("includeBusiness", "false");
+      }
+      return request;
+    }
+
+    return request;
+  }
+
+  api.getNearbyQueues = function(latitude, longitude) {
+    var request = api.request(api.ENDPOINT_QUEUE_NEARBY);
+    request.addParameter("latitude", latitude);
+    request.addParameter("longitude", longitude);
+
+    request.inRange = function(distance) {
+      request.addParameter("distance", distance);
+      return request;
+    }
+
+    request.includeBusinesses = function(value) {
+      if (value) {
+        request.addParameter("includeBusinesses", "true");
+      } else {
+        request.addParameter("includeBusinesses", "false");
+      }
+      return request;
+    }
+
     return request;
   }
 
@@ -477,6 +525,18 @@ var intelliqApi = function(){
     return request;
   }
 
+  api.getQueueItem = function(queueItemKeyId) {
+    var request = api.request(api.ENDPOINT_QUEUE_ITEM_GET);
+    request.addParameter("queueItemKeyId", queueItemKeyId);
+    return request;
+  }
+
+  api.getQueueItemsFrom = function(userKeyId) {
+    var request = api.request(api.ENDPOINT_QUEUE_ITEM_FROM);
+    request.addParameter("userKeyId", userKeyId);
+    return request;
+  }
+
   api.addQueueItem = function(queueKeyId) {
     var request = api.request(api.ENDPOINT_QUEUE_ITEM_ADD);
     request.addParameter("queueKeyId", queueKeyId);
@@ -493,6 +553,15 @@ var intelliqApi = function(){
         request.addParameter("showName", "false");
       } else {
         request.addParameter("showName", "true");
+      }
+      return request;
+    }
+
+    request.usingApp = function(value) {
+      if (value) {
+        request.addParameter("usingApp", "true");
+      } else {
+        request.addParameter("usingApp", "false");
       }
       return request;
     }
@@ -734,7 +803,7 @@ var intelliqApi = function(){
 
       urls.resizedTo = function(size) {
         if (top.location.origin == "file://") {
-          return "http://localhost:8888/image/" + imageKeyId + "/" + size + ".jpg";
+          return api.HOST_LOCAL + "image/" + imageKeyId + "/" + size + ".jpg";
         } else {
           return api.PAGE_LINK + "image/" + imageKeyId + "/" + size + ".jpg";
         }
@@ -771,6 +840,22 @@ var intelliqApi = function(){
       urls.manage = function() {
         var url = api.PAGE_LINK_MANAGE + api.PATH_QUEUE;
         return urls.replaceParameter("queueKeyId", queue.key.id, url);
+      }
+
+      urls.openInWebApp = function() {
+        var url = api.PAGE_LINK_WEB_APP_QUEUE;
+        return urls.replaceParameter("queueKeyId", queue.key.id, url);
+      }
+
+      return urls;
+    }
+
+    urls.forQueueItem = function(queueItemEntry) {
+      var queueItem = queueItemEntry;
+
+      urls.openInWebApp = function() {
+        var url = api.PAGE_LINK_WEB_APP_TICKETS;
+        return urls.replaceParameter("queueItemKeyId", queueItem.key.id, url);
       }
 
       return urls;

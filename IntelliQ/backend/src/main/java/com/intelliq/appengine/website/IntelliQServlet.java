@@ -52,7 +52,15 @@ public class IntelliQServlet extends HttpServlet {
                 //forwardUrl += "manage/overviewservlet/";
             }
         } else if (requestUrl.contains("/apps/")) {
-            forwardUrl += "appsservlet/";
+            if (requestUrl.contains("/web/")) {
+                if (requestUrl.contains("/queue/")) {
+                    forwardUrl += "webapp/queueservlet/";
+                } else {
+                    forwardUrl += "webappservlet/";
+                }
+            } else {
+                forwardUrl += "appsservlet/";
+            }
         } else if (requestUrl.contains("/unternehmen/") || requestUrl.contains("/business/")) {
             forwardUrl += "businessservlet/";
         } else if (requestUrl.contains("/signin/")) {
@@ -69,6 +77,8 @@ public class IntelliQServlet extends HttpServlet {
         req.setAttribute("rootUrl", rootUrl);
         req.setAttribute("requestUrl", requestUrl.replace("/intelliq", ""));
         req.setAttribute("staticUrl", rootUrl + "/static/");
+        req.setAttribute("appUrl", rootUrl + "/apps/web/");
+        req.setAttribute("manageUrl", rootUrl + "/manage/");
 
         try {
             rd.forward(req, resp);
