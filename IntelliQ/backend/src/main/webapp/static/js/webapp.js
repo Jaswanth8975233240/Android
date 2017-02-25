@@ -185,7 +185,7 @@ function requestRecentQueueItemKeyIds() {
     var queueItemKeyIds = [];
 
     var addQueueItemKeyId = function(queueItemKeyId) {
-      if (queueItemKeyId == null && queueItemKeyId < 0) {
+      if (queueItemKeyId == null || queueItemKeyId < 0) {
         return;
       }
       if (queueItemKeyIds.indexOf(queueItemKeyId) > -1) {
