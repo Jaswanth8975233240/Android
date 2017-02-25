@@ -1,22 +1,28 @@
 var existingBusiness; // holds the existing business, as returned by the API
 var newBusiness; // holds the new business, created by the local changes
 
-window.onload = function(event) {
-  $("#saveBusinessButton").click(saveNewBusiness);
-  updateFormWithUrlParameterData();
-};
+(function($){
+  $(function(){
 
-var onUserReady = function(user) {
-  var businessKeyId = getUrlParam("businessKeyId");
-  requestExistingBusinessData(businessKeyId);
+    $("#saveBusinessButton").click(saveNewBusiness);
+    updateFormWithUrlParameterData();
 
-  // update the UI
-  if (businessKeyId == null) {
-    showAddBusinessUi();
-  } else {
-    showEditBusinessUi();
-  }
-}
+    var statusChangeListener = {
+      onUserAvailable: function(user) {
+        var businessKeyId = getUrlParam("businessKeyId");
+        requestExistingBusinessData(businessKeyId);
+
+        // update the UI
+        if (businessKeyId == null) {
+          showAddBusinessUi();
+        } else {
+          showEditBusinessUi();
+        }
+      }
+    };
+    authenticator.registerStatusChangeListener(statusChangeListener);
+  });
+})(jQuery);
 
 // fetches an existing business from the API, if the required
 // url param is set. Then updates the form with the business data
@@ -36,7 +42,7 @@ function requestExistingBusinessData(businessKeyId) {
   }).catch(function(error){
     console.log(error);
     $(".loadingState").hide();
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
@@ -96,12 +102,12 @@ function saveNewBusiness() {
     console.log(data);
     window.location.href = intelliqApi.PAGE_LINK_MANAGE;
   }, function(error) {
-    showErrorMessage(error);
+    ui.showErrorMessage(error);
   });
 }
 
 function updateExistingBusiness(business) {
-  var googleIdToken = authenticator.getInstance().getUserIdToken()
+  var googleIdToken = authenticator.getGoogleUserIdToken();
   return intelliqApi
       .editBusiness(business.key.id, business.name, business.mail)
       .setGoogleIdToken(googleIdToken)
@@ -109,7 +115,7 @@ function updateExistingBusiness(business) {
 }
 
 function addNewBusiness(business) {
-  var googleIdToken = authenticator.getInstance().getUserIdToken()
+  var googleIdToken = authenticator.getGoogleUserIdToken();
   return intelliqApi
       .addBusiness(business.name, business.mail)
       .addQueue(false)

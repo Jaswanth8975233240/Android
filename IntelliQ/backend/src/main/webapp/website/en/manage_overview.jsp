@@ -3,27 +3,6 @@
   <head>
     <title>IntelliQ.me - Manage</title>
     <%@include file="../includes/en/common_head.jsp"%>
-    <script type="text/javascript">
-      var onUserReady = function(user) {
-        updateAddBusinessUrl();
-
-        intelliqApi.getBusinessesFrom(user.key.id).send().then(function(data){
-          var businesses = intelliqApi.getBusinessesFromResponse(data);
-          console.log(businesses);
-          renderBusinesses(businesses, $("#businessContainer"));
-        }).catch(function(error){
-          console.log(error);
-          showErrorMessage(error);
-        });
-      }
-
-      function updateAddBusinessUrl() {
-        var userProfile = authenticator.getInstance().getCurrentGoogleUser().getBasicProfile();
-        var url = intelliqApi.getUrls().forBusiness().add(userProfile.getName(), userProfile.getEmail());
-        $("#addBusinessButton").attr("href", url);
-      }
-    </script>
-
   </head>
 
   <body>
@@ -69,5 +48,29 @@
     </main>
     <%@include file="../includes/en/common_footer.jsp"%>
     <script src="${staticUrl}js/manage.js" defer></script>
+    <script type="text/javascript">
+      $(function(){
+        var statusChangeListener = {
+          onUserAvailable: function(user) {
+            updateAddBusinessUrl();
+            intelliqApi.getBusinessesFrom(user.key.id).send().then(function(data){
+              var businesses = intelliqApi.getBusinessesFromResponse(data);
+              console.log(businesses);
+              renderBusinesses(businesses, $("#businessContainer"));
+            }).catch(function(error){
+              console.log(error);
+              showErrorMessage(error);
+            });
+          }
+        };
+        authenticator.registerStatusChangeListener(statusChangeListener);
+      });
+      
+      function updateAddBusinessUrl() {
+        var userProfile = authenticator.getGoogleUser().getBasicProfile();
+        var url = intelliqApi.getUrls().forBusiness().add(userProfile.getName(), userProfile.getEmail());
+        $("#addBusinessButton").attr("href", url);
+      }
+    </script>
   </body>
 </html>

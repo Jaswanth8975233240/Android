@@ -2,11 +2,27 @@
     <!-- Sign in modal -->
     <div id="modal-signin" class="modal">
       <div class="modal-content">
-        <h4>Connect your account</h4>
-        <p>Please sign in with your Google account to use this feature. In order to prevent misuse and spam, certain actions you perform will be tracked and coupled with your account.</p>
+        <h4>Sign In</h4>
+        <p>Please sign in with your Google account. If you don't have an account, you can create one <a href="https://accounts.google.com/SignUp" target="_blank">here</a>. In order to prevent misuse and spam, certain actions you perform will be tracked and coupled with your account.</p>
         <a id="signInWithGoogleButton" class="btn-large waves-effect waves-light primary-color">
           <i class="material-icons right">account_circle</i>
-          Connect Google Account
+          Google Sign In
+        </a>
+      </div>
+    </div>
+
+    <!-- Sign out modal -->
+    <div id="modal-signout" class="modal">
+      <div class="modal-content">
+        <h4>Sign Out</h4>
+        <p>You can sign out or switch your account using the buttons below.</p>
+        <a id="signOutButton" class="btn-large waves-effect waves-light primary-color">
+          <i class="material-icons right">account_circle</i>
+          Sign Out
+        </a>
+        <a id="switchAccountButton" class="btn-large waves-effect waves-light primary-color">
+          <i class="material-icons right">supervisor_account</i>
+          Switch Account
         </a>
       </div>
     </div>
@@ -31,7 +47,7 @@
           <div class="col s12 m12 l6">
             <h5 class="white-text">About IntelliQ.me</h5>
             <p class="grey-text text-lighten-4">We think no one should waste lifetime while waiting. It doesn't matter where you are - you should be able to use the time until it's your turn effectively.
-            IntelliQ is a smart system to manage waiting queues and offers estimations about remaining waiting time.</p>
+            IntelliQ.me is a smart system to manage waiting queues and offers estimations about remaining waiting time.</p>
           </div>
           <div class="col s6 m4 l3">
             <h5 class="white-text">Connect</h5>
@@ -45,8 +61,7 @@
           <div class="col s6 m4 l3">
             <h5 class="white-text">Links</h5>
             <ul>
-              <li><a class="white-text" href="https://play.google.com/store/apps/details?id=com.steppschuh.intelliq">Android App</a></li>
-              <li><a class="white-text" href="https://itunes.apple.com/pg/app/intelliq/id1019495717">iOS App</a></li>
+              <li><a class="white-text" href="${rootUrl}/apps/">Apps</a></li>
               <li><a class="white-text" href="${rootUrl}/manage/">Manage</a></li>
               <li><a class="white-text" href="${rootUrl}/press/">Press</a></li>
             </ul>
@@ -56,8 +71,7 @@
       <div class="footer-copyright">
         <div class="container">
           Developed with love by 
-          <a class="accent-color-text text-lighten-3" href="http://markus-petrykowski.de/">Markus</a> and 
-          <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Stephan</a>
+          <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a>
         </div>
       </div>
     </footer>
@@ -66,6 +80,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="${staticUrl}js/materialize.js"></script>
     <script src="${staticUrl}js/init.js"></script>
+    <script src="${staticUrl}js/tracking.js"></script>
     <script src="${staticUrl}js/general.js"></script>
     <script src="${staticUrl}js/authenticator.js" defer></script>
     <script src="${staticUrl}js/api.js" defer></script>

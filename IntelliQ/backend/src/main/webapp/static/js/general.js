@@ -1,7 +1,7 @@
 var baseUrl = location.protocol + "//" + location.hostname + (location.port && ":" + location.port) + "";
 
 function whenAvailable(name, callback) {
-    var interval = 50; // ms
+    var interval = 50;
     window.setTimeout(function() {
         if (window[name]) {
             callback(window[name]);
@@ -9,24 +9,6 @@ function whenAvailable(name, callback) {
             window.setTimeout(arguments.callee, interval);
         }
     }, interval);
-}
-
-function getDeviceLocation() {
-  var promise = new Promise(function(resolve, reject) {
-    try {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        console.log(position);
-        //var lat = position.coords.latitude;
-        //var long = position.coords.longitude;
-        resolve(position)
-      }, function() {
-        reject("Location request blocked");
-      });
-    } catch(ex) {
-      reject(ex);
-    }
-  });
-  return promise;
 }
 
 function getDecodedUrlParam(sParam) {
@@ -72,12 +54,17 @@ function getHostNameFromUrl(url) {
   return l.hostname;
 }
 
-function getString(key, value) {
+function getString(key) {
   var string  = res[key];
   if (string == null) {
     string = "Resource Error";
   }
-  string = string.replace("[VALUE]", value);
+  
+  if (arguments.length > 0) {
+    var values = Array.prototype.slice.call(arguments, 1);
+    string = String.prototype.format.apply(string, values);
+  }
+  
   return string;
 }
 
@@ -103,6 +90,9 @@ function removeClassName(div, newClass) {
 }
 
 function setCookie(cname, cvalue, exdays) {
+  if (typeof exdays === 'undefined') {
+    exdays = 7;
+  }
   var d = new Date();
   d.setTime(d.getTime() + (exdays*24*60*60*1000));
   var expires = "expires=" + d.toUTCString();
@@ -120,4 +110,30 @@ function getCookie(cname) {
     if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
   }
   return "";
+}
+
+function deleteCookie(cname) {
+  setCookie(cname, "", -1);
+}
+
+function requestDeviceLocation() {
+  var promise = new Promise(function(resolve, reject) {
+    try {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        console.log(position);
+        //var lat = position.coords.latitude;
+        //var long = position.coords.longitude;
+        resolve(position)
+      }, function(error) {
+        reject("Location request blocked");
+      });
+    } catch(ex) {
+      reject(ex);
+    }
+  });
+  return promise;
+}
+
+function navigateTo(url) {
+  window.location.href = url;
 }

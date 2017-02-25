@@ -11,91 +11,91 @@ import com.google.appengine.api.datastore.Key;
 @PersistenceCapable(detachable = "true")
 public class PermissionEntry {
 
-	public static final int PERMISSION_NONE = -1;
-	public static final int PERMISSION_VIEW = 0;
-	public static final int PERMISSION_EDIT = 1;
-	public static final int PERMISSION_OWN = 2;
-	
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	Key key;
+    public static final int PERMISSION_NONE = -1;
+    public static final int PERMISSION_VIEW = 0;
+    public static final int PERMISSION_EDIT = 1;
+    public static final int PERMISSION_OWN = 2;
 
-	@Persistent
-	long userKeyId;
-	
-	@Persistent
-	long subjectKeyId;
-	
-	@Persistent
-	String subjectKind;
-	
-	@Persistent
-	int permission;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    Key key;
 
-	public PermissionEntry() {
-		super();
-		this.permission = PERMISSION_NONE;
-	}
-	
-	public PermissionEntry(long userKeyId, long subjectKeyId, String subjectKind, int permission) {
-		super();
-		this.userKeyId = userKeyId;
-		this.subjectKeyId = subjectKeyId;
-		this.subjectKind = subjectKind;
-		this.permission = permission;
-	}
+    @Persistent
+    long userKeyId;
 
-	public boolean matches(long userKeyId, long subjectKeyId, int permission) {
-		if (this.userKeyId != userKeyId || this.subjectKeyId != subjectKeyId) {
-			return false;
-		}
-		
-		// required permission level is higher than the granted one
-		if (this.permission < permission) {
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public Key getKey() {
-		return key;
-	}
+    @Persistent
+    long subjectKeyId;
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
+    @Persistent
+    String subjectKind;
 
-	public long getUserKeyId() {
-		return userKeyId;
-	}
+    @Persistent
+    int permission;
 
-	public void setUserKeyId(long userKeyId) {
-		this.userKeyId = userKeyId;
-	}
+    public PermissionEntry() {
+        super();
+        this.permission = PERMISSION_NONE;
+    }
 
-	public long getSubjectKeyId() {
-		return subjectKeyId;
-	}
+    public PermissionEntry(long userKeyId, long subjectKeyId, String subjectKind, int permission) {
+        super();
+        this.userKeyId = userKeyId;
+        this.subjectKeyId = subjectKeyId;
+        this.subjectKind = subjectKind;
+        this.permission = permission;
+    }
 
-	public void setSubjectKeyId(long subbjectKeyId) {
-		this.subjectKeyId = subbjectKeyId;
-	}
-	
-	public int getPermission() {
-		return permission;
-	}
+    public boolean matches(long userKeyId, long subjectKeyId, int permission) {
+        if (this.userKeyId != userKeyId || this.subjectKeyId != subjectKeyId) {
+            return false;
+        }
 
-	public void setPermission(int permission) {
-		this.permission = permission;
-	}
+        // required permission level is higher than the granted one
+        if (this.permission < permission) {
+            return false;
+        }
 
-	public String getSubjectKind() {
-		return subjectKind;
-	}
+        return true;
+    }
 
-	public void setSubjectKind(String subjectKind) {
-		this.subjectKind = subjectKind;
-	}
-	
+    public Key getKey() {
+        return key;
+    }
+
+    public void setKey(Key key) {
+        this.key = key;
+    }
+
+    public long getUserKeyId() {
+        return userKeyId;
+    }
+
+    public void setUserKeyId(long userKeyId) {
+        this.userKeyId = userKeyId;
+    }
+
+    public long getSubjectKeyId() {
+        return subjectKeyId;
+    }
+
+    public void setSubjectKeyId(long subbjectKeyId) {
+        this.subjectKeyId = subbjectKeyId;
+    }
+
+    public int getPermission() {
+        return permission;
+    }
+
+    public void setPermission(int permission) {
+        this.permission = permission;
+    }
+
+    public String getSubjectKind() {
+        return subjectKind;
+    }
+
+    public void setSubjectKind(String subjectKind) {
+        this.subjectKind = subjectKind;
+    }
+
 }

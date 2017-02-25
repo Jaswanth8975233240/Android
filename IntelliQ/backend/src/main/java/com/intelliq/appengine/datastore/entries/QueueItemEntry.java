@@ -19,177 +19,177 @@ import com.intelliq.appengine.datastore.Location;
 @PersistenceCapable(detachable = "true")
 public class QueueItemEntry {
 
-	public static final byte STATUS_ALL = -1;
-	public static final byte STATUS_WAITING = 0;
-	public static final byte STATUS_CANCELED = 1;
-	public static final byte STATUS_CALLED = 2;
-	public static final byte STATUS_DONE = 3;
+    public static final byte STATUS_ALL = -1;
+    public static final byte STATUS_WAITING = 0;
+    public static final byte STATUS_CANCELED = 1;
+    public static final byte STATUS_CALLED = 2;
+    public static final byte STATUS_DONE = 3;
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	Key key;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    Key key;
 
-	@Persistent
-	long queueKeyId;
+    @Persistent
+    long queueKeyId;
 
-	@Persistent
-	long userKeyId;
-	
-	@Persistent
-	String name;
+    @Persistent
+    long userKeyId;
 
-	@Persistent
-	boolean showName;
+    @Persistent
+    String name;
 
-	@Persistent
-	boolean usingApp;
+    @Persistent
+    boolean showName;
 
-	@Persistent
-	long entryTimestamp;
+    @Persistent
+    boolean usingApp;
 
-	@Persistent
-	long lastStatusChangeTimestamp;
+    @Persistent
+    long entryTimestamp;
 
-	@Persistent
-	int ticketNumber;
+    @Persistent
+    long lastStatusChangeTimestamp;
 
-	@Persistent
-	byte status;
+    @Persistent
+    int ticketNumber;
 
-	public QueueItemEntry(long queueKeyId) {
-		this.queueKeyId = queueKeyId;
-		entryTimestamp = new Date().getTime();
-		lastStatusChangeTimestamp = entryTimestamp;
-		status = STATUS_WAITING;
-		showName = true;
-		usingApp = true;
-		ticketNumber = -1;
-		userKeyId = -1;
-	}
+    @Persistent
+    byte status;
 
-	public void parseFromRequest(ApiRequest req) {
-		queueKeyId = req.getParameterAsLong("queueKeyId", queueKeyId);
-		userKeyId = req.getParameterAsLong("userKeyId", userKeyId);
-		name = req.getParameter("name", name);
-		showName = req.getParameterAsBoolean("showName", showName);
-		usingApp = req.getParameterAsBoolean("usingApp", usingApp);
-	}
+    public QueueItemEntry(long queueKeyId) {
+        this.queueKeyId = queueKeyId;
+        entryTimestamp = new Date().getTime();
+        lastStatusChangeTimestamp = entryTimestamp;
+        status = STATUS_WAITING;
+        showName = true;
+        usingApp = true;
+        ticketNumber = -1;
+        userKeyId = -1;
+    }
 
-	public void makeDummyItem() {
-		name = "Dummy Customer";
-		entryTimestamp = (long) (new Date().getTime() - (Math.random() * TimeUnit.MINUTES.toMillis(60)));
-		lastStatusChangeTimestamp = entryTimestamp;
-		
-		if (Math.random() < 0.5) {
-			// make sure we have more people waiting
-			status = STATUS_WAITING;
-		} else {
-			// set random status
-			status = (byte) Math.round(Math.random() * 3);
-		}
-		
-		showName = Math.random() < 0.5;
-		usingApp = Math.random() < 0.5;
-	}
+    public void parseFromRequest(ApiRequest req) {
+        queueKeyId = req.getParameterAsLong("queueKeyId", queueKeyId);
+        userKeyId = req.getParameterAsLong("userKeyId", userKeyId);
+        name = req.getParameter("name", name);
+        showName = req.getParameterAsBoolean("showName", showName);
+        usingApp = req.getParameterAsBoolean("usingApp", usingApp);
+    }
 
-	public Key getKey() {
-		return key;
-	}
+    public void makeDummyItem() {
+        name = "Dummy Customer";
+        entryTimestamp = (long) (new Date().getTime() - (Math.random() * TimeUnit.MINUTES.toMillis(60)));
+        lastStatusChangeTimestamp = entryTimestamp;
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
+        if (Math.random() < 0.5) {
+            // make sure we have more people waiting
+            status = STATUS_WAITING;
+        } else {
+            // set random status
+            status = (byte) Math.round(Math.random() * 3);
+        }
 
-	public Key generateKey() {
-		return KeyFactory.createKey(QueueItemEntry.class.getSimpleName(), name);
-	}
+        showName = Math.random() < 0.5;
+        usingApp = Math.random() < 0.5;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Key getKey() {
+        return key;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setKey(Key key) {
+        this.key = key;
+    }
 
-	public boolean getShowName() {
-		return showName;
-	}
+    public Key generateKey() {
+        return KeyFactory.createKey(QueueItemEntry.class.getSimpleName(), name);
+    }
 
-	public void setShowName(boolean showName) {
-		this.showName = showName;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public boolean isUsingApp() {
-		return usingApp;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setUsingApp(boolean usingApp) {
-		this.usingApp = usingApp;
-	}
+    public boolean getShowName() {
+        return showName;
+    }
 
-	public long getEntryTimestamp() {
-		return entryTimestamp;
-	}
+    public void setShowName(boolean showName) {
+        this.showName = showName;
+    }
 
-	public void setEntryTimestamp(long entryTimestamp) {
-		this.entryTimestamp = entryTimestamp;
-		this.lastStatusChangeTimestamp = entryTimestamp;
-	}
+    public boolean isUsingApp() {
+        return usingApp;
+    }
 
-	public long getQueueKeyId() {
-		return queueKeyId;
-	}
+    public void setUsingApp(boolean usingApp) {
+        this.usingApp = usingApp;
+    }
 
-	public void setQueueKeyId(long queueKeyId) {
-		this.queueKeyId = queueKeyId;
-	}
+    public long getEntryTimestamp() {
+        return entryTimestamp;
+    }
 
-	public long getUserKeyId() {
-		return userKeyId;
-	}
+    public void setEntryTimestamp(long entryTimestamp) {
+        this.entryTimestamp = entryTimestamp;
+        this.lastStatusChangeTimestamp = entryTimestamp;
+    }
 
-	public void setUserKeyId(long userKeyId) {
-		this.userKeyId = userKeyId;
-	}
+    public long getQueueKeyId() {
+        return queueKeyId;
+    }
 
-	public long getLastStatusChangeTimestamp() {
-		return lastStatusChangeTimestamp;
-	}
+    public void setQueueKeyId(long queueKeyId) {
+        this.queueKeyId = queueKeyId;
+    }
 
-	public void setLastStatusChangeTimestamp(long lastStatusChangeTimestamp) {
-		this.lastStatusChangeTimestamp = lastStatusChangeTimestamp;
-	}
+    public long getUserKeyId() {
+        return userKeyId;
+    }
 
-	public int getTicketNumber() {
-		return ticketNumber;
-	}
+    public void setUserKeyId(long userKeyId) {
+        this.userKeyId = userKeyId;
+    }
 
-	public void setTicketNumber(int ticketNumber) {
-		this.ticketNumber = ticketNumber;
-	}
+    public long getLastStatusChangeTimestamp() {
+        return lastStatusChangeTimestamp;
+    }
 
-	public byte getStatus() {
-		return status;
-	}
+    public void setLastStatusChangeTimestamp(long lastStatusChangeTimestamp) {
+        this.lastStatusChangeTimestamp = lastStatusChangeTimestamp;
+    }
 
-	public void setStatus(byte status) {
-		this.status = status;
-	}
+    public int getTicketNumber() {
+        return ticketNumber;
+    }
 
-	public static class EntryTimestampComparator implements Comparator<QueueItemEntry> {
-		@Override
-		public int compare(QueueItemEntry one, QueueItemEntry another) {
-			int returnVal = 0;
-			if (one.getEntryTimestamp() < another.getEntryTimestamp()) {
-				returnVal = -1;
-			} else if (one.getEntryTimestamp() > another.getEntryTimestamp()) {
-				returnVal = 1;
-			} else if (one.getEntryTimestamp() == another.getEntryTimestamp()) {
-				returnVal = 0;
-			}
-			return returnVal;
-		}
-	}
+    public void setTicketNumber(int ticketNumber) {
+        this.ticketNumber = ticketNumber;
+    }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
+
+    public static class EntryTimestampComparator implements Comparator<QueueItemEntry> {
+        @Override
+        public int compare(QueueItemEntry one, QueueItemEntry another) {
+            int returnVal = 0;
+            if (one.getEntryTimestamp() < another.getEntryTimestamp()) {
+                returnVal = -1;
+            } else if (one.getEntryTimestamp() > another.getEntryTimestamp()) {
+                returnVal = 1;
+            } else if (one.getEntryTimestamp() == another.getEntryTimestamp()) {
+                returnVal = 0;
+            }
+            return returnVal;
+        }
+    }
 
 }

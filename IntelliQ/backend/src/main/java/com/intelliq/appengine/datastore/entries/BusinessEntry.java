@@ -14,73 +14,73 @@ import com.intelliq.appengine.api.ApiRequest;
 @PersistenceCapable(detachable = "true")
 public class BusinessEntry {
 
-	@PrimaryKey
-	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	Key key;
+    @PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    Key key;
 
-	@Persistent
-	String name;
+    @Persistent
+    String name;
 
-	@Persistent
-	String mail;
-	
-	@Persistent
-	long logoImageKeyId;
+    @Persistent
+    String mail;
 
-	ArrayList<QueueEntry> queues;
-	
-	public BusinessEntry() {
-		logoImageKeyId = -1;
-	}
-	
-	public void parseFromRequest(ApiRequest req) {
-		name = req.getParameter("name", name);
-		mail = req.getParameter("mail", mail);
-		logoImageKeyId = req.getParameterAsLong("logoImageKeyId", logoImageKeyId);
-	}
+    @Persistent
+    long logoImageKeyId;
 
-	public Key getKey() {
-		return key;
-	}
+    ArrayList<QueueEntry> queues;
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
+    public BusinessEntry() {
+        logoImageKeyId = -1;
+    }
 
-	public Key generateKey() {
-		return KeyFactory.createKey(BusinessEntry.class.getSimpleName(), name);
-	}
+    public void parseFromRequest(ApiRequest req) {
+        name = req.getParameter("name", name);
+        mail = req.getParameter("mail", mail);
+        logoImageKeyId = req.getParameterAsLong("logoImageKeyId", logoImageKeyId);
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Key getKey() {
+        return key;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setKey(Key key) {
+        this.key = key;
+    }
 
-	public String getMail() {
-		return mail;
-	}
+    public Key generateKey() {
+        return KeyFactory.createKey(BusinessEntry.class.getSimpleName(), name);
+    }
 
-	public void setMail(String email) {
-		this.mail = email;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public long getLogoImageKeyId() {
-		return logoImageKeyId;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setLogoImageKeyId(long logoImageKeyId) {
-		this.logoImageKeyId = logoImageKeyId;
-	}
+    public String getMail() {
+        return mail;
+    }
 
-	public ArrayList<QueueEntry> getQueues() {
-		return queues;
-	}
+    public void setMail(String email) {
+        this.mail = email;
+    }
 
-	public void setQueues(ArrayList<QueueEntry> queues) {
-		this.queues = queues;
-	}
-	
+    public long getLogoImageKeyId() {
+        return logoImageKeyId;
+    }
+
+    public void setLogoImageKeyId(long logoImageKeyId) {
+        this.logoImageKeyId = logoImageKeyId;
+    }
+
+    public ArrayList<QueueEntry> getQueues() {
+        return queues;
+    }
+
+    public void setQueues(ArrayList<QueueEntry> queues) {
+        this.queues = queues;
+    }
+
 }

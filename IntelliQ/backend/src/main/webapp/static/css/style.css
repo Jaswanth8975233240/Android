@@ -1,9 +1,10 @@
-
-
-
 nav ul a,
 nav .brand-logo {
   color: #FFFFFF;
+}
+
+.side-nav {
+  width: 250px;
 }
 
 .nav-wrapper ul li a i {
@@ -28,6 +29,14 @@ p {
 a {
   color: #663fb4;
   cursor: pointer;
+}
+
+.medium-blur {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
 }
 
 .fill-width {
@@ -103,6 +112,10 @@ a {
 	line-height: 1.5;
 }
 
+.card .card-content .card-title {
+  font-size: 22px;
+}
+
 .card .card-action a {
 	color: #663fb4;
 }
@@ -131,6 +144,18 @@ a {
 .card-image {
   overflow: hidden;
   vertical-align: middle;
+}
+
+.card-image .overlay-content a {
+  color: #fff;
+  padding-top: 30px;
+  padding-right: 20px;
+  padding-bottom: 30px;
+  padding-left: 10px;
+  width: 100%;
+  font-size: 20px;
+  font-weight: 300;
+  text-shadow: 0px 0px 10px #000;
 }
 
 .card-image img {
@@ -189,8 +214,12 @@ a {
   position: absolute;
   height: 100%;
   width: 100%;
+  top: 0px;
+  bottom: 0px;
   text-align: center;
   cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.33);
+  background-blend-mode: multiply;
 }
 
 .overlay-content .valign-wrapper {
@@ -268,6 +297,7 @@ a {
     position: absolute;
     top: 40%;
   }
+
   #index-banner .section {
     top: 10%;
   }
@@ -276,6 +306,42 @@ a {
 @media only screen and (max-width : 600px) {
   #index-banner .section {
     top: 0;
+  }
+
+  h1 {
+    font-size: 3.2rem;
+  }
+
+  h5 {
+    font-size: 1.5rem;
+  }
+
+  .card .card-content .card-title, .card-title .material-icons {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .section {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+
+  .vertical-spacing {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+
+  .row {
+    margin-bottom: 5px;
+  }
+
+  .row .col {
+    padding: 0 0.4rem;
+  }
+
+  td, th {
+    padding: 7px 5px;
   }
 }
 
@@ -442,4 +508,8 @@ footer.page-footer {
 
 .accent-color-text {
   color: #fd4482 !important;
+}
+
+.warning-color {
+  background-color: #d50000 !important;
 }

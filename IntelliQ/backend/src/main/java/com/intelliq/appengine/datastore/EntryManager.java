@@ -5,8 +5,7 @@ import java.util.logging.Logger;
 
 public class EntryManager {
 
-	private static final Logger log = Logger.getLogger(EntryManager.class.getName());
-	
-	
-	
+    private static final Logger log = Logger.getLogger(EntryManager.class.getName());
+
+
 }

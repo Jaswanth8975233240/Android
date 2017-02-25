@@ -24,31 +24,31 @@ import com.intelliq.appengine.datastore.entries.UserEntry;
 
 public class FromBusinessEndpoint extends Endpoint {
 
-	@Override
-	public String getEndpointPath() {
-		return EndpointManager.ENDPOINT_BUSINESS_FROM;
-	}
-	
-	@Override
-	public List<String> getRequiredParameters(ApiRequest request) {
-		List<String> parameters = new ArrayList<String>();
-		parameters.add("userKeyId");
-		return parameters;
-	}
-	
-	@Override
-	public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
-		ApiResponse response = new ApiResponse();
-		
-		long userKeyId = request.getParameterAsLong("userKeyId", -1);
-		try {
-			List<BusinessEntry> businesses = BusinessHelper.getBusinessesByUserKeyId(userKeyId, PermissionEntry.PERMISSION_VIEW);
-			response.setContent(businesses);
-		} catch (NucleusObjectNotFoundException exception) {
-			response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
-			response.setException(new Exception("Unable to find businesses"));
-		}
-		return response;
-	}	
-	
+    @Override
+    public String getEndpointPath() {
+        return EndpointManager.ENDPOINT_BUSINESS_FROM;
+    }
+
+    @Override
+    public List<String> getRequiredParameters(ApiRequest request) {
+        List<String> parameters = new ArrayList<String>();
+        parameters.add("userKeyId");
+        return parameters;
+    }
+
+    @Override
+    public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
+        ApiResponse response = new ApiResponse();
+
+        long userKeyId = request.getParameterAsLong("userKeyId", -1);
+        try {
+            List<BusinessEntry> businesses = BusinessHelper.getBusinessesByUserKeyId(userKeyId, PermissionEntry.PERMISSION_VIEW);
+            response.setContent(businesses);
+        } catch (NucleusObjectNotFoundException exception) {
+            response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
+            response.setException(new Exception("Unable to find businesses"));
+        }
+        return response;
+    }
+
 }
