@@ -20,7 +20,7 @@
 						<h5 class="header col s12 light">And stop wasting your lifetime while waiting in line</h5>
 					</div>
 					<div class="row center">
-						<a href="${appUrl}" class="btn-large waves-effect waves-light accent-color">Open the App</a>
+						<a href="${appUrl}" class="btn-large waves-effect waves-light accent-color">Join a Queue</a>
 					</div>
 					<br>
 	

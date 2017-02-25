@@ -78,6 +78,7 @@ public class IntelliQServlet extends HttpServlet {
         req.setAttribute("requestUrl", requestUrl.replace("/intelliq", ""));
         req.setAttribute("staticUrl", rootUrl + "/static/");
         req.setAttribute("appUrl", rootUrl + "/apps/web/");
+        req.setAttribute("manageUrl", rootUrl + "/manage/");
 
         try {
             rd.forward(req, resp);

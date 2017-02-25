@@ -23,7 +23,7 @@
 	
 					</div>
 					<div class="row center">
-						<a href="mailto:mail@intelliq.me" class="btn-large waves-effect waves-light accent-color">Request Details</a>
+						<a href="${manageUrl}" class="btn-large waves-effect waves-light accent-color">Create a Queue</a>
 					</div>
 					<br>
 					<br>
