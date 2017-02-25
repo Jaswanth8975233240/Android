@@ -69,8 +69,11 @@
         </div>
       </div>
       <div class="footer-copyright">
-        <div class="container">
-          Developed with love by <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a>, open source on <a class="accent-color-text text-lighten-3" href="https://github.com/IntelliQ">GitHub</a>
+        <div class="container hide-on-small-only">
+          Developed with love by <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a> - open sourced on <a class="accent-color-text text-lighten-3" href="https://github.com/IntelliQ">GitHub</a>
+        </div>
+        <div class="container hide-on-small-and-up">
+          Developed by <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a> - source on <a class="accent-color-text text-lighten-3" href="https://github.com/IntelliQ">GitHub</a>
         </div>
       </div>
     </footer>
