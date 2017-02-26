@@ -63,15 +63,17 @@
             <ul>
               <li><a class="white-text" href="${rootUrl}/apps/">Apps</a></li>
               <li><a class="white-text" href="${rootUrl}/manage/">Manage</a></li>
-              <li><a class="white-text" href="${rootUrl}/press/">Press</a></li>
+              <li><a class="white-text" href="${rootUrl}/imprint/">Imprint</a></li>
             </ul>
           </div>
         </div>
       </div>
       <div class="footer-copyright">
-        <div class="container">
-          Developed with love by 
-          <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a>
+        <div class="container hide-on-small-only">
+          Developed with love by <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a> - open sourced on <a class="accent-color-text text-lighten-3" href="https://github.com/IntelliQ">GitHub</a>
+        </div>
+        <div class="container hide-on-small-and-up">
+          Developed by <a class="accent-color-text text-lighten-3" href="http://steppschuh.net/">Steppschuh</a> - source on <a class="accent-color-text text-lighten-3" href="https://github.com/IntelliQ">GitHub</a>
         </div>
       </div>
     </footer>
@@ -80,7 +82,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="${staticUrl}js/materialize.js"></script>
     <script src="${staticUrl}js/init.js"></script>
-    <script src="${staticUrl}js/tracking.js"></script>
+    <script src="${staticUrl}js/analyze.js"></script>
     <script src="${staticUrl}js/general.js"></script>
     <script src="${staticUrl}js/authenticator.js" defer></script>
     <script src="${staticUrl}js/api.js" defer></script>
