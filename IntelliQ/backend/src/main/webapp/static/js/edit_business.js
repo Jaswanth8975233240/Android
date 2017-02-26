@@ -25,38 +25,6 @@ var newBusiness; // holds the new business, created by the local changes
   });
 })(jQuery);
 
-function setupImageUpload() {
-  $("#changeImageButton").click(function() {
-    $("#imageUploadModal").openModal();
-  });
-
-  var imageFileInput = $("#imageFileInput").get(0);
-  imageFileInput.addEventListener('change', function(event) {
-    var businessKeyId = existingBusiness.key.id;
-    var files = $("#imageFileInput").get(0).files;
-    if (files.length < 1) {
-      return;
-    }
-
-    var file = files[0];
-
-    Materialize.toast(getString("uploadStarted"), 3000);
-    $(".loadingState").show();
-
-    intelliqApi.uploadBusinessLogo(businessKeyId, file).then(function(data){
-      console.log("Success");
-      Materialize.toast(getString("uploadSuccessful"), 3000);
-      $(".loadingState").hide();
-      $("#imageUploadModal").closeModal();
-    }).catch(function(error){
-      console.log(error);
-      Materialize.toast(getString("uploadFailed"), 3000);
-      ui.showErrorMessage(error);
-      $(".loadingState").hide();
-    });
-  });
-}
-
 // fetches an existing business from the API, if the required
 // url param is set. Then updates the form with the business data
 function requestExistingBusinessData(businessKeyId) {
@@ -172,4 +140,35 @@ function mergeBusinesses(existingBusiness, newBusiness) {
     }
   }
   return existingBusiness;
+}
+
+function setupImageUpload() {
+  $("#changeImageButton").click(function() {
+    $("#imageUploadModal").openModal();
+  });
+
+  var imageFileInput = $("#imageFileInput").get(0);
+  imageFileInput.addEventListener('change', function(event) {
+    var businessKeyId = existingBusiness.key.id;
+    var files = $("#imageFileInput").get(0).files;
+    if (files.length < 1) {
+      return;
+    }
+
+    var file = files[0];
+
+    Materialize.toast(getString("uploadStarted"), 3000);
+    $(".loadingState").show();
+
+    intelliqApi.uploadBusinessLogo(businessKeyId, file).then(function(data){
+      Materialize.toast(getString("uploadSuccessful"), 3000);
+      $(".loadingState").hide();
+      $("#imageUploadModal").closeModal();
+    }).catch(function(error){
+      console.log(error);
+      Materialize.toast(getString("uploadFailed"), 3000);
+      ui.showErrorMessage(error);
+      $(".loadingState").hide();
+    });
+  });
 }
