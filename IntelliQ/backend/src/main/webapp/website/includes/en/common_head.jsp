@@ -28,6 +28,9 @@
 
         "applyChanges": "Apply Changes",
         "save": "Save",
+        "uploadStarted": "Upload Started",
+        "uploadSuccessful": "Upload Finished",
+        "uploadFailed": "Upload Failed",
 
         "status": "Status",
         "statusWaiting": "Waiting",

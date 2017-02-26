@@ -3,9 +3,10 @@ var newBusiness; // holds the new business, created by the local changes
 
 (function($){
   $(function(){
-
     $("#saveBusinessButton").click(saveNewBusiness);
     updateFormWithUrlParameterData();
+
+    setupImageUpload();
 
     var statusChangeListener = {
       onUserAvailable: function(user) {
@@ -23,6 +24,38 @@ var newBusiness; // holds the new business, created by the local changes
     authenticator.registerStatusChangeListener(statusChangeListener);
   });
 })(jQuery);
+
+function setupImageUpload() {
+  $("#changeImageButton").click(function() {
+    $("#imageUploadModal").openModal();
+  });
+
+  var imageFileInput = $("#imageFileInput").get(0);
+  imageFileInput.addEventListener('change', function(event) {
+    var businessKeyId = existingBusiness.key.id;
+    var files = $("#imageFileInput").get(0).files;
+    if (files.length < 1) {
+      return;
+    }
+
+    var file = files[0];
+
+    Materialize.toast(getString("uploadStarted"), 3000);
+    $(".loadingState").show();
+
+    intelliqApi.uploadBusinessLogo(businessKeyId, file).then(function(data){
+      console.log("Success");
+      Materialize.toast(getString("uploadSuccessful"), 3000);
+      $(".loadingState").hide();
+      $("#imageUploadModal").closeModal();
+    }).catch(function(error){
+      console.log(error);
+      Materialize.toast(getString("uploadFailed"), 3000);
+      ui.showErrorMessage(error);
+      $(".loadingState").hide();
+    });
+  });
+}
 
 // fetches an existing business from the API, if the required
 // url param is set. Then updates the form with the business data
@@ -49,11 +82,13 @@ function requestExistingBusinessData(businessKeyId) {
 function showAddBusinessUi() {
   $("#businessHeading").text(getString("addBusiness"));
   $("#saveBusinessButton").text(getString("save"));
+  $("#changeImageContainer").addClass("hide");
 }
 
 function showEditBusinessUi() {
   $("#businessHeading").text(getString("editBusiness"));
   $("#saveBusinessButton").text(getString("applyChanges"));
+  $("#changeImageContainer").removeClass("hide");
 }
 
 // fills the form fields with data from URL params
@@ -74,6 +109,8 @@ function updateFormWithBusinessData(business) {
   $("#form-key-id").val(business.key.id);
   $("#form-name").val(business.name);
   $("#form-mail").val(business.mail);
+
+  $("#changeImageButton").removeClass("disabled");
 }
 
 // creates a new business object by parsing the form data

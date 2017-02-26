@@ -5,11 +5,7 @@ var intelliqApi = function(){
   }
 
   function useDevelopmentServer() {
-    if (top.location.hostname == "localhost") {
-      return true;
-    } else {
-      return false;
-    }
+    return top.location.hostname == "localhost";
   }
 
   var api = {
@@ -31,12 +27,14 @@ var intelliqApi = function(){
   api.HOST_APP_ENGINE = "https://intelliq-me.appspot.com/";
   api.HOST_APP_ENGINE_VERSIONED = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
 
-  // Request endpoints
   if (useDevelopmentServer()) {
-    api.ENDPOINT_API = api.HOST_LOCAL + "api/";
+    api.HOST = api.HOST_LOCAL;
   } else {
-    api.ENDPOINT_API = api.HOST_APP_ENGINE + "api/";
+    api.HOST = api.HOST_APP_ENGINE;
   }
+
+  // Request endpoints
+  api.ENDPOINT_API = api.HOST + "api/";
   
   api.ENDPOINT_USER = api.ENDPOINT_API + "user/";
   api.ENDPOINT_USER_GET = api.ENDPOINT_USER + "get/";
@@ -68,6 +66,8 @@ var intelliqApi = function(){
   api.ENDPOINT_QUEUE_ITEM_DELETE = api.ENDPOINT_QUEUE_ITEM + "delete/";
   api.ENDPOINT_QUEUE_ITEM_STATUS = api.ENDPOINT_QUEUE_ITEM + "status/";
   api.ENDPOINT_QUEUE_ITEM_REPORT = api.ENDPOINT_QUEUE_ITEM + "report/";
+
+  api.ENDPOINT_IMAGE = "image/";
 
   // Webpages
   if (useDevelopmentServer()) {
@@ -105,6 +105,11 @@ var intelliqApi = function(){
   api.ENTRY_TYPE_QUEUE_ITEM = "QueueItemEntry";
   api.ENTRY_TYPE_USER = "UserEntry";
   api.ENTRY_TYPE_PERMISSION = "PermissionEntry";
+  api.ENTRY_TYPE_IMAGE = "ImageEntry";
+
+  // Image types
+  api.IMAGE_TYPE_LOGO = 0;
+  api.IMAGE_TYPE_PHOTO = 1;
 
   // Update intervals
   api.UPDATE_INTERVAL_CASUAL = 1000 * 30;
@@ -652,6 +657,53 @@ var intelliqApi = function(){
     }
 
     return request;
+  }
+
+  /*
+    Image endpoints
+  */
+  api.uploadImage = function(parentKeyId, type, file) {
+    var promise = new Promise(function(resolve, reject) {
+      var formData = new FormData();
+      formData.append("parentKeyId", parentKeyId);
+      formData.append("type", type);
+      formData.append("image", file);
+
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = function () {
+        if(request.readyState === XMLHttpRequest.DONE) {
+          console.log("onreadystatechange");
+
+          data = JSON.parse(request.responseText);
+          console.log(data);
+
+          // check if the API returned a valid response
+          if (data.statusCode != null && data.statusCode == 200) {
+            // looks good
+            resolve(data);
+          } else {
+            // something went wrong, try to extract error message
+            if (data.statusMessage != null) {
+              reject(data.statusMessage);
+            } else {
+              reject("Request didn't return a valid response: " + data);
+            }
+          }
+        }
+      };
+
+      request.open("POST", intelliqApi.HOST + intelliqApi.ENDPOINT_IMAGE);
+      request.send(formData);
+    });
+    return promise;
+  }
+
+  api.uploadBusinessLogo = function(businessKeyId, file) {
+    return api.uploadImage(businessKeyId, api.IMAGE_TYPE_LOGO, file);
+  }
+
+  api.uploadQueuePhoto = function(queueKeyId, file) {
+    return api.uploadImage(queueKeyId, api.IMAGE_TYPE_PHOTO, file);
   }
 
   /*

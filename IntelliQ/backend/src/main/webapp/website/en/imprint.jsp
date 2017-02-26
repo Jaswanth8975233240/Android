@@ -23,7 +23,7 @@
 							IntelliQ.me UG (haftungsbeschränkt)<br/>
 							Geschwister-Scholl-Str. 80<br/>
 							14471 Potsdan<br/>
-							Branenburg, Germany
+							Brandenburg, Germany
 						</p>
 					</div>
 
