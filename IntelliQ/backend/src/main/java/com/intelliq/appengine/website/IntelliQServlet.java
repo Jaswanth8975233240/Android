@@ -63,6 +63,8 @@ public class IntelliQServlet extends HttpServlet {
             }
         } else if (requestUrl.contains("/unternehmen/") || requestUrl.contains("/business/")) {
             forwardUrl += "businessservlet/";
+        } else if (requestUrl.contains("/imprint/") || requestUrl.contains("/impressum/")) {
+            forwardUrl += "imprintservlet/";
         } else if (requestUrl.contains("/signin/")) {
             forwardUrl += "signinservlet/";
         } else {
