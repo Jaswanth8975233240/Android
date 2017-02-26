@@ -485,7 +485,7 @@ function setupImageUpload() {
     Materialize.toast(getString("uploadStarted"), 3000);
     $(".loadingState").show();
 
-    intelliqApi.uploadQueuePhoto(queueKeyId, file).then(function(data){
+    intelliqApi.uploadQueuePhoto(queueKeyId, file, authenticator.getGoogleUserIdToken()).then(function(data){
       Materialize.toast(getString("uploadSuccessful"), 3000);
       $(".loadingState").hide();
       $("#imageUploadModal").closeModal();

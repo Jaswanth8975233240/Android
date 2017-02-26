@@ -662,7 +662,7 @@ var intelliqApi = function(){
   /*
     Image endpoints
   */
-  api.uploadImage = function(parentKeyId, type, file) {
+  api.uploadImage = function(parentKeyId, type, file, googleIdToken) {
     var promise = new Promise(function(resolve, reject) {
       var formData = new FormData();
       formData.append("parentKeyId", parentKeyId);
@@ -692,18 +692,19 @@ var intelliqApi = function(){
         }
       };
 
-      request.open("POST", intelliqApi.HOST + intelliqApi.ENDPOINT_IMAGE);
+      var requestUrl = intelliqApi.HOST + intelliqApi.ENDPOINT_IMAGE + "?googleIdToken=" + googleIdToken;
+      request.open("POST", requestUrl);
       request.send(formData);
     });
     return promise;
   }
 
-  api.uploadBusinessLogo = function(businessKeyId, file) {
-    return api.uploadImage(businessKeyId, api.IMAGE_TYPE_LOGO, file);
+  api.uploadBusinessLogo = function(businessKeyId, file, googleIdToken) {
+    return api.uploadImage(businessKeyId, api.IMAGE_TYPE_LOGO, file, googleIdToken);
   }
 
-  api.uploadQueuePhoto = function(queueKeyId, file) {
-    return api.uploadImage(queueKeyId, api.IMAGE_TYPE_PHOTO, file);
+  api.uploadQueuePhoto = function(queueKeyId, file, googleIdToken) {
+    return api.uploadImage(queueKeyId, api.IMAGE_TYPE_PHOTO, file, googleIdToken);
   }
 
   /*

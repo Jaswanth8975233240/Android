@@ -160,7 +160,7 @@ function setupImageUpload() {
     Materialize.toast(getString("uploadStarted"), 3000);
     $(".loadingState").show();
 
-    intelliqApi.uploadBusinessLogo(businessKeyId, file).then(function(data){
+    intelliqApi.uploadBusinessLogo(businessKeyId, file, authenticator.getGoogleUserIdToken()).then(function(data){
       Materialize.toast(getString("uploadSuccessful"), 3000);
       $(".loadingState").hide();
       $("#imageUploadModal").closeModal();

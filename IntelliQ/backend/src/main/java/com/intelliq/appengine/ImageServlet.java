@@ -2,13 +2,17 @@ package com.intelliq.appengine;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.common.io.ByteStreams;
+import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
+import com.intelliq.appengine.api.PermissionSet;
 import com.intelliq.appengine.datastore.BusinessHelper;
 import com.intelliq.appengine.datastore.ImageHelper;
 import com.intelliq.appengine.datastore.QueueHelper;
 import com.intelliq.appengine.datastore.entries.BusinessEntry;
 import com.intelliq.appengine.datastore.entries.ImageEntry;
+import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
+import com.intelliq.appengine.datastore.entries.UserEntry;
 import com.intelliq.appengine.datastore.queries.ImageQuery;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -80,10 +84,18 @@ public class ImageServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        ApiRequest apiRequest = new ApiRequest(req);
         ApiResponse responseObject = new ApiResponse();
         String response;
 
         try {
+            UserEntry user;
+            try {
+                user = apiRequest.getUserFromToken();
+            } catch (Exception ex) {
+                throw new Exception("Request requires an authorized user: " + ex.getMessage());
+            }
+
             ServletFileUpload upload = new ServletFileUpload();
             res.setContentType("text/plain");
 
@@ -155,6 +167,13 @@ public class ImageServlet extends HttpServlet {
             // add the new image key id to the parent business or queue
             long oldImageKeyId;
             if (image.getType() == ImageEntry.TYPE_LOGO) {
+                PermissionEntry editBusinessPermission = new PermissionEntry();
+                editBusinessPermission.setSubjectKeyId(image.getParentKeyId());
+                editBusinessPermission.setPermission(PermissionEntry.PERMISSION_EDIT);
+                if (!user.hasPermission(editBusinessPermission)) {
+                    responseObject.setStatusCode(HttpServletResponse.SC_FORBIDDEN);
+                    throw new Exception("User doesn't have the permission to edit this business");
+                }
                 BusinessEntry businessEntry = BusinessHelper.getEntryByKeyId(image.getParentKeyId());
                 if (businessEntry != null) {
                     oldImageKeyId = businessEntry.getLogoImageKeyId();
@@ -164,6 +183,13 @@ public class ImageServlet extends HttpServlet {
                 }
                 BusinessHelper.saveEntry(businessEntry);
             } else {
+                PermissionEntry editQueuePermission = new PermissionEntry();
+                editQueuePermission.setSubjectKeyId(image.getParentKeyId());
+                editQueuePermission.setPermission(PermissionEntry.PERMISSION_EDIT);
+                if (!user.hasPermission(editQueuePermission)) {
+                    responseObject.setStatusCode(HttpServletResponse.SC_FORBIDDEN);
+                    throw new Exception("User doesn't have the permission to edit this business");
+                }
                 QueueEntry queueEntry = QueueHelper.getEntryByKeyId(image.getParentKeyId());
                 if (queueEntry != null) {
                     oldImageKeyId = queueEntry.getPhotoImageKeyId();
