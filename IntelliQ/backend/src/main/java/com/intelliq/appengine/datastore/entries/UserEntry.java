@@ -93,11 +93,7 @@ public class UserEntry {
         }
 
         // look up the PermissionEntry in the data store
-        if (this.key != null) {
-            return PermissionHelper.hasPermission(requestedPermission);
-        } else {
-            return false;
-        }
+        return PermissionHelper.hasPermission(requestedPermission);
     }
 
     @Override

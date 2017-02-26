@@ -35,10 +35,10 @@ public class PermissionHelper {
     }
 
     public static boolean hasPermission(PermissionEntry permissionEntry) {
-        return hasPermission(permissionEntry.getUserKeyId(), permissionEntry.getSubjectKeyId(), permissionEntry.getSubjectKind(), permissionEntry.getPermission());
+        return hasPermission(permissionEntry.getUserKeyId(), permissionEntry.getSubjectKeyId(), permissionEntry.getPermission());
     }
 
-    public static boolean hasPermission(long userKeyId, long subjectKeyId, String subjectKind, int permission) {
+    public static boolean hasPermission(long userKeyId, long subjectKeyId, int permission) {
         // check if this permission exists
         if (getPermission(userKeyId, subjectKeyId, permission) != null) {
             return true;

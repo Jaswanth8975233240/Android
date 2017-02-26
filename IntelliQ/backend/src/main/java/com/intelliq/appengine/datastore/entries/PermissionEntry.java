@@ -33,12 +33,10 @@ public class PermissionEntry {
     int permission;
 
     public PermissionEntry() {
-        super();
         this.permission = PERMISSION_NONE;
     }
 
     public PermissionEntry(long userKeyId, long subjectKeyId, String subjectKind, int permission) {
-        super();
         this.userKeyId = userKeyId;
         this.subjectKeyId = subjectKeyId;
         this.subjectKind = subjectKind;
