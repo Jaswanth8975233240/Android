@@ -55,11 +55,13 @@ public class GetNearbyQueuesEndpoint extends Endpoint {
         }
 
         // remove private queues
+        List<QueueEntry> privateQueues = new ArrayList<>();
         for (QueueEntry queue : nearbyQueues) {
             if (queue.getVisibility() == QueueEntry.VISIBILITY_PRIVATE) {
-                nearbyQueues.remove(queue);
+                privateQueues.add(queue);
             }
         }
+        nearbyQueues.removeAll(privateQueues);
 
         // update number of queue items in queue
         for (QueueEntry queue : nearbyQueues) {

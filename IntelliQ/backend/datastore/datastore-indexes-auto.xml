@@ -1,19 +1,11 @@
-<!-- Indices written at Sun, 26 Feb 2017 18:10:09 CET -->
+<!-- Indices written at Mon, 27 Feb 2017 22:07:09 CET -->
 
 <datastore-indexes>
 
     <!-- Used 2 times in query history -->
-    <datastore-index kind="PermissionEntry" ancestor="false" source="auto">
-        <property name="subjectKeyId" direction="asc"/>
-        <property name="userKeyId" direction="asc"/>
-        <property name="permission" direction="desc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="PermissionEntry" ancestor="false" source="auto">
-        <property name="subjectKind" direction="asc"/>
-        <property name="userKeyId" direction="asc"/>
-        <property name="permission" direction="desc"/>
+    <datastore-index kind="QueueItemEntry" ancestor="false" source="auto">
+        <property name="queueKeyId" direction="asc"/>
+        <property name="ticketNumber" direction="asc"/>
     </datastore-index>
 
 </datastore-indexes>
