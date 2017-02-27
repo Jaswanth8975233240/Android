@@ -1,8 +1,5 @@
 package com.intelliq.appengine.api.endpoint.queue;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intelliq.appengine.ParserHelper;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
@@ -12,6 +9,9 @@ import com.intelliq.appengine.datastore.Location;
 import com.intelliq.appengine.datastore.QueueHelper;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GetNearbyQueuesEndpoint extends Endpoint {
@@ -40,7 +40,7 @@ public class GetNearbyQueuesEndpoint extends Endpoint {
 
         boolean includeBusinesses = request.getParameterAsBoolean("includeBusinesses", false);
         String postalCode = request.getParameter("postalCode");
-        List<QueueEntry> nearbyQueues = new ArrayList<QueueEntry>();
+        List<QueueEntry> nearbyQueues;
 
         if (ParserHelper.containsAnyValue(postalCode)) {
             // use postal code
@@ -54,9 +54,16 @@ public class GetNearbyQueuesEndpoint extends Endpoint {
             nearbyQueues = QueueHelper.getQueuesByLocation(latitude, longitude, distance);
         }
 
-        // update queue number entries
-        for (int i = 0; i < nearbyQueues.size(); i++) {
-            nearbyQueues.get(i).setWaitingPeople(QueueHelper.getNumberOfItemsInQueue(nearbyQueues.get(i).getKey().getId(), QueueItemEntry.STATUS_WAITING));
+        // remove private queues
+        for (QueueEntry queue : nearbyQueues) {
+            if (queue.getVisibility() == QueueEntry.VISIBILITY_PRIVATE) {
+                nearbyQueues.remove(queue);
+            }
+        }
+
+        // update number of queue items in queue
+        for (QueueEntry queue : nearbyQueues) {
+            queue.setWaitingPeople(QueueHelper.getNumberOfItemsInQueue(queue.getKey().getId(), QueueItemEntry.STATUS_WAITING));
         }
 
         if (includeBusinesses) {
