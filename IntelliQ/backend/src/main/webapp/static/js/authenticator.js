@@ -1,6 +1,9 @@
 var authenticator = function(){
 
   function log(message) {
+    if (typeof message !== "string") {
+      message = "\n" + JSON.stringify(message, null, 2)
+    }
     console.log("Authenticator: " + message);
   }
 

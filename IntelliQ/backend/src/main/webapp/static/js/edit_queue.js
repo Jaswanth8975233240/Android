@@ -54,13 +54,13 @@ function requestExistingQueueData(queueKeyId) {
 }
 
 function showAddQueueUi() {
-  $("#businessHeading").text(getString("addQueue"));
+  $("#queueHeading").text(getString("addQueue"));
   $("#saveQueueButton").text(getString("save"));
   $("#changeImageContainer").addClass("hide");
 }
 
 function showEditQueueUi() {
-  $("#businessHeading").text(getString("editQueue"));
+  $("#queueHeading").text(getString("editQueue"));
   $("#saveQueueButton").text(getString("applyChanges"));
   $("#changeImageContainer").removeClass("hide");
 }

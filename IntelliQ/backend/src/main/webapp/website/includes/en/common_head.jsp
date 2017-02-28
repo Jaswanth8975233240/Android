@@ -57,6 +57,7 @@
         "manage": "Manage",
         "editBusiness": "Edit Business",
         "addBusiness": "Add Business",
+        "addQueue": "Add Queue",
         "editQueue": "Edit Queue",
         "populatingQueue": "Popuating queue",
         "joiningQueue": "Joining queue",

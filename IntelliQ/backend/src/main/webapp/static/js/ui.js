@@ -1,7 +1,10 @@
 var ui = function(){
 
   function log(message) {
-    console.log("UI: " + message);
+    if (typeof message !== "string") {
+      message = "\n" + JSON.stringify(message, null, 2)
+    }
+    console.log("IntelliQ.me UI: " + message);
   }
 
   var ui = {
@@ -891,6 +894,9 @@ var ui = function(){
   }
 
   ui.showErrorMessage = function(message) {
+    if (typeof message !== "string") {
+      message = JSON.stringify(message, null, 2)
+    }
     $("#modal-error-message").text(message);
     $("#modal-error").openModal();
   }

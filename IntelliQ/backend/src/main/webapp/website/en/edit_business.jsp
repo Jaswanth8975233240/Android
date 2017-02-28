@@ -26,7 +26,7 @@
             <form class="col s12 vertical-spacing">
               
               <!-- ID -->
-              <div class="row">
+              <div class="row hide">
                 <div class="input-field col s12 m6">
                   <input disabled value="Not yet set" id="form-key-id" type="text">
                   <label for="form-key-id">Key ID</label>
