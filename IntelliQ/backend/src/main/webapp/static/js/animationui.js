@@ -3,6 +3,9 @@ var animationUi = function(){
     var DEFAULT_FADE_DURATION = 500;
 
     function log(message) {
+        if (typeof message !== "string") {
+          message = "\n" + JSON.stringify(message, null, 2)
+        }
         console.log("Animation UI: " + message);
     }
 

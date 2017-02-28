@@ -224,7 +224,7 @@ function requestNearbyQueues() {
     });
   }).catch(function(error){
     console.log(error);
-    ui.showErrorMessage(getString("locationUnavailable") + ": " + error);
+    ui.showErrorMessage(getString("locationUnavailable") + ": " + JSON.stringify(error));
   });
 }
 

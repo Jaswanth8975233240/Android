@@ -12,7 +12,7 @@
 
         <!-- Queue -->
         <div class="section">
-          <h5 id="businessHeading">Add Queue</h5>
+          <h5 id="queueHeading">Add Queue</h5>
           <div class="divider"></div>
           <div class="row">
 
@@ -25,7 +25,7 @@
             <!-- Form -->
             <form class="col s12 vertical-spacing">
               
-              <div class="row">
+              <div class="row hide">
                 <!-- ID -->
                 <div class="input-field col s12 m6">
                   <input disabled value="Not yet set" id="form-key-id" type="text">
