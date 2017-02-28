@@ -56,7 +56,7 @@ function getHostNameFromUrl(url) {
 
 function getString(key) {
   var string  = res[key];
-  if (string == null) {
+  if (!string) {
     string = key;
   }
   
