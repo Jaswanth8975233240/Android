@@ -57,7 +57,7 @@ function getHostNameFromUrl(url) {
 function getString(key) {
   var string  = res[key];
   if (string == null) {
-    string = "Resource Error";
+    string = key;
   }
   
   if (arguments.length > 0) {
