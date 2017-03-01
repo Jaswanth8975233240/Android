@@ -401,12 +401,14 @@ footer.page-footer {
 }
 /* label focus color */
 .input-field input[type=text]:focus + label,
+.input-field input[type=tel]:focus + label,
 .input-field input[type=number]:focus + label,
 .input-field input[type=email]:focus + label {
  color: #663fb4;
 }
 /* label underline focus color */
 .input-field input[type=text]:focus,
+.input-field input[type=tel]:focus,
 .input-field input[type=number]:focus,
 .input-field input[type=email]:focus {
  border-bottom: 1px solid #663fb4;
@@ -414,6 +416,7 @@ footer.page-footer {
 }
 /* valid color */
 .input-field input[type=text].valid,
+.input-field input[type=tel].valid,
 .input-field input[type=number].valid,
 .input-field input[type=email].valid {
  border-bottom: 1px solid #000;
