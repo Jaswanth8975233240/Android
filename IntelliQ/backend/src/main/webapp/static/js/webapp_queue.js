@@ -87,7 +87,7 @@ function requestQueueItem() {
       if (ticketActive) {
         onQueueJoined(queueItem);
       } else {
-        $("#joinQueueButton").addClass("disabled");
+        onQueueLeft();
       }
     } catch(error) {
       console.log(error);
@@ -139,14 +139,7 @@ function leaveQueue(queue) {
     request.send().then(function(data){
       try {
         console.log(data);
-
-        // delete cookies
-        deleteCookie("queueKeyId");
-        deleteCookie("queueItemKeyId");
-        deleteCookie("queueItem");
-
         onQueueLeft();
-
         tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue item canceled", queue.name, queue.key.id);
         location.reload();
       } catch(error) {
@@ -199,11 +192,13 @@ function onJoinQueueModalSubmitted() {
   try {
     var name = $("#newCustomerName").val();
     var hideName = $("#newCustomerVisibility").prop("checked") == false;
+    var phoneNumber = $("#phoneNumber").val();
 
     Materialize.toast(getString("joiningQueue"), 3000);
     var request = intelliqApi.addQueueItem(queue.key.id)
         .withName(name)
         .hideName(hideName)
+        .withPhoneNumber(phoneNumber)
         .usingApp(true);
 
     if (authenticator.getGoogleSignInStatus()) {
@@ -218,14 +213,7 @@ function onJoinQueueModalSubmitted() {
           throw "Queue item not found";
         }
         queueItem = queueItems[0];
-        
-        // persist data in cookies
-        setCookie("queueKeyId", queueItem.queueKeyId);
-        setCookie("queueItemKeyId", queueItem.key.id);
-        setCookie("queueItem", JSON.stringify(queueItem));
-
         onQueueJoined(queueItem);
-
         tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Queue joined", queue.name, queue.key.id);
 
         // update url
@@ -249,17 +237,29 @@ function onJoinQueueModalSubmitted() {
 }
 
 function onQueueJoined(queueItem) {
-  onQueueItemsChanged();
+  // set cookies
+  setCookie("queueKeyId", queueItem.queueKeyId);
+  setCookie("queueItemKeyId", queueItem.key.id);
+  setCookie("queueItem", JSON.stringify(queueItem));
+
   $("#joinQueueContainer").addClass("hide");
   $("#joinQueueButton").addClass("disabled");
   $("#leaveQueueContainer").removeClass("hide");
   $("#leaveQueueButton").removeClass("disabled");
+
+  onQueueItemsChanged();
 }
 
 function onQueueLeft() {
-  onQueueItemsChanged();
+  // delete cookies
+  deleteCookie("queueKeyId");
+  deleteCookie("queueItemKeyId");
+  deleteCookie("queueItem");
+
   $("#joinQueueContainer").removeClass("hide");
   $("#joinQueueButton").removeClass("disabled");
   $("#leaveQueueContainer").addClass("hide");
   $("#leaveQueueButton").addClass("disabled");
+
+  onQueueItemsChanged();
 }
