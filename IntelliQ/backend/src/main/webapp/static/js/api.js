@@ -240,10 +240,10 @@ var intelliqApi = function(){
           api.lastRequestTimestamp = (new Date()).getTime();
           //xhr.setRequestHeader("X-Mashape-Authorization", api.apiKey);
         },
-        success : function(data) {
+        success : function(data, status, xhr) {
           request.data = data;
           // check if the API returned a valid response
-          if (data.statusCode != null && data.statusCode == 200) {
+          if (data.statusCode && data.statusCode == 200) {
             // looks good
             if (request.onSuccessCallback != null) {
               request.onSuccessCallback(data);
@@ -251,27 +251,31 @@ var intelliqApi = function(){
             resolve(data);
           } else {
             // something went wrong, try to extract error message
-            if (data.statusMessage != null) {
-              this.error(data.statusMessage);
+            if (data.statusMessage) {
+              this.error(xhr, status, data.statusMessage);
             } else {
-              this.error("Request didn't return a valid response: " + data);
+              this.error(xhr, status, "Request didn't return a valid response:\n" + JSON.stringify(data));
             }
           }
         },
-        error : function(error) {
+        error : function(xhr, status, error) {
+          console.log(xhr);
+          console.log(status);
+          console.log(error);
+
           request.error = error;
+          log(error)
 
-          if (typeof error == 'string') {
-            log(error);
-            request.data = "{ \"error\": \"" + error + "\" }";
+          if (xhr.responseText) {
+            request.data = JSON.parse(xhr.responseText);
           } else {
-            log(error.responseText);
-            request.data = error.responseJSON;
+            request.data = { "error": error };
           }
-
+          
           if (request.onErrorCallback != null) {
             request.onErrorCallback(error);
           }
+
           reject(error);
         },
         complete : function (){

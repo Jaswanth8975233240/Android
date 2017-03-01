@@ -58,7 +58,7 @@ function requestQueue() {
         reject("Queue not found");
       }
     }).catch(function(error){
-      reject("Unable to get queue: " + error);
+      reject("Unable to get queue: " + JSON.stringify(error));
       console.log(error);
     });
   });
@@ -78,7 +78,7 @@ function requestQueueItems() {
       queueItems = intelliqApi.sortQueueItems(queueItems).byTicketNumber();
       resolve(queueItems);
     }).catch(function(error){
-      reject("Unable to get queue items: " + error);
+      reject("Unable to get queue items: " + JSON.stringify(error));
       console.log(error);
     });
   });
