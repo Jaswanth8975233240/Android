@@ -32,6 +32,8 @@
         "uploadSuccessful": "Upload Finished",
         "uploadFailed": "Upload Failed",
 
+        "selectQueue": "Select a queue",
+
         "status": "Status",
         "statusWaiting": "Waiting",
         "statusCalled": "Called",
