@@ -86,6 +86,7 @@ var intelliqApi = function(){
   api.PAGE_LINK_WEB_APP = api.PAGE_LINK + "apps/web/";
   api.PAGE_LINK_WEB_APP_NEARBY = api.PAGE_LINK_WEB_APP + "nearby/";
   api.PAGE_LINK_WEB_APP_QUEUE = api.PAGE_LINK_WEB_APP + "queue/";
+  api.PAGE_LINK_WEB_APP_BUSINESS = api.PAGE_LINK_WEB_APP + "business/";
   api.PAGE_LINK_WEB_APP_TICKETS = api.PAGE_LINK_WEB_APP + "tickets/";
   
   api.PATH_BUSINESS = "business/";
@@ -939,6 +940,11 @@ var intelliqApi = function(){
 
       urls.manage = function() {
         var url = api.PAGE_LINK_MANAGE + api.PATH_BUSINESS;
+        return urls.replaceParameter("businessKeyId", business.key.id, url);
+      }
+
+      urls.openInWebApp = function() {
+        var url = api.PAGE_LINK_WEB_APP_BUSINESS;
         return urls.replaceParameter("businessKeyId", business.key.id, url);
       }
 
