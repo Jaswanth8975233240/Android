@@ -44,7 +44,7 @@
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="${staticUrl}js/materialize.js"></script>
     <script src="${staticUrl}js/init.js"></script>
-    <script src="${staticUrl}js/analyze.js"></script>
+    <script src="${staticUrl}js/tracking.js"></script>
     <script src="${staticUrl}js/general.js"></script>
     <script src="${staticUrl}js/authenticator.js" defer></script>
     <script src="${staticUrl}js/api.js" defer></script>
