@@ -447,7 +447,26 @@ var ui = function(){
 
     card.withImageRatio(3/1);
     
-    card.withContent().withTitle(business.name, false);
+    var url = intelliqApi.getUrls().forBusiness(business).openInWebApp();
+    var title = $("<a>", {
+      "href": url,
+      "class": "truncate"
+    }).text(business.name);
+
+    if (business.queues.length == 1) {
+      // directly navigate to only queue available
+      var queue = business.queues[0];
+      var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();
+      title.attr("href", url);
+    } else {
+      // don't actually navigate, show toast instead
+      title.click(function(event) {
+        event.preventDefault();
+        Materialize.toast(getString("selectQueue"), 3000);
+      });
+    }
+    
+    card.withContent().withTitle(title, false);
     return card;
   }
 
