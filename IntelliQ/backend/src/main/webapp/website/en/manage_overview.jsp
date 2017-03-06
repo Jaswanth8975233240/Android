@@ -35,7 +35,7 @@
               <div class="col s12 card-spacing">
                 <a id="addBusinessButton" href="${rootUrl}/edit/business/" class="btn-large waves-effect waves-light primary-color fill-width">
                   <i class="material-icons right">business</i> 
-                  Add Businenss
+                  Add Business
                 </a>
                 <blockquote>Businesses are in charge of managing one or more queues. If you want other users to be able to manage a business or some of its queues, you can grant them permissions to do so. Other users won't be able to perform administrative operations, though.</blockquote>
               </div>
