@@ -7,4 +7,8 @@ import com.intelliq.appengine.notification.NotificationSender;
  */
 
 public abstract class TextNotificationSender extends NotificationSender<TextNotification> {
+
+    public TextNotificationSender() {
+    }
+
 }

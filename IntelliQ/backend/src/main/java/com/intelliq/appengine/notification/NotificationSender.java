@@ -6,22 +6,27 @@ package com.intelliq.appengine.notification;
 
 public abstract class NotificationSender<T extends Notification> {
 
+    public NotificationSender() {
+    }
+
     /**
      * Checks if the notification sender is operational at all.
      */
-    abstract boolean canSendNotifications();
+    public abstract boolean canSendNotifications();
 
     /**
      * Checks if the specified notification can (potentially) be delivered.
+     *
      * @param notification
      */
-    abstract boolean canSendNotification(T notification);
+    public abstract boolean canSendNotification(T notification);
 
     /**
      * Tries to deliver the specified notification
+     *
      * @param notification
      * @throws NotificationException if the notification could not be delivered
      */
-    abstract void sendNotification(T notification) throws NotificationException;
+    public abstract void sendNotification(T notification) throws NotificationException;
 
 }

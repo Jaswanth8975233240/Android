@@ -7,4 +7,5 @@ import com.intelliq.appengine.notification.Notification;
  */
 
 public class TextNotification extends Notification {
+
 }
