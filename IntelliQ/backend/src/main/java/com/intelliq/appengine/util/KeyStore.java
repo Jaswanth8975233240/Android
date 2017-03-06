@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public final class KeyStore {
 
-    private static final String KEYSTORE_PROPERTIES_FILE = "WEB-INF/keystore.properties";
+    private static final String KEYSTORE_PROPERTIES_FILE = getPropertiesFilePath();
 
     public static final String MESSAGE_BIRD_KEY_DEV = "MESSAGE_BIRD_KEY_DEV";
     public static final String MESSAGE_BIRD_KEY_PRODUCTION = "MESSAGE_BIRD_KEY_PRODUCTION";
@@ -42,6 +42,17 @@ public final class KeyStore {
 
     public Properties getKeys() {
         return keys;
+    }
+
+    private static String getPropertiesFilePath() {
+        String fileName = "keystore.properties";
+        String productionPath = "WEB-INF/" + fileName;
+        String testingPath = System.getProperty("user.dir") + "/backend/src/main/webapp/WEB-INF/" + fileName;
+        if (new File(productionPath).exists()) {
+            return productionPath;
+        } else {
+            return testingPath;
+        }
     }
 
 }

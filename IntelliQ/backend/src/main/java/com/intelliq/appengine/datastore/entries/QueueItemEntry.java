@@ -45,6 +45,9 @@ public class QueueItemEntry {
     boolean usingApp;
 
     @Persistent
+    String phoneNumber;
+
+    @Persistent
     long entryTimestamp;
 
     @Persistent
@@ -71,6 +74,7 @@ public class QueueItemEntry {
         queueKeyId = req.getParameterAsLong("queueKeyId", queueKeyId);
         userKeyId = req.getParameterAsLong("userKeyId", userKeyId);
         name = req.getParameter("name", name);
+        phoneNumber = req.getParameter("phoneNumber", phoneNumber);
         showName = req.getParameterAsBoolean("showName", showName);
         usingApp = req.getParameterAsBoolean("usingApp", usingApp);
     }
@@ -126,6 +130,14 @@ public class QueueItemEntry {
 
     public void setUsingApp(boolean usingApp) {
         this.usingApp = usingApp;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public long getEntryTimestamp() {

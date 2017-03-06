@@ -1,16 +1,19 @@
 package com.intelliq.appengine.notification;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Steppschuh on 04/03/2017.
  */
 
-public abstract class Notification {
+public abstract class Notification<T extends NotificationRecipient> {
 
-    protected String originator;
+    public static final String ORIGINATOR_INTELLIQ = "IntelliQ.me";
+
+    protected String originator = ORIGINATOR_INTELLIQ;
     protected String body;
-    protected List<NotificationRecipient> recipients;
+    protected List<T> recipients;
 
     public Notification() {
     }
@@ -33,12 +36,17 @@ public abstract class Notification {
         return this;
     }
 
-    public List<NotificationRecipient> getRecipients() {
+    public List<T> getRecipients() {
         return recipients;
     }
 
-    public Notification setRecipients(List<NotificationRecipient> recipients) {
+    public Notification setRecipients(List<T> recipients) {
         this.recipients = recipients;
+        return this;
+    }
+
+    public Notification setRecipient(T recipient) {
+        this.recipients = Arrays.asList(recipient);
         return this;
     }
 

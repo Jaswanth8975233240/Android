@@ -6,4 +6,18 @@ package com.intelliq.appengine.notification;
 
 public abstract class NotificationRecipient {
 
+    private String name;
+
+    public NotificationRecipient() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public NotificationRecipient setName(String name) {
+        this.name = name;
+        return this;
+    }
+
 }
