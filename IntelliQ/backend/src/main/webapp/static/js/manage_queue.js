@@ -417,6 +417,7 @@ function populateQueue() {
 
 function showAddNewQueueItemModal() {
   $("#newCustomerName").val("");
+  $("#phoneNumber").val("");
   $("#addCustomerModal").openModal();
   $("#newCustomerName").focus();
   tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Show new queue item modal");
@@ -425,12 +426,14 @@ function showAddNewQueueItemModal() {
 function onAddNewCustomerModalSubmitted() {
   try {
     var name = $("#newCustomerName").val();
+    var phoneNumber = $("#phoneNumber").val();
     var hideName = $("#newCustomerVisibility").prop("checked") == false;
 
     Materialize.toast(getString("adding", name), 3000);
     var request = intelliqApi.addQueueItem(queue.key.id)
         .withName(name)
         .hideName(hideName)
+        .withPhoneNumber(phoneNumber)
         .setGoogleIdToken(authenticator.getGoogleUserIdToken());
     
     request.send().then(function(data){
@@ -449,6 +452,9 @@ function onAddNewCustomerModalSubmitted() {
 }
 
 function showQueueItemDetailsModal(queueItem) {
+  console.log("Showing queue item details");
+  console.log(queueItem);
+  
   var modal = $("#customerDetailsModal");
   modal.find("h4").text(queueItem.name);
 
@@ -462,6 +468,10 @@ function showQueueItemDetailsModal(queueItem) {
   modal.find("#customerQueueEntry").text(joined);
   modal.find("#customerStatusChange").text(changed);
 
+  if (queueItem.phoneNumber && queueItem.phoneNumber.length > 0) {
+    modal.find("#customerPhoneNumber").text(queueItem.phoneNumber);
+  }
+
   modal.find("#reportCustomerButton").off().click(function() {
     reportQueueItem(queueItem);
   });
@@ -469,11 +479,13 @@ function showQueueItemDetailsModal(queueItem) {
   modal.openModal();
 
   // request more user details
+  /*
   requestUser(queueItem.userKeyId).then(function(user) {
     console.log(user);
   }).catch(function(error) {
     console.log(error);
   });
+  */
   
   tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Show queue item details", queueItem.name, queueItem.ticketNumber);
 }
