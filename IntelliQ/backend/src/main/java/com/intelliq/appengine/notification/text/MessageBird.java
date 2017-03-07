@@ -75,12 +75,12 @@ public class MessageBird extends TextNotificationSender {
                 if (errors.size() > 0) {
                     JsonObject error = errors.get(0).getAsJsonObject();
                     if (error.has(KEY_DESCRIPTION)) {
-                        throw new IOException(error.get(KEY_DESCRIPTION).getAsString());
+                        throw new MessageBirdException(error.get(KEY_DESCRIPTION).getAsString());
                     }
                 }
-                throw new IOException("Unable to get error from response:\n" + response);
+                throw new MessageBirdException("Unable to get error from response:\n" + response);
             }
-        } catch (IOException e) {
+        } catch (IOException | MessageBirdException e) {
             throw new NotificationException("Unable to send notification: " + e.getMessage(), e);
         }
     }

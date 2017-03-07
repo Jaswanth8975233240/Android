@@ -22,7 +22,7 @@ public class MessageBirdTest {
         // TODO: implement
     }
 
-    @Test
+    //@Test
     public void sendNotification_validNotification_getsDelivered() throws Exception {
         MessageBird messageBird = new MessageBird(KeyStore.getKey(KeyStore.MESSAGE_BIRD_KEY_DEV));
         TextNotification textNotification = new TextNotification();

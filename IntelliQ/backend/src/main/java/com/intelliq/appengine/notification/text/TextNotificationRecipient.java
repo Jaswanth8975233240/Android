@@ -25,4 +25,5 @@ public class TextNotificationRecipient extends NotificationRecipient {
         this.msisdn = msisdn;
         return this;
     }
+
 }
