@@ -61,7 +61,7 @@
         "addBusiness": "Add Business",
         "addQueue": "Add Queue",
         "editQueue": "Edit Queue",
-        "populatingQueue": "Popuating queue",
+        "populatingQueue": "Populating queue",
         "joiningQueue": "Joining queue",
         "leavingQueue": "Leaving queue",
 
