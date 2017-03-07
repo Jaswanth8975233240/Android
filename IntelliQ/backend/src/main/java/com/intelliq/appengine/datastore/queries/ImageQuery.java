@@ -1,16 +1,16 @@
 package com.intelliq.appengine.datastore.queries;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.datastore.PMF;
+import com.intelliq.appengine.datastore.entries.ImageEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.datastore.PMF;
-import com.intelliq.appengine.datastore.entries.ImageEntry;
 
 public class ImageQuery {
 

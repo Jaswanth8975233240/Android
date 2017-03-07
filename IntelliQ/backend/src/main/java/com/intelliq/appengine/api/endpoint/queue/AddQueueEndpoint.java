@@ -1,11 +1,5 @@
 package com.intelliq.appengine.api.endpoint.queue;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.datastore.Key;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
@@ -19,6 +13,12 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
 import com.intelliq.appengine.logging.QueueLogging;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 public class AddQueueEndpoint extends Endpoint {

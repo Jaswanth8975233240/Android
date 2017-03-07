@@ -1,10 +1,5 @@
 package com.intelliq.appengine.datastore;
 
-import java.net.URL;
-import java.util.logging.Logger;
-
-import javax.jdo.PersistenceManager;
-
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.images.Image;
@@ -16,7 +11,11 @@ import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.intelliq.appengine.datastore.entries.ImageEntry;
-import com.intelliq.appengine.datastore.entries.QueueItemEntry;
+
+import java.net.URL;
+import java.util.logging.Logger;
+
+import javax.jdo.PersistenceManager;
 
 public class ImageHelper {
 

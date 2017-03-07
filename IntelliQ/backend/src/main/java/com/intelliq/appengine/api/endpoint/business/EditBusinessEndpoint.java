@@ -1,30 +1,21 @@
 package com.intelliq.appengine.api.endpoint.business;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.jdo.JDOObjectNotFoundException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.datastore.Key;
-import com.intelliq.appengine.ParserHelper;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.PermissionSet;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
 import com.intelliq.appengine.datastore.BusinessHelper;
-import com.intelliq.appengine.datastore.PermissionHelper;
-import com.intelliq.appengine.datastore.QueueHelper;
-import com.intelliq.appengine.datastore.QueueItemHelper;
-import com.intelliq.appengine.datastore.UserHelper;
 import com.intelliq.appengine.datastore.entries.BusinessEntry;
 import com.intelliq.appengine.datastore.entries.PermissionEntry;
-import com.intelliq.appengine.datastore.entries.QueueEntry;
-import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
 import com.intelliq.appengine.logging.BusinessLogging;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.JDOObjectNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class EditBusinessEndpoint extends Endpoint {

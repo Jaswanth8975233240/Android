@@ -1,13 +1,8 @@
 package com.intelliq.appengine.api.endpoint.queueitem;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.google.appengine.api.datastore.Key;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
-import com.intelliq.appengine.api.PermissionSet;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
 import com.intelliq.appengine.datastore.PermissionHelper;
@@ -18,11 +13,12 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
-import com.intelliq.appengine.notification.Notification;
 import com.intelliq.appengine.notification.NotificationException;
-import com.intelliq.appengine.notification.NotificationManager;
 import com.intelliq.appengine.notification.text.TextNotification;
-import com.intelliq.appengine.notification.text.TextNotificationRecipient;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 
 public class AddQueueItemEndpoint extends Endpoint {

@@ -1,13 +1,12 @@
 package com.intelliq.appengine.api.endpoint.queueitem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
-import com.intelliq.appengine.api.endpoint.queue.GetNearbyQueuesEndpoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueueItemEndpoint extends Endpoint {
 

@@ -1,11 +1,5 @@
 package com.intelliq.appengine.api.endpoint.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jdo.JDOObjectNotFoundException;
-import javax.servlet.http.HttpServletResponse;
-
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.PermissionSet;
@@ -16,6 +10,12 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
 import com.intelliq.appengine.logging.SlackLog;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.JDOObjectNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class GetUserEndpoint extends Endpoint {

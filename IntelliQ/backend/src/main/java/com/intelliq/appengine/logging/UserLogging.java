@@ -1,6 +1,5 @@
 package com.intelliq.appengine.logging;
 
-import com.intelliq.appengine.api.endpoint.user.SignInUserEndpoint;
 import com.intelliq.appengine.api.endpoint.user.UserEndpoint;
 import com.intelliq.appengine.datastore.entries.UserEntry;
 
