@@ -76,9 +76,6 @@ public final class KeyStore {
         File propertiesFile = findPropertiesFile(Paths.get(System.getProperty("user.dir")));
         if (propertiesFile.exists()) {
             log.info("Found keystore properties file: " + propertiesFile.getAbsolutePath());
-            
-            // TODO: remove debug print
-            System.out.println("Found keystore properties file: " + propertiesFile.getAbsolutePath());
             return propertiesFile;
         } else {
             throw new FileNotFoundException("Unable to find any keystore properties file");
