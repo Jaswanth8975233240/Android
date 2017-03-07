@@ -40,17 +40,6 @@ public class MessageBird extends TextNotificationSender {
     }
 
     @Override
-    public boolean canSendNotifications() {
-        // TODO: check if service is enabled
-        return false;
-    }
-
-    @Override
-    public boolean canSendNotification(TextNotification textNotification) {
-        return false;
-    }
-
-    @Override
     public void sendNotification(TextNotification textNotification) throws NotificationException {
         List<String> msisdnNumbers = getMsisdnNumbersFromRecipients(textNotification.getRecipients());
 
