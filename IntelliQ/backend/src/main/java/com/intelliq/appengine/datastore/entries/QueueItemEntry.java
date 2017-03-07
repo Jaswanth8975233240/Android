@@ -79,6 +79,12 @@ public class QueueItemEntry {
     }
 
     public TextNotificationRecipient asTextNotificationRecipient() throws NotificationException {
+        if (name == null || name.length() < 1) {
+            throw new NotificationException("Invalid recipient name");
+        }
+        if (phoneNumber == null || phoneNumber.length() < 1) {
+            throw new NotificationException("Invalid recipient phone number");
+        }
         TextNotificationRecipient recipient = new TextNotificationRecipient();
         recipient.setName(name);
         recipient.setMsisdn(phoneNumber);
