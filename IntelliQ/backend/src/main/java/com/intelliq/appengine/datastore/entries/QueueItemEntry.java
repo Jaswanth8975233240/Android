@@ -1,5 +1,11 @@
 package com.intelliq.appengine.datastore.entries;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.api.ApiRequest;
+import com.intelliq.appengine.notification.NotificationException;
+import com.intelliq.appengine.notification.text.TextNotificationRecipient;
+
 import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -8,13 +14,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.ParserHelper;
-import com.intelliq.appengine.api.ApiRequest;
-import com.intelliq.appengine.datastore.Location;
 
 @PersistenceCapable(detachable = "true")
 public class QueueItemEntry {
@@ -77,6 +76,13 @@ public class QueueItemEntry {
         phoneNumber = req.getParameter("phoneNumber", phoneNumber);
         showName = req.getParameterAsBoolean("showName", showName);
         usingApp = req.getParameterAsBoolean("usingApp", usingApp);
+    }
+
+    public TextNotificationRecipient asTextNotificationRecipient() throws NotificationException {
+        TextNotificationRecipient recipient = new TextNotificationRecipient();
+        recipient.setName(name);
+        recipient.setMsisdn(phoneNumber);
+        return recipient;
     }
 
     public void makeDummyItem() {

@@ -50,4 +50,13 @@ public abstract class Notification<T extends NotificationRecipient> {
         return this;
     }
 
+    public Notification send() throws NotificationException {
+        if (NotificationManager.getInstance().canSendNotification(this)) {
+            NotificationManager.getInstance().sendNotification(this);
+        } else {
+            throw new NotificationException("Notification can not be sent");
+        }
+        return this;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.intelliq.appengine.api.endpoint.queueitem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Key;
 import com.intelliq.appengine.api.ApiRequest;
@@ -17,9 +18,16 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.notification.Notification;
+import com.intelliq.appengine.notification.NotificationException;
+import com.intelliq.appengine.notification.NotificationManager;
+import com.intelliq.appengine.notification.text.TextNotification;
+import com.intelliq.appengine.notification.text.TextNotificationRecipient;
 
 
 public class AddQueueItemEndpoint extends Endpoint {
+
+    private static final Logger log = Logger.getLogger(AddQueueItemEndpoint.class.getName());
 
     @Override
     public String getEndpointPath() {
@@ -47,7 +55,9 @@ public class AddQueueItemEndpoint extends Endpoint {
     public ApiResponse generateRequestResponse(ApiRequest request) throws Exception {
         ApiResponse response = new ApiResponse();
 
+        // get queue
         long queueKeyId = request.getParameterAsLong("queueKeyId", -1);
+        QueueEntry queueEntry = QueueHelper.getEntryByKeyId(queueKeyId);
 
         // create queue item
         QueueItemEntry queueItemEntry = new QueueItemEntry(queueKeyId);
@@ -71,9 +81,16 @@ public class AddQueueItemEndpoint extends Endpoint {
         if (queueItemEntry.getUserKeyId() > -1 && !addedByManagement) {
             QueueItemEntry existingQueueItemEntry = QueueItemHelper.getQueueItemByUserKeyId(queueItemEntry.getUserKeyId(), queueItemEntry.getQueueKeyId());
             if (existingQueueItemEntry != null) {
-                // return the existing queue item
-                response.setContent(existingQueueItemEntry);
-                return response;
+                // check if the queue items has already been processed
+                if (existingQueueItemEntry.getStatus() == QueueItemEntry.STATUS_DONE) {
+                    // create a new queue item
+                } else if (existingQueueItemEntry.getStatus() == QueueItemEntry.STATUS_CANCELED) {
+                    // create a new queue item
+                } else {
+                    // return the existing queue item
+                    response.setContent(existingQueueItemEntry);
+                    return response;
+                }
             }
         }
 
@@ -95,8 +112,45 @@ public class AddQueueItemEndpoint extends Endpoint {
             PermissionHelper.grantPermission(user, queueItemEntry, PermissionEntry.PERMISSION_OWN);
         }
 
+        // send notification
+        try {
+            sendQueueJoinedNotification(queueItemEntry, queueEntry);
+        } catch (NotificationException e) {
+            log.info("Unable to send notification: " + e.getMessage());
+        }
+
         response.setContent(queueItemEntry);
         return response;
+    }
+
+    public static void sendQueueJoinedNotification(QueueItemEntry queueItemEntry, QueueEntry queueEntry) throws NotificationException {
+        if (!queueEntry.isTextNotificationsEnabled()) {
+            throw new NotificationException("Text notifications are not enabled for this queue");
+        }
+        TextNotification notification = new TextNotification();
+        notification.setRecipient(queueItemEntry.asTextNotificationRecipient());
+        notification.setBody(generateQueueJoinedNotificationBody(queueItemEntry, queueEntry));
+        notification.send();
+    }
+
+    public static String generateQueueJoinedNotificationBody(QueueItemEntry queueItemEntry, QueueEntry queueEntry) {
+        int waitingQueueItemEntries = QueueHelper.getNumberOfItemsInQueue(queueEntry.getKey().getId(), QueueItemEntry.STATUS_WAITING);
+        waitingQueueItemEntries -= 1; // current item is already included
+        long averageWaitingTime = queueEntry.getAverageWaitingTime();
+
+        // TODO: localize message
+        StringBuilder sb = new StringBuilder()
+                .append("Your ticket number is ")
+                .append(queueItemEntry.getTicketNumber())
+                .append(", you will be called as ")
+                .append(queueItemEntry.getName())
+                .append(" in about ")
+                .append(QueueHelper.getReadableWaitingTimeEstimation(waitingQueueItemEntries, averageWaitingTime))
+                .append(".");
+
+        // TODO: append link to queue
+
+        return sb.toString();
     }
 
 }

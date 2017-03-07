@@ -14,6 +14,7 @@ import com.intelliq.appengine.datastore.entries.BusinessEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.stuff.FakeData;
+import com.intelliq.appengine.util.TimeUtils;
 
 public class QueueHelper {
 
@@ -298,6 +299,16 @@ public class QueueHelper {
         }
 
         return count;
+    }
+
+    public static String getReadableWaitingTimeEstimation(QueueEntry queueEntry) {
+        int waitingQueueItemEntries = QueueHelper.getNumberOfItemsInQueue(queueEntry.getKey().getId(), QueueItemEntry.STATUS_WAITING);
+        long averageWaitingTime = queueEntry.getAverageWaitingTime();
+        return getReadableWaitingTimeEstimation(waitingQueueItemEntries, averageWaitingTime);
+    }
+
+    public static String getReadableWaitingTimeEstimation(int waitingQueueItemEntries, long averageWaitingTime) {
+        return TimeUtils.getReadableTimeFromMillis(waitingQueueItemEntries * averageWaitingTime);
     }
 
     public static QueueItemEntry getLastAssignedTicketInQueue(long queueKeyId, byte status) {

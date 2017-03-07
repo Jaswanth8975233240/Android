@@ -22,7 +22,7 @@ public final class NotificationManager extends NotificationSender {
         textNotificationSender = new MessageBird(KeyStore.getKey(KeyStore.MESSAGE_BIRD_KEY_DEV));
     }
 
-    public NotificationManager getInstance() {
+    public static NotificationManager getInstance() {
         if (instance == null) {
             instance = new NotificationManager();
         }

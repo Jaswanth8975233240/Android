@@ -1,18 +1,15 @@
 package com.intelliq.appengine.datastore.entries;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.api.ApiRequest;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.ParserHelper;
-import com.intelliq.appengine.api.ApiRequest;
-import com.intelliq.appengine.datastore.Location;
 
 @PersistenceCapable(detachable = "true")
 public class QueueEntry {
@@ -45,6 +42,9 @@ public class QueueEntry {
     @Persistent
     boolean requiresSignIn;
 
+    @Persistent
+    boolean textNotificationsEnabled;
+
     int waitingPeople;
 
     /**
@@ -74,6 +74,7 @@ public class QueueEntry {
         latitude = -1;
         longitude = -1;
         requiresSignIn = false;
+        textNotificationsEnabled = false;
         averageWaitingTime = TimeUnit.MINUTES.toMillis(5);
     }
 
@@ -170,7 +171,6 @@ public class QueueEntry {
         this.name = name;
     }
 
-
     public String getDescription() {
         return description;
     }
@@ -186,7 +186,6 @@ public class QueueEntry {
     public void setVisibility(byte visibility) {
         this.visibility = visibility;
     }
-
 
     public long getPhotoImageKeyId() {
         return photoImageKeyId;
@@ -275,4 +274,13 @@ public class QueueEntry {
     public void setRequiresSignIn(boolean requiresSignIn) {
         this.requiresSignIn = requiresSignIn;
     }
+
+    public boolean isTextNotificationsEnabled() {
+        return textNotificationsEnabled;
+    }
+
+    public void setTextNotificationsEnabled(boolean textNotificationsEnabled) {
+        this.textNotificationsEnabled = textNotificationsEnabled;
+    }
+
 }
