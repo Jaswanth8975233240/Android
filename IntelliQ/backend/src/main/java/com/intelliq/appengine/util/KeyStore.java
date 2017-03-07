@@ -2,6 +2,7 @@ package com.intelliq.appengine.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.DirectoryStream;
@@ -21,7 +22,7 @@ public final class KeyStore {
 
     private static final Logger log = Logger.getLogger(KeyStore.class.getName());
 
-    private static final File KEYSTORE_PROPERTIES_FILE = getPropertiesFile();
+    private static final String KEYSTORE_PROPERTIES_FILE_NAME = "keystore.properties";
 
     public static final String MESSAGE_BIRD_KEY_DEV = "MESSAGE_BIRD_KEY_DEV";
     public static final String MESSAGE_BIRD_KEY_PRODUCTION = "MESSAGE_BIRD_KEY_PRODUCTION";
@@ -31,7 +32,7 @@ public final class KeyStore {
 
     private KeyStore() {
         try {
-            InputStream inputStream = new FileInputStream(KEYSTORE_PROPERTIES_FILE);
+            InputStream inputStream = new FileInputStream(getPropertiesFile());
             keys.load(inputStream);
         } catch (IOException e) {
             log.severe("Unable to load keystore properties file: " + e.getMessage());
@@ -54,14 +55,15 @@ public final class KeyStore {
         return keys;
     }
 
-    private static File getPropertiesFile() {
-        String fileName = "keystore.properties";
-        String productionPath = "WEB-INF/" + fileName;
-        String testingPath = System.getProperty("user.dir") + "/backend/src/main/webapp/WEB-INF/" + fileName;
-
+    /**
+     * Attempts to find the {@link #KEYSTORE_PROPERTIES_FILE_NAME} and returns it as File.
+     *
+     * @return
+     */
+    private static File getPropertiesFile() throws FileNotFoundException {
         List<File> files = new ArrayList<>();
-        files.add(new File(productionPath));
-        files.add(new File(testingPath));
+        files.add(new File("WEB-INF/" + KEYSTORE_PROPERTIES_FILE_NAME));
+        files.add(new File(System.getProperty("user.dir") + "/backend/src/main/webapp/WEB-INF/" + KEYSTORE_PROPERTIES_FILE_NAME));
 
         for (File file : files) {
             if (file.exists()) {
@@ -71,31 +73,37 @@ public final class KeyStore {
             }
         }
 
-        log.warning("Unable to find any keystore properties file.");
-
-        List<String> fileNames = getFileNames(new ArrayList<String>(), Paths.get(System.getProperty("user.dir")));
-        for (String name : fileNames) {
-            log.info(name);
+        File propertiesFile = findPropertiesFile(Paths.get(System.getProperty("user.dir")));
+        if (propertiesFile.exists()) {
+            log.info("Found keystore properties file: " + propertiesFile.getAbsolutePath());
+            return propertiesFile;
+        } else {
+            throw new FileNotFoundException("Unable to find any keystore properties file");
         }
-
-        return new File("");
     }
 
-    private static List<String> getFileNames(List<String> fileNames, Path dir) {
+    /**
+     * Traverses the specified directory and returns the first file that
+     * matches the {@link #KEYSTORE_PROPERTIES_FILE_NAME}.
+     *
+     * @param dir
+     * @return
+     */
+    private static File findPropertiesFile(Path dir) throws FileNotFoundException {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
             for (Path path : stream) {
                 if (path.toFile().isDirectory()) {
-                    getFileNames(fileNames, path);
+                    return findPropertiesFile(path);
                 } else {
-                    if (path.getFileName().toString().contains("keystore")) {
-                        fileNames.add(path.toAbsolutePath().toString());
+                    if (path.getFileName().toString().contains(KEYSTORE_PROPERTIES_FILE_NAME)) {
+                        return path.toFile();
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return fileNames;
+        throw new FileNotFoundException("Unable to find file with name: " + KEYSTORE_PROPERTIES_FILE_NAME);
     }
 
 }
