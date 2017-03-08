@@ -418,6 +418,11 @@ function populateQueue() {
 function showAddNewQueueItemModal() {
   $("#newCustomerName").val("");
   $("#phoneNumber").val("");
+  if (queue && queue.textNotificationsEnabled) {
+    $("#phoneNumberContainer").removeClass("hide");
+  } else {
+    $("#phoneNumberContainer").addClass("hide");
+  }
   $("#addCustomerModal").openModal();
   $("#newCustomerName").focus();
   tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Show new queue item modal");
@@ -445,6 +450,7 @@ function onAddNewCustomerModalSubmitted() {
     });
     $("#addCustomerModal").closeModal();
     tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Submit new queue item modal", name, hideName ? 1 : 0);
+    tracking.trackEvent(tracking.CATEGORY_QUEUE_MANAGE, "Phone number provided by management", phoneNumber);
   } catch(error) {
     console.log(error);
     ui.showErrorMessage(error);
@@ -454,7 +460,7 @@ function onAddNewCustomerModalSubmitted() {
 function showQueueItemDetailsModal(queueItem) {
   console.log("Showing queue item details");
   console.log(queueItem);
-  
+
   var modal = $("#customerDetailsModal");
   modal.find("h4").text(queueItem.name);
 

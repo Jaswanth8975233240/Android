@@ -183,9 +183,16 @@ function showJoinQueueModal() {
       $("#newCustomerName").val(userName);
     }
   });
+
+  if (queue && queue.textNotificationsEnabled) {
+    $("#phoneNumberContainer").removeClass("hide");
+  } else {
+    $("#phoneNumberContainer").addClass("hide");
+  }
+
   $("#joinQueueModal").openModal();
   $("#newCustomerName").focus();
-  tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Show join queue modal");
+  tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Show join queue modal", queue.name, queue.key.id);
 }
 
 function onJoinQueueModalSubmitted() {
@@ -228,8 +235,12 @@ function onJoinQueueModalSubmitted() {
       console.log(error);
       ui.showErrorMessage(error);
     });
+
     $("#joinQueueModal").closeModal();
     tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Submit join queue modal", queue.name, queue.key.id);
+    if (phoneNumber && phoneNumber.length > 0) {
+      tracking.trackEvent(tracking.CATEGORY_WEBAPP, "Phone number provided by user", phoneNumber);
+    }
   } catch(error) {
     console.log(error);
     ui.showErrorMessage(error);

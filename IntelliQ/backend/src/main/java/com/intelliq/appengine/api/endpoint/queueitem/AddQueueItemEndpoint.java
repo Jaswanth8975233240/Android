@@ -134,7 +134,6 @@ public class AddQueueItemEndpoint extends Endpoint {
         waitingQueueItemEntries -= 1; // current item is already included
         long averageWaitingTime = queueEntry.getAverageWaitingTime();
 
-        // TODO: localize message
         StringBuilder sb = new StringBuilder()
                 .append("Your ticket number is ")
                 .append(queueItemEntry.getTicketNumber())
@@ -144,6 +143,7 @@ public class AddQueueItemEndpoint extends Endpoint {
                 .append(QueueHelper.getReadableWaitingTimeEstimation(waitingQueueItemEntries, averageWaitingTime))
                 .append(".");
 
+        // TODO: localize message
         // TODO: append link to queue
 
         return sb.toString();

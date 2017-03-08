@@ -155,7 +155,7 @@
               </div>
 
               <!-- Phone number -->
-              <div class="input-field col s12 l6">
+              <div id="phoneNumberContainer" class="input-field col s12 l6">
                 <input id="phoneNumber" type="tel" placeholder="Optional">
                 <label for="phoneNumber">Mobile Phone Number</label>
               </div>
