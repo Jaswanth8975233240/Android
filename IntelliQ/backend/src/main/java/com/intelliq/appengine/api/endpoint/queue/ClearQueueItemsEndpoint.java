@@ -71,7 +71,7 @@ public class ClearQueueItemsEndpoint extends Endpoint {
             QueueHelper.deleteItemsInQueue(queueKeyId, status);
         }
 
-        List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, 0, 100);
+        List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, QueueItemEntry.STATUS_ALL, 0, 100);
         response.setContent(entries);
         return response;
     }

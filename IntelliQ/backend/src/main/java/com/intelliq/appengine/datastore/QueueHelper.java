@@ -204,25 +204,28 @@ public class QueueHelper {
         return -1;
     }
 
-    public static List<QueueItemEntry> getItemsInQueue(long queueKeyId, int startIndex, int count) {
+    public static List<QueueItemEntry> getItemsInQueue(long queueKeyId, byte status, int startIndex, int count) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Query query = pm.newQuery(QueueItemEntry.class);
 
-        query.setFilter("queueKeyId == value");
-        query.setOrdering("entryTimestamp descending");
-        query.declareParameters("long value");
-        query.setRange(startIndex, count);
         query.setOrdering("ticketNumber ascending");
+        query.setRange(startIndex, count);
 
         List<QueueItemEntry> results = new ArrayList<QueueItemEntry>();
         try {
-            results = (List<QueueItemEntry>) query.execute(queueKeyId);
+            if (status == QueueItemEntry.STATUS_ALL) {
+                query.setFilter("queueKeyId == value");
+                query.declareParameters("long value");
+                results = (List<QueueItemEntry>) query.execute(queueKeyId);
+            } else {
+                query.setFilter("queueKeyId == value && status == value2");
+                query.declareParameters("long value, byte value2");
+                results = (List<QueueItemEntry>) query.execute(queueKeyId, status);
+            }
             results.size();
             for (QueueItemEntry entry : results) {
                 entry.getName();
-                //log.info("Item found: " + entry.getName());
             }
-            //log.info("Query execution returned " + results.size() + " item(s)");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

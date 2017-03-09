@@ -95,4 +95,8 @@ public class SetQueueItemStatusEndpoint extends Endpoint {
         return response;
     }
 
+    public static void notifyWaitingQueueItems(long queueKeyId) {
+
+    }
+
 }
