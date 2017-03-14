@@ -144,7 +144,7 @@ public class AddQueueItemEndpoint extends Endpoint {
                 .append(".");
 
         // TODO: localize message
-        // TODO: append link to queue
+        // TODO: append link to ticket
 
         return sb.toString();
     }
