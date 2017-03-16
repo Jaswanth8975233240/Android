@@ -204,12 +204,12 @@ public class QueueHelper {
         return -1;
     }
 
-    public static List<QueueItemEntry> getItemsInQueue(long queueKeyId, byte status, int startIndex, int count) {
+    public static List<QueueItemEntry> getItemsInQueue(long queueKeyId, byte status, int startIndex, int endIndex) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Query query = pm.newQuery(QueueItemEntry.class);
 
         query.setOrdering("ticketNumber ascending");
-        query.setRange(startIndex, count);
+        query.setRange(startIndex, endIndex);
 
         List<QueueItemEntry> results = new ArrayList<QueueItemEntry>();
         try {

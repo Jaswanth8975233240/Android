@@ -13,6 +13,7 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.notification.NotificationGenerator;
 import com.intelliq.appengine.notification.NotificationException;
 import com.intelliq.appengine.notification.text.TextNotification;
 
@@ -125,28 +126,8 @@ public class AddQueueItemEndpoint extends Endpoint {
         }
         TextNotification notification = new TextNotification();
         notification.setRecipient(queueItemEntry.asTextNotificationRecipient());
-        notification.setBody(generateQueueJoinedNotificationBody(queueItemEntry, queueEntry));
+        notification.setBody(NotificationGenerator.generateQueueJoinedNotificationBody(queueItemEntry, queueEntry));
         notification.send();
-    }
-
-    public static String generateQueueJoinedNotificationBody(QueueItemEntry queueItemEntry, QueueEntry queueEntry) {
-        int waitingQueueItemEntries = QueueHelper.getNumberOfItemsInQueue(queueEntry.getKey().getId(), QueueItemEntry.STATUS_WAITING);
-        waitingQueueItemEntries -= 1; // current item is already included
-        long averageWaitingTime = queueEntry.getAverageWaitingTime();
-
-        StringBuilder sb = new StringBuilder()
-                .append("Your ticket number is ")
-                .append(queueItemEntry.getTicketNumber())
-                .append(", you will be called as ")
-                .append(queueItemEntry.getName())
-                .append(" in about ")
-                .append(QueueHelper.getReadableWaitingTimeEstimation(waitingQueueItemEntries, averageWaitingTime))
-                .append(".");
-
-        // TODO: localize message
-        // TODO: append link to ticket
-
-        return sb.toString();
     }
 
 }

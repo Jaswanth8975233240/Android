@@ -38,7 +38,7 @@ public class GetItemsInQueueEndpoint extends Endpoint {
         byte status = (byte) request.getParameterAsInt("status", QueueItemEntry.STATUS_ALL);
 
         try {
-            List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, status, offset, count);
+            List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, status, offset, offset + count);
             response.setContent(entries);
         } catch (JDOObjectNotFoundException exception) {
             response.setStatusCode(HttpServletResponse.SC_NOT_FOUND);
