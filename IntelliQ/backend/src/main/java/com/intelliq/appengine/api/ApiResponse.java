@@ -1,8 +1,8 @@
 package com.intelliq.appengine.api;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.gson.Gson;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class ApiResponse {
 

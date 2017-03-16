@@ -1,7 +1,10 @@
 var ui = function(){
 
   function log(message) {
-    console.log("UI: " + message);
+    if (typeof message !== "string") {
+      message = "\n" + JSON.stringify(message, null, 2)
+    }
+    console.log("IntelliQ.me UI: " + message);
   }
 
   var ui = {
@@ -444,7 +447,26 @@ var ui = function(){
 
     card.withImageRatio(3/1);
     
-    card.withContent().withTitle(business.name, false);
+    var url = intelliqApi.getUrls().forBusiness(business).openInWebApp();
+    var title = $("<a>", {
+      "href": url,
+      "class": "truncate"
+    }).text(business.name);
+
+    if (business.queues.length == 1) {
+      // directly navigate to only queue available
+      var queue = business.queues[0];
+      var url = intelliqApi.getUrls().forQueue(queue).openInWebApp();
+      title.attr("href", url);
+    } else {
+      // don't actually navigate, show toast instead
+      title.click(function(event) {
+        event.preventDefault();
+        Materialize.toast(getString("selectQueue"), 3000);
+      });
+    }
+    
+    card.withContent().withTitle(title, false);
     return card;
   }
 
@@ -891,6 +913,9 @@ var ui = function(){
   }
 
   ui.showErrorMessage = function(message) {
+    if (typeof message !== "string") {
+      message = JSON.stringify(message, null, 2)
+    }
     $("#modal-error-message").text(message);
     $("#modal-error").openModal();
   }

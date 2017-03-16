@@ -185,7 +185,7 @@ function requestRecentQueueItemKeyIds() {
     var queueItemKeyIds = [];
 
     var addQueueItemKeyId = function(queueItemKeyId) {
-      if (queueItemKeyId == null && queueItemKeyId < 0) {
+      if (queueItemKeyId == null || queueItemKeyId < 0) {
         return;
       }
       if (queueItemKeyIds.indexOf(queueItemKeyId) > -1) {
@@ -224,6 +224,9 @@ function requestNearbyQueues() {
     });
   }).catch(function(error){
     console.log(error);
+    if (typeof error !== "string") {
+      error = "\n" + JSON.stringify(error)
+    }
     ui.showErrorMessage(getString("locationUnavailable") + ": " + error);
   });
 }

@@ -1,9 +1,9 @@
 package com.intelliq.appengine.api;
 
+import com.intelliq.appengine.datastore.entries.PermissionEntry;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.intelliq.appengine.datastore.entries.PermissionEntry;
 
 public class PermissionSet {
 

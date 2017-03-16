@@ -1,9 +1,7 @@
 package com.intelliq.appengine.logging;
 
 import com.intelliq.appengine.api.endpoint.business.BusinessEndpoint;
-import com.intelliq.appengine.api.endpoint.queue.QueueEndpoint;
 import com.intelliq.appengine.datastore.entries.BusinessEntry;
-import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
 
 import net.steppschuh.slackmessagebuilder.message.attachment.Attachment;

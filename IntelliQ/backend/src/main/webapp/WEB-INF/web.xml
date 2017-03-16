@@ -116,6 +116,24 @@
         <servlet-name>en/business</servlet-name>
         <url-pattern>/intelliq/en/businessservlet/*</url-pattern>
     </servlet-mapping>
+
+    <!-- Imprint page servlet -->
+    <servlet>
+        <servlet-name>de/imprint</servlet-name>
+        <jsp-file>/website/en/imprint.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>de/imprint</servlet-name>
+        <url-pattern>/intelliq/de/imprintservlet/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>en/imprint</servlet-name>
+        <jsp-file>/website/en/imprint.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>en/imprint</servlet-name>
+        <url-pattern>/intelliq/en/imprintservlet/*</url-pattern>
+    </servlet-mapping>
     
     <!-- Sign In page servlet -->
     <servlet>

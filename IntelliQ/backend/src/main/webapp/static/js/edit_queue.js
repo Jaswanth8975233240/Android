@@ -11,6 +11,8 @@ var queueLocationMarker; // map marker for the new queue location
     $("#saveQueueButton").click(saveNewQueue);
     updateFormWithUrlParameterData();
 
+    setupImageUpload();
+
     var statusChangeListener = {
       onUserAvailable: function(user) {
         var queueKeyId = getUrlParam("queueKeyId");
@@ -52,13 +54,15 @@ function requestExistingQueueData(queueKeyId) {
 }
 
 function showAddQueueUi() {
-  $("#businessHeading").text(getString("addQueue"));
+  $("#queueHeading").text(getString("addQueue"));
   $("#saveQueueButton").text(getString("save"));
+  $("#changeImageContainer").addClass("hide");
 }
 
 function showEditQueueUi() {
-  $("#businessHeading").text(getString("editQueue"));
+  $("#queueHeading").text(getString("editQueue"));
   $("#saveQueueButton").text(getString("applyChanges"));
+  $("#changeImageContainer").removeClass("hide");
 }
 
 // fills the form fields with data from URL params
@@ -86,6 +90,8 @@ function updateFormWithQueueData(queue) {
   $("#form-business-key-id").val(queue.businessKeyId);
   $("#form-name").val(queue.name);
   $("#form-description").val(queue.description);
+
+  $("#changeImageButton").removeClass("disabled");
 
   // waiting time
   var enteredTimeUnit = $("#form-average-waiting-time-unit :selected").val();
@@ -459,4 +465,35 @@ function geocodeLocation(latitude, longitude, geocoder, map) {
     }
   });
   return promise;
+}
+
+function setupImageUpload() {
+  $("#changeImageButton").click(function() {
+    $("#imageUploadModal").openModal();
+  });
+
+  var imageFileInput = $("#imageFileInput").get(0);
+  imageFileInput.addEventListener('change', function(event) {
+    var queueKeyId = existingQueue.key.id;
+    var files = $("#imageFileInput").get(0).files;
+    if (files.length < 1) {
+      return;
+    }
+
+    var file = files[0];
+
+    Materialize.toast(getString("uploadStarted"), 3000);
+    $(".loadingState").show();
+
+    intelliqApi.uploadQueuePhoto(queueKeyId, file, authenticator.getGoogleUserIdToken()).then(function(data){
+      Materialize.toast(getString("uploadSuccessful"), 3000);
+      $(".loadingState").hide();
+      $("#imageUploadModal").closeModal();
+    }).catch(function(error){
+      console.log(error);
+      Materialize.toast(getString("uploadFailed"), 3000);
+      ui.showErrorMessage(error);
+      $(".loadingState").hide();
+    });
+  });
 }

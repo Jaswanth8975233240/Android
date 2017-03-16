@@ -1,9 +1,8 @@
 package com.intelliq.appengine.datastore;
 
-import java.util.Iterator;
-import java.util.List;
-
 import com.intelliq.appengine.ParserHelper;
+
+import java.util.List;
 
 public class MergeHelper {
 

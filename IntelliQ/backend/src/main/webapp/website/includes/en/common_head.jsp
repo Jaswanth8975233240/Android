@@ -28,6 +28,11 @@
 
         "applyChanges": "Apply Changes",
         "save": "Save",
+        "uploadStarted": "Upload Started",
+        "uploadSuccessful": "Upload Finished",
+        "uploadFailed": "Upload Failed",
+
+        "selectQueue": "Select a queue",
 
         "status": "Status",
         "statusWaiting": "Waiting",
@@ -54,8 +59,9 @@
         "manage": "Manage",
         "editBusiness": "Edit Business",
         "addBusiness": "Add Business",
+        "addQueue": "Add Queue",
         "editQueue": "Edit Queue",
-        "populatingQueue": "Popuating queue",
+        "populatingQueue": "Populating queue",
         "joiningQueue": "Joining queue",
         "leavingQueue": "Leaving queue",
 

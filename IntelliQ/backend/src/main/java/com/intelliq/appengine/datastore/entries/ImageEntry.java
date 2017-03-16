@@ -1,14 +1,15 @@
 package com.intelliq.appengine.datastore.entries;
 
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.datastore.ImageHelper;
+
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
 
 @PersistenceCapable(detachable = "true")
 public class ImageEntry {
@@ -37,6 +38,32 @@ public class ImageEntry {
 
     public ImageEntry() {
 
+    }
+
+    public void resizeTo(int maximumWidth) {
+        resizeTo(maximumWidth, 1024 * 1024 * 5);
+    }
+
+    /**
+     * Tries to resize the image until its smaller than the specified width and size.
+     *
+     * @param maximumWidth the maximum width in pixels
+     * @param maximumSize  the maximum size in bytes
+     */
+    public void resizeTo(int maximumWidth, long maximumSize) {
+        if (image != null) {
+            int maximumOperations = 5;
+            int resizeWidth = maximumWidth;
+            byte[] resizedImage = image.getBytes();
+            for (int operation = 0; operation < maximumOperations; operation++) {
+                resizedImage = ImageHelper.resizeImage(image.getBytes(), resizeWidth, false);
+                if (resizedImage.length <= maximumSize) {
+                    break;
+                }
+                resizeWidth = resizeWidth - (resizeWidth / 4);
+            }
+            setImage(resizedImage);
+        }
     }
 
     public Key getKey() {

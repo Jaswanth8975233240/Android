@@ -1,13 +1,13 @@
 package com.intelliq.appengine.api.endpoint;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.endpoint.business.BusinessEndpoint;
 import com.intelliq.appengine.api.endpoint.queue.QueueEndpoint;
 import com.intelliq.appengine.api.endpoint.queueitem.QueueItemEndpoint;
 import com.intelliq.appengine.api.endpoint.user.UserEndpoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class EndpointManager {
 

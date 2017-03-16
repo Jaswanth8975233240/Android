@@ -1,15 +1,14 @@
 var intelliqApi = function(){
 
   function log(message) {
+    if (typeof message !== "string") {
+      message = "\n" + JSON.stringify(message, null, 2)
+    }
     console.log("IntelliQ.me API: " + message);
   }
 
   function useDevelopmentServer() {
-    if (top.location.hostname == "localhost") {
-      return true;
-    } else {
-      return false;
-    }
+    return top.location.hostname == "localhost";
   }
 
   var api = {
@@ -31,12 +30,14 @@ var intelliqApi = function(){
   api.HOST_APP_ENGINE = "https://intelliq-me.appspot.com/";
   api.HOST_APP_ENGINE_VERSIONED = "https://" + api.APP_ENGINE_VERSION + "-dot-intelliq-me.appspot.com/";
 
-  // Request endpoints
   if (useDevelopmentServer()) {
-    api.ENDPOINT_API = api.HOST_LOCAL + "api/";
+    api.HOST = api.HOST_LOCAL;
   } else {
-    api.ENDPOINT_API = api.HOST_APP_ENGINE + "api/";
+    api.HOST = api.HOST_APP_ENGINE;
   }
+
+  // Request endpoints
+  api.ENDPOINT_API = api.HOST + "api/";
   
   api.ENDPOINT_USER = api.ENDPOINT_API + "user/";
   api.ENDPOINT_USER_GET = api.ENDPOINT_USER + "get/";
@@ -69,6 +70,8 @@ var intelliqApi = function(){
   api.ENDPOINT_QUEUE_ITEM_STATUS = api.ENDPOINT_QUEUE_ITEM + "status/";
   api.ENDPOINT_QUEUE_ITEM_REPORT = api.ENDPOINT_QUEUE_ITEM + "report/";
 
+  api.ENDPOINT_IMAGE = "image/";
+
   // Webpages
   if (useDevelopmentServer()) {
     api.PAGE_LINK = api.HOST_LOCAL;
@@ -83,6 +86,7 @@ var intelliqApi = function(){
   api.PAGE_LINK_WEB_APP = api.PAGE_LINK + "apps/web/";
   api.PAGE_LINK_WEB_APP_NEARBY = api.PAGE_LINK_WEB_APP + "nearby/";
   api.PAGE_LINK_WEB_APP_QUEUE = api.PAGE_LINK_WEB_APP + "queue/";
+  api.PAGE_LINK_WEB_APP_BUSINESS = api.PAGE_LINK_WEB_APP + "business/";
   api.PAGE_LINK_WEB_APP_TICKETS = api.PAGE_LINK_WEB_APP + "tickets/";
   
   api.PATH_BUSINESS = "business/";
@@ -105,6 +109,11 @@ var intelliqApi = function(){
   api.ENTRY_TYPE_QUEUE_ITEM = "QueueItemEntry";
   api.ENTRY_TYPE_USER = "UserEntry";
   api.ENTRY_TYPE_PERMISSION = "PermissionEntry";
+  api.ENTRY_TYPE_IMAGE = "ImageEntry";
+
+  // Image types
+  api.IMAGE_TYPE_LOGO = 0;
+  api.IMAGE_TYPE_PHOTO = 1;
 
   // Update intervals
   api.UPDATE_INTERVAL_CASUAL = 1000 * 30;
@@ -232,10 +241,10 @@ var intelliqApi = function(){
           api.lastRequestTimestamp = (new Date()).getTime();
           //xhr.setRequestHeader("X-Mashape-Authorization", api.apiKey);
         },
-        success : function(data) {
+        success : function(data, status, xhr) {
           request.data = data;
           // check if the API returned a valid response
-          if (data.statusCode != null && data.statusCode == 200) {
+          if (data.statusCode && data.statusCode == 200) {
             // looks good
             if (request.onSuccessCallback != null) {
               request.onSuccessCallback(data);
@@ -243,27 +252,31 @@ var intelliqApi = function(){
             resolve(data);
           } else {
             // something went wrong, try to extract error message
-            if (data.statusMessage != null) {
-              this.error(data.statusMessage);
+            if (data.statusMessage) {
+              this.error(xhr, status, data.statusMessage);
             } else {
-              this.error("Request didn't return a valid response: " + data);
+              this.error(xhr, status, "Request didn't return a valid response:\n" + JSON.stringify(data));
             }
           }
         },
-        error : function(error) {
+        error : function(xhr, status, error) {
+          console.log(xhr);
+          console.log(status);
+          console.log(error);
+
           request.error = error;
+          log(error)
 
-          if (typeof error == 'string') {
-            log(error);
-            request.data = "{ \"error\": \"" + error + "\" }";
+          if (xhr.responseText) {
+            request.data = JSON.parse(xhr.responseText);
           } else {
-            log(error.responseText);
-            request.data = error.responseJSON;
+            request.data = { "error": error };
           }
-
+          
           if (request.onErrorCallback != null) {
             request.onErrorCallback(error);
           }
+
           reject(error);
         },
         complete : function (){
@@ -566,6 +579,11 @@ var intelliqApi = function(){
       return request;
     }
 
+    request.withPhoneNumber = function(value) {
+      request.addParameter("phoneNumber", value);
+      return request;
+    }
+
     return request;
   }
 
@@ -652,6 +670,54 @@ var intelliqApi = function(){
     }
 
     return request;
+  }
+
+  /*
+    Image endpoints
+  */
+  api.uploadImage = function(parentKeyId, type, file, googleIdToken) {
+    var promise = new Promise(function(resolve, reject) {
+      var formData = new FormData();
+      formData.append("parentKeyId", parentKeyId);
+      formData.append("type", type);
+      formData.append("image", file);
+
+      var request = new XMLHttpRequest();
+      request.onreadystatechange = function () {
+        if(request.readyState === XMLHttpRequest.DONE) {
+          console.log("onreadystatechange");
+
+          data = JSON.parse(request.responseText);
+          console.log(data);
+
+          // check if the API returned a valid response
+          if (data.statusCode != null && data.statusCode == 200) {
+            // looks good
+            resolve(data);
+          } else {
+            // something went wrong, try to extract error message
+            if (data.statusMessage != null) {
+              reject(data.statusMessage);
+            } else {
+              reject("Request didn't return a valid response: " + data);
+            }
+          }
+        }
+      };
+
+      var requestUrl = intelliqApi.HOST + intelliqApi.ENDPOINT_IMAGE + "?googleIdToken=" + googleIdToken;
+      request.open("POST", requestUrl);
+      request.send(formData);
+    });
+    return promise;
+  }
+
+  api.uploadBusinessLogo = function(businessKeyId, file, googleIdToken) {
+    return api.uploadImage(businessKeyId, api.IMAGE_TYPE_LOGO, file, googleIdToken);
+  }
+
+  api.uploadQueuePhoto = function(queueKeyId, file, googleIdToken) {
+    return api.uploadImage(queueKeyId, api.IMAGE_TYPE_PHOTO, file, googleIdToken);
   }
 
   /*
@@ -883,6 +949,11 @@ var intelliqApi = function(){
 
       urls.manage = function() {
         var url = api.PAGE_LINK_MANAGE + api.PATH_BUSINESS;
+        return urls.replaceParameter("businessKeyId", business.key.id, url);
+      }
+
+      urls.openInWebApp = function() {
+        var url = api.PAGE_LINK_WEB_APP_BUSINESS;
         return urls.replaceParameter("businessKeyId", business.key.id, url);
       }
 

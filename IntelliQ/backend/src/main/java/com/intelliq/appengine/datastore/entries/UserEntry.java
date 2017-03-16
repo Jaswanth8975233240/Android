@@ -1,14 +1,14 @@
 package com.intelliq.appengine.datastore.entries;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.appengine.api.datastore.Key;
+import com.intelliq.appengine.datastore.PermissionHelper;
+
 import javax.jdo.annotations.Element;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.appengine.api.datastore.Key;
-import com.intelliq.appengine.datastore.PermissionHelper;
 
 @PersistenceCapable(detachable = "true")
 public class UserEntry {
@@ -93,11 +93,7 @@ public class UserEntry {
         }
 
         // look up the PermissionEntry in the data store
-        if (this.key != null) {
-            return PermissionHelper.hasPermission(requestedPermission);
-        } else {
-            return false;
-        }
+        return PermissionHelper.hasPermission(requestedPermission);
     }
 
     @Override

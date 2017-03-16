@@ -2,3 +2,4 @@
 appengine-generated/
 *.class
 .DS_Store
+keystore.properties

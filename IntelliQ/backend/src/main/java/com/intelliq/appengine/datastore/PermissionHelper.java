@@ -1,12 +1,5 @@
 package com.intelliq.appengine.datastore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
-
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.intelliq.appengine.datastore.entries.BusinessEntry;
@@ -14,6 +7,13 @@ import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 public class PermissionHelper {
 
@@ -35,10 +35,10 @@ public class PermissionHelper {
     }
 
     public static boolean hasPermission(PermissionEntry permissionEntry) {
-        return hasPermission(permissionEntry.getUserKeyId(), permissionEntry.getSubjectKeyId(), permissionEntry.getSubjectKind(), permissionEntry.getPermission());
+        return hasPermission(permissionEntry.getUserKeyId(), permissionEntry.getSubjectKeyId(), permissionEntry.getPermission());
     }
 
-    public static boolean hasPermission(long userKeyId, long subjectKeyId, String subjectKind, int permission) {
+    public static boolean hasPermission(long userKeyId, long subjectKeyId, int permission) {
         // check if this permission exists
         if (getPermission(userKeyId, subjectKeyId, permission) != null) {
             return true;

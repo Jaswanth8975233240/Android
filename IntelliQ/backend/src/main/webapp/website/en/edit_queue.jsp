@@ -12,7 +12,7 @@
 
         <!-- Queue -->
         <div class="section">
-          <h5 id="businessHeading">Add Queue</h5>
+          <h5 id="queueHeading">Add Queue</h5>
           <div class="divider"></div>
           <div class="row">
 
@@ -25,7 +25,7 @@
             <!-- Form -->
             <form class="col s12 vertical-spacing">
               
-              <div class="row">
+              <div class="row hide">
                 <!-- ID -->
                 <div class="input-field col s12 m6">
                   <input disabled value="Not yet set" id="form-key-id" type="text">
@@ -50,6 +50,15 @@
                 <div class="input-field col s12 m6 l8">
                   <input placeholder="What do people queue up for?" id="form-description" type="text">
                   <label for="form-description">Description</label>
+                </div>
+              </div>
+
+              <!-- Photo -->
+              <div class="row">
+                <div id="changeImageContainer" class="input-field col s12 m6 hide">
+                  <a id="changeImageButton" class="btn-large waves-effect waves-light primary-color disabled">
+                    Change Photo
+                  </a>
                 </div>
               </div>
 
@@ -168,6 +177,34 @@
         </div>
 
       </div>
+
+      <!-- Image upload modal -->
+      <div id="imageUploadModal" class="modal">
+        <div class="modal-content">
+          <h4>Queue Photo</h4>
+          
+          <p>The photo of your queue will be publicly visible in all apps for every user. A vibrant photo without any text works best!</p>
+
+          <br/>
+
+          <form enctype="multipart/form-data" method="post" action="${rootUrl}/image/">
+            <div class="file-field input-field">
+              <div class="btn waves-effect waves-light primary-color">
+                <span>Browse</span>
+                <input id="imageFileInput" name="image" type="file" accept="image/jpeg,image/jpg,image/png">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <a id="closeImageUploadButton" class="modal-action modal-close waves-effect waves-light btn-flat">Close</a>
+        </div>
+      </div>
+
     </main>
     <%@include file="../includes/en/common_footer.jsp"%>
     <script src="${staticUrl}js/edit_queue.js"></script>

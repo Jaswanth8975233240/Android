@@ -1,26 +1,21 @@
 package com.intelliq.appengine.api.endpoint.queue;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.jdo.JDOObjectNotFoundException;
-import javax.servlet.http.HttpServletResponse;
-
-import com.google.appengine.api.datastore.Key;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.PermissionSet;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
-import com.intelliq.appengine.datastore.BusinessHelper;
-import com.intelliq.appengine.datastore.PermissionHelper;
 import com.intelliq.appengine.datastore.QueueHelper;
-import com.intelliq.appengine.datastore.UserHelper;
-import com.intelliq.appengine.datastore.entries.BusinessEntry;
 import com.intelliq.appengine.datastore.entries.PermissionEntry;
 import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.UserEntry;
 import com.intelliq.appengine.logging.QueueLogging;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jdo.JDOObjectNotFoundException;
+import javax.servlet.http.HttpServletResponse;
 
 
 public class EditQueueEndpoint extends Endpoint {

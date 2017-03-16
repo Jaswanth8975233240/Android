@@ -1,11 +1,7 @@
 package com.intelliq.appengine.datastore;
 
-import java.net.URL;
-import java.util.logging.Logger;
-
-import javax.jdo.PersistenceManager;
-
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
@@ -15,6 +11,11 @@ import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.intelliq.appengine.datastore.entries.ImageEntry;
+
+import java.net.URL;
+import java.util.logging.Logger;
+
+import javax.jdo.PersistenceManager;
 
 public class ImageHelper {
 
@@ -33,6 +34,15 @@ public class ImageHelper {
             pm.close();
         }
         return entryKey;
+    }
+
+    public static void deleteImageByKeyId(long id) {
+        log.severe("Deleting image with keyId: " + id);
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Key key = KeyFactory.createKey(ImageEntry.class.getSimpleName(), id);
+        ImageEntry entry = pm.getObjectById(ImageEntry.class, key);
+        pm.deletePersistent(entry);
+        pm.close();
     }
 
     public static ImageEntry fetchImageFromUrl(String url) throws Exception {

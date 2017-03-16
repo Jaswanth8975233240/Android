@@ -1,9 +1,5 @@
 package com.intelliq.appengine.api.endpoint.queue;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.intelliq.appengine.ParserHelper;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.PermissionSet;
@@ -11,8 +7,10 @@ import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
 import com.intelliq.appengine.datastore.QueueHelper;
 import com.intelliq.appengine.datastore.entries.PermissionEntry;
-import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ClearQueueItemsEndpoint extends Endpoint {
@@ -73,7 +71,7 @@ public class ClearQueueItemsEndpoint extends Endpoint {
             QueueHelper.deleteItemsInQueue(queueKeyId, status);
         }
 
-        List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, 0, 100);
+        List<QueueItemEntry> entries = QueueHelper.getItemsInQueue(queueKeyId, QueueItemEntry.STATUS_ALL, 0, 100);
         response.setContent(entries);
         return response;
     }

@@ -1,6 +1,9 @@
 var authenticator = function(){
 
   function log(message) {
+    if (typeof message !== "string") {
+      message = "\n" + JSON.stringify(message, null, 2)
+    }
     console.log("Authenticator: " + message);
   }
 
@@ -67,16 +70,22 @@ var authenticator = function(){
         }
 
         var onGoogleSignInInitializationFailed = function(error) {
-          log("Google authentication initialization failed: " + error);
+          log("Google authentication initialization failed: " + JSON.stringify(error));
           authenticator.googleAuthenticationInitializing = false;
           authenticator.googleAuthenticationInitialized = false;
+          if (error.error) {
+            if (error.error === "popup_closed_by_user") {
+              reject("Sign in canceled by user");
+              return;
+            }
+          }
           reject(error);
         }
 
         googleAuth.then(onGoogleSignInInitialized, onGoogleSignInInitializationFailed);
       }
 
-      if (gapi.auth2 == null) {
+      if (!gapi.auth2) {
         log("Requesting Google auth2 API");
         authenticator.googleAuthenticationInitializing = true;
         gapi.load('auth2', onAuthApiAvailable);
@@ -103,8 +112,8 @@ var authenticator = function(){
             log("Google sign in failed: " + error);
             reject(error);
           });
-        } catch (ex) {
-          log("Google sign in invoking failed: " + ex);
+        } catch (error) {
+          log("Google sign in invoking failed: " + error);
           reject(error);
         }
       }).catch(function(error) {
@@ -127,8 +136,8 @@ var authenticator = function(){
             log("Google sign out failed: " + error);
             reject(error);
           });
-        } catch (ex) {
-          log("Google sign out invoking failed: " + ex);
+        } catch (error) {
+          log("Google sign out invoking failed: " + error);
           reject(error);
         }
       }).catch(function(error) {
@@ -151,8 +160,8 @@ var authenticator = function(){
             log("Google disconnection failed: " + error);
             reject(error);
           });
-        } catch (ex) {
-          log("Google disconnection invoking failed: " + ex);
+        } catch (error) {
+          log("Google disconnection invoking failed: " + error);
           reject(error);
         }
       }).catch(function(error) {
@@ -179,7 +188,7 @@ var authenticator = function(){
   authenticator.getGoogleSignInStatus = function() {
     try {
       return gapi.auth2.getAuthInstance().isSignedIn.get();
-    } catch (ex) {
+    } catch (error) {
       log("Unable to get Google sign in status")
       return false;
     }
@@ -200,7 +209,7 @@ var authenticator = function(){
   authenticator.getGoogleUser = function() {
     try {
       return gapi.auth2.getAuthInstance().currentUser.get();
-    } catch (ex) {
+    } catch (error) {
       log("Unable to get Google user")
       return null;
     }
