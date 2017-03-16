@@ -1,12 +1,12 @@
 package com.intelliq.appengine.api.endpoint.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserEndpoint extends Endpoint {
 

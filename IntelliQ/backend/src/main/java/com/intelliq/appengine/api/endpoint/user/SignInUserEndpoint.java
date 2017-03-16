@@ -1,12 +1,5 @@
 package com.intelliq.appengine.api.endpoint.user;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.datastore.Key;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
@@ -14,11 +7,12 @@ import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
 import com.intelliq.appengine.datastore.UserHelper;
 import com.intelliq.appengine.datastore.entries.UserEntry;
-import com.intelliq.appengine.logging.SlackLog;
 import com.intelliq.appengine.logging.UserLogging;
 
-import net.steppschuh.slackmessagebuilder.message.attachment.Attachment;
-import net.steppschuh.slackmessagebuilder.message.attachment.AttachmentField;
+import java.util.Date;
+import java.util.logging.Logger;
+
+import javax.servlet.http.HttpServletResponse;
 
 
 public class SignInUserEndpoint extends Endpoint {

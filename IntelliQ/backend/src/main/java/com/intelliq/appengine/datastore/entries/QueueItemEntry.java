@@ -1,5 +1,11 @@
 package com.intelliq.appengine.datastore.entries;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.api.ApiRequest;
+import com.intelliq.appengine.notification.NotificationException;
+import com.intelliq.appengine.notification.text.TextNotificationRecipient;
+
 import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -8,13 +14,6 @@ import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import javax.servlet.http.HttpServletRequest;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.ParserHelper;
-import com.intelliq.appengine.api.ApiRequest;
-import com.intelliq.appengine.datastore.Location;
 
 @PersistenceCapable(detachable = "true")
 public class QueueItemEntry {
@@ -45,6 +44,9 @@ public class QueueItemEntry {
     boolean usingApp;
 
     @Persistent
+    String phoneNumber;
+
+    @Persistent
     long entryTimestamp;
 
     @Persistent
@@ -71,8 +73,22 @@ public class QueueItemEntry {
         queueKeyId = req.getParameterAsLong("queueKeyId", queueKeyId);
         userKeyId = req.getParameterAsLong("userKeyId", userKeyId);
         name = req.getParameter("name", name);
+        phoneNumber = req.getParameter("phoneNumber", phoneNumber);
         showName = req.getParameterAsBoolean("showName", showName);
         usingApp = req.getParameterAsBoolean("usingApp", usingApp);
+    }
+
+    public TextNotificationRecipient asTextNotificationRecipient() throws NotificationException {
+        if (name == null || name.length() < 1) {
+            throw new NotificationException("Invalid recipient name");
+        }
+        if (phoneNumber == null || phoneNumber.length() < 1) {
+            throw new NotificationException("Invalid recipient phone number");
+        }
+        TextNotificationRecipient recipient = new TextNotificationRecipient();
+        recipient.setName(name);
+        recipient.setMsisdn(phoneNumber);
+        return recipient;
     }
 
     public void makeDummyItem() {
@@ -126,6 +142,14 @@ public class QueueItemEntry {
 
     public void setUsingApp(boolean usingApp) {
         this.usingApp = usingApp;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public long getEntryTimestamp() {

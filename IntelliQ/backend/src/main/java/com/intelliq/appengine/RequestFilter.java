@@ -40,7 +40,7 @@ public class RequestFilter implements Filter {
         if (path.startsWith("/static") || path.startsWith("/_ah") || path.startsWith("/intelliq")) {
             // preserve special routes
             filterChain.doFilter(request, response);
-        } else if(uri.contains(".well-known/assetlinks.json")) {
+        } else if (uri.contains(".well-known/assetlinks.json")) {
             // redirect to Digital Asset Links JSON file
             RequestDispatcher rd = request.getRequestDispatcher("/static/assetlinks.json");
             rd.forward(request, response);

@@ -1,14 +1,13 @@
 package com.intelliq.appengine.api;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.intelliq.appengine.ParserHelper;
+import com.intelliq.appengine.datastore.UserHelper;
+import com.intelliq.appengine.datastore.entries.UserEntry;
+
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.intelliq.appengine.ParserHelper;
-import com.intelliq.appengine.api.endpoint.EndpointManager;
-import com.intelliq.appengine.datastore.UserHelper;
-import com.intelliq.appengine.datastore.entries.UserEntry;
 
 public class ApiRequest {
 

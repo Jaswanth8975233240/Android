@@ -1,5 +1,13 @@
 package com.intelliq.appengine.datastore;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.datastore.entries.BusinessEntry;
+import com.intelliq.appengine.datastore.entries.QueueEntry;
+import com.intelliq.appengine.datastore.entries.QueueItemEntry;
+import com.intelliq.appengine.stuff.FakeData;
+import com.intelliq.appengine.util.TimeUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,13 +15,6 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.datastore.entries.BusinessEntry;
-import com.intelliq.appengine.datastore.entries.QueueEntry;
-import com.intelliq.appengine.datastore.entries.QueueItemEntry;
-import com.intelliq.appengine.stuff.FakeData;
 
 public class QueueHelper {
 
@@ -203,25 +204,28 @@ public class QueueHelper {
         return -1;
     }
 
-    public static List<QueueItemEntry> getItemsInQueue(long queueKeyId, int startIndex, int count) {
+    public static List<QueueItemEntry> getItemsInQueue(long queueKeyId, byte status, int startIndex, int count) {
         PersistenceManager pm = PMF.get().getPersistenceManager();
         Query query = pm.newQuery(QueueItemEntry.class);
 
-        query.setFilter("queueKeyId == value");
-        query.setOrdering("entryTimestamp descending");
-        query.declareParameters("long value");
-        query.setRange(startIndex, count);
         query.setOrdering("ticketNumber ascending");
+        query.setRange(startIndex, count);
 
         List<QueueItemEntry> results = new ArrayList<QueueItemEntry>();
         try {
-            results = (List<QueueItemEntry>) query.execute(queueKeyId);
+            if (status == QueueItemEntry.STATUS_ALL) {
+                query.setFilter("queueKeyId == value");
+                query.declareParameters("long value");
+                results = (List<QueueItemEntry>) query.execute(queueKeyId);
+            } else {
+                query.setFilter("queueKeyId == value && status == value2");
+                query.declareParameters("long value, byte value2");
+                results = (List<QueueItemEntry>) query.execute(queueKeyId, status);
+            }
             results.size();
             for (QueueItemEntry entry : results) {
                 entry.getName();
-                //log.info("Item found: " + entry.getName());
             }
-            //log.info("Query execution returned " + results.size() + " item(s)");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -298,6 +302,16 @@ public class QueueHelper {
         }
 
         return count;
+    }
+
+    public static String getReadableWaitingTimeEstimation(QueueEntry queueEntry) {
+        int waitingQueueItemEntries = QueueHelper.getNumberOfItemsInQueue(queueEntry.getKey().getId(), QueueItemEntry.STATUS_WAITING);
+        long averageWaitingTime = queueEntry.getAverageWaitingTime();
+        return getReadableWaitingTimeEstimation(waitingQueueItemEntries, averageWaitingTime);
+    }
+
+    public static String getReadableWaitingTimeEstimation(int waitingQueueItemEntries, long averageWaitingTime) {
+        return TimeUtils.getReadableTimeFromMillis(waitingQueueItemEntries * averageWaitingTime);
     }
 
     public static QueueItemEntry getLastAssignedTicketInQueue(long queueKeyId, byte status) {

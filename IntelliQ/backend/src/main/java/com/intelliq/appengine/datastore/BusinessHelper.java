@@ -1,15 +1,15 @@
 package com.intelliq.appengine.datastore;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.datastore.entries.BusinessEntry;
+import com.intelliq.appengine.datastore.entries.PermissionEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.datastore.entries.BusinessEntry;
-import com.intelliq.appengine.datastore.entries.PermissionEntry;
 
 public class BusinessHelper {
 

@@ -1,12 +1,11 @@
 package com.intelliq.appengine.datastore.entries;
 
+import com.google.appengine.api.datastore.Key;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
-import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(detachable = "true")
 public class PermissionEntry {

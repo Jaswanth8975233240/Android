@@ -1,20 +1,18 @@
 package com.intelliq.appengine.datastore;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.datastore.entries.UserEntry;
+import com.intelliq.appengine.datastore.entries.UserStatsEntry;
+
+import org.datanucleus.exceptions.NucleusObjectNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
-import org.datanucleus.exceptions.NucleusObjectNotFoundException;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.datastore.entries.BusinessEntry;
-import com.intelliq.appengine.datastore.entries.QueueEntry;
-import com.intelliq.appengine.datastore.entries.UserEntry;
-import com.intelliq.appengine.datastore.entries.UserStatsEntry;
 
 public class UserHelper {
 

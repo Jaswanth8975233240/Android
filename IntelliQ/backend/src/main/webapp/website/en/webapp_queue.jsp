@@ -57,16 +57,25 @@
         <div id="joinQueueModal" class="modal">
           <div class="modal-content">
             <h4>Join Queue</h4>
+            
             <div class="row">
-              <div class="input-field col s12">
+              <!-- Name -->
+              <div class="input-field col s12 l6">
                 <input id="newCustomerName" type="text">
                 <label for="newCustomerName">Name</label>
               </div>
+
+              <!-- Phone number -->
+              <div id="phoneNumberContainer" class="input-field col s12 l6">
+                <input id="phoneNumber" type="tel" placeholder="Optional">
+                <label for="phoneNumber">Mobile Phone Number</label>
+              </div>
             </div>
 
-            <div class="switch">
+            <div class="switch hide">
               <label>hide name <input id="newCustomerVisibility" type="checkbox" checked="checked"> <span class="lever"></span> show name</label>
             </div>
+
           </div>
           <div class="modal-footer">
             <a id="sbmitNewCustomerButton" class="modal-action modal-close waves-effect waves-green btn-flat">Join</a>

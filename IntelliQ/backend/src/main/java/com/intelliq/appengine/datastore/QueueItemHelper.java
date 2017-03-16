@@ -1,16 +1,15 @@
 package com.intelliq.appengine.datastore;
 
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
+import com.intelliq.appengine.datastore.entries.QueueItemEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-import com.intelliq.appengine.datastore.entries.QueueItemEntry;
-import com.intelliq.appengine.datastore.entries.UserEntry;
 
 public class QueueItemHelper {
 

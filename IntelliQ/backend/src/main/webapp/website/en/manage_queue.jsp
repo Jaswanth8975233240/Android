@@ -147,13 +147,19 @@
       <div id="addCustomerModal" class="modal">
         <div class="modal-content">
           <h4>Add a customer</h4>
-          <p>Customer name</p>
           <div class="row">
-            <div class="input-field col s12">
-              <input id="newCustomerName" type="text">
-              <label for="newCustomerName">Name</label>
+              <!-- Name -->
+              <div class="input-field col s12 l6">
+                <input id="newCustomerName" type="text">
+                <label for="newCustomerName">Name</label>
+              </div>
+
+              <!-- Phone number -->
+              <div id="phoneNumberContainer" class="input-field col s12 l6">
+                <input id="phoneNumber" type="tel" placeholder="Optional">
+                <label for="phoneNumber">Mobile Phone Number</label>
+              </div>
             </div>
-          </div>
 
           <p>Display name</p>
           <div class="switch">
@@ -175,6 +181,10 @@
               <tr>
                 <td>Ticket number</td>
                 <td id="customerTicketNumber">Unknown</td>
+              </tr>
+              <tr>
+                <td>Phone number</td>
+                <td id="customerPhoneNumber">Unknown</td>
               </tr>
               <tr>
                 <td>Joined queue</td>

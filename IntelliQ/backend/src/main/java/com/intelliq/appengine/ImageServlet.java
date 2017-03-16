@@ -4,7 +4,6 @@ import com.google.appengine.api.datastore.Key;
 import com.google.common.io.ByteStreams;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
-import com.intelliq.appengine.api.PermissionSet;
 import com.intelliq.appengine.datastore.BusinessHelper;
 import com.intelliq.appengine.datastore.ImageHelper;
 import com.intelliq.appengine.datastore.QueueHelper;

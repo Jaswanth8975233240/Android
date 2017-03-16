@@ -1,16 +1,14 @@
 package com.intelliq.appengine.api.endpoint.queueitem;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.intelliq.appengine.ParserHelper;
 import com.intelliq.appengine.api.ApiRequest;
 import com.intelliq.appengine.api.ApiResponse;
 import com.intelliq.appengine.api.endpoint.Endpoint;
 import com.intelliq.appengine.api.endpoint.EndpointManager;
 import com.intelliq.appengine.datastore.QueueHelper;
-import com.intelliq.appengine.datastore.entries.QueueEntry;
 import com.intelliq.appengine.datastore.entries.QueueItemEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GetLastItemInQueueEndpoint extends Endpoint {

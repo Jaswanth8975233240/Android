@@ -1,18 +1,16 @@
 package com.intelliq.appengine.api.endpoint;
 
+import com.intelliq.appengine.ParserHelper;
+import com.intelliq.appengine.api.ApiRequest;
+import com.intelliq.appengine.api.ApiResponse;
+import com.intelliq.appengine.api.PermissionSet;
+import com.intelliq.appengine.datastore.entries.UserEntry;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.intelliq.appengine.ParserHelper;
-import com.intelliq.appengine.api.ApiRequest;
-import com.intelliq.appengine.api.ApiResponse;
-import com.intelliq.appengine.api.ApiServlet;
-import com.intelliq.appengine.api.PermissionSet;
-import com.intelliq.appengine.datastore.entries.PermissionEntry;
-import com.intelliq.appengine.datastore.entries.UserEntry;
 
 /**
  * Abstract endpoint that every API endpoint needs to extend.

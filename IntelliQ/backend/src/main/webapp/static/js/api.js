@@ -579,6 +579,11 @@ var intelliqApi = function(){
       return request;
     }
 
+    request.withPhoneNumber = function(value) {
+      request.addParameter("phoneNumber", value);
+      return request;
+    }
+
     return request;
   }
 
