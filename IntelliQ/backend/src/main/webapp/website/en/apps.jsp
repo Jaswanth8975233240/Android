@@ -20,7 +20,7 @@
 						<h5 class="header col s12 light">And stop wasting your lifetime while waiting in line</h5>
 					</div>
 					<div class="row center">
-						<a href="${appUrl}" class="btn-large waves-effect waves-light accent-color">Join a Queue</a>
+						<a href="${appUrl}" class="btn-large waves-effect waves-light accent-color">Nearby Queues</a>
 					</div>
 					<br>
 	
@@ -36,6 +36,24 @@
 			<div class="section">
 	
 				<div class="row">
+
+					<!-- Web -->
+					<div class="col s12 m4" style="margin-top: 20px; margin-bottom: 20px;">
+						<div class="icon-block">
+							<h2 class="center primary-color-text">
+								<i class="material-icons">laptop_chromebook</i>
+							</h2>
+							<h5 class="center">Web</h5>
+	
+							<p class="light center">If you don't want to download the native IntelliQ.me app right now, simply use your browser.</p>
+	
+							<div class="row center">
+								<a href="${appUrl}" class="btn-large waves-effect waves-light primary-color">Open</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Android -->
 					<div class="col s12 m4" style="margin-top: 20px; margin-bottom: 20px;">
 						<div class="icon-block">
 							<h2 class="center primary-color-text">
@@ -51,6 +69,7 @@
 						</div>
 					</div>
 	
+					<!-- iOS -->
 					<div class="col s12 m4" style="margin-top: 20px; margin-bottom: 20px;">
 						<div class="icon-block">
 							<h2 class="center primary-color-text">
@@ -66,20 +85,6 @@
 						</div>
 					</div>
 	
-					<div class="col s12 m4" style="margin-top: 20px; margin-bottom: 20px;">
-						<div class="icon-block">
-							<h2 class="center primary-color-text">
-								<i class="material-icons">laptop_chromebook</i>
-							</h2>
-							<h5 class="center">Web</h5>
-	
-							<p class="light center">If you don't want to download the native IntelliQ.me app right now, simply use your browser.</p>
-	
-							<div class="row center">
-								<a href="${appUrl}" class="btn-large waves-effect waves-light primary-color">Open</a>
-							</div>
-						</div>
-					</div>
 				</div>
 	
 			</div>

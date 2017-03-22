@@ -30,7 +30,7 @@
 					<div class="col s12 m12 l4">
 						<h5 class="hide-on-med-and-down">&nbsp;</h5>
 						<p>
-							Managing Director: Stephan Schultz<br/>
+							Managing Director: <a href="https://steppschuh.net">Stephan Schultz</a><br/>
 							Registration Court: Amtsgericht Potsdam<br/>
 							Registration Number: HRB29427P<br/>
 							VAT-ID: DE309275209

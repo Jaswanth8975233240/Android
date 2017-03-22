@@ -25,7 +25,7 @@
 								<p class="light white-text center">Spend your waiting time more effectively and start using the free IntelliQ.me app</p>
 	
 								<div class="row center">
-									<a href="${rootUrl}/apps/" class="btn-large waves-effect waves-light accent-color">Get the App</a>
+									<a href="${rootUrl}/apps/" class="btn-large waves-effect waves-light accent-color">Join a Queue</a>
 								</div>
 							</div>
 						</div>
@@ -40,7 +40,7 @@
 								<p class="light white-text center">Learn how to get satisfied customers and save costs by integrating IntelliQ.me</p>
 	
 								<div class="row center">
-									<a href="${rootUrl}/business/" class="btn-large waves-effect waves-light accent-color">Learn More</a>
+									<a href="${rootUrl}/business/" class="btn-large waves-effect waves-light accent-color">Create a Queue</a>
 								</div>
 							</div>
 						</div>

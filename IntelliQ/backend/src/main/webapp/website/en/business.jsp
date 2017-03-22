@@ -23,7 +23,7 @@
 	
 					</div>
 					<div class="row center">
-						<a href="${manageUrl}" class="btn-large waves-effect waves-light accent-color">Create a Queue</a>
+						<a href="${manageUrl}" class="btn-large waves-effect waves-light accent-color">Manage a Queue</a>
 					</div>
 					<br>
 					<br>
